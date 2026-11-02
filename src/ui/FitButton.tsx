@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The way back to the part, in every viewport that can be orbited away from it.
 //
 // Orbiting happens about the point under the cursor and zooming happens towards
@@ -30,8 +31,8 @@ export function FitButton({ onFit }: { onFit: () => void }) {
       type="button"
       className="viewfit"
       data-test="fit-view"
-      title="Fit to view — bring the whole model back on screen, without turning it"
-      aria-label="Fit to view"
+      title={tr("Fit to view — bring the whole model back on screen, without turning it")}
+      aria-label={tr("Fit to view")}
       onClick={onFit}
     >
       <FitIcon />

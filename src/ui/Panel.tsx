@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The left faceplate: everything the operator sets, and every number the tool
 // reports. Controls at the top, readouts below, in the order the work happens.
 
@@ -178,16 +179,11 @@ export function Panel({
     <aside className="panel">
       <div className="group">
         <div className="sec-head">
-          Model
-          <InfoDot title="The scan">
+          {tr("Model")}{' '}<InfoDot title={tr("The scan")}>
             <p>
-              The part as measured — an <b>STL</b>, <b>PLY</b> or <b>OBJ</b> from your scanner. Drop
-              it anywhere in the window, or use the button.
-            </p>
+              {tr("The part as measured — an")}{' '}<b>{tr("STL")}</b>, <b>{tr("PLY")}</b> {tr("or")}{' '}<b>{tr("OBJ")}</b> {tr("from your scanner. Drop it anywhere in the window, or use the button.")}{' '}</p>
             <p>
-              Units are assumed to be millimetres. Nothing is uploaded: the file is read and the
-              whole measurement runs in this browser.
-            </p>
+              {tr("Units are assumed to be millimetres. Nothing is uploaded: the file is read and the whole measurement runs in this browser.")}{' '}</p>
           </InfoDot>
         </div>
         <ModelSlotBlock
@@ -210,32 +206,17 @@ export function Panel({
       {sectionDraft === null && (
         <div className="group">
           <div className="sec-head">
-            Create element
-            <InfoDot title="Elements">
+            {tr("Create element")}{' '}<InfoDot title={tr("Elements")}>
               <p>
-                Every measurement here starts with an element — a plane, a cylinder, a sphere, a
-                circle, a point or a line. Dimensions are then measured between them, never between
-                raw triangles.
-              </p>
+                {tr("Every measurement here starts with an element — a plane, a cylinder, a sphere, a circle, a point or a line. Dimensions are then measured between them, never between raw triangles.")}{' '}</p>
               <p>
-                An element is either <b>fitted</b> to the scan, by clicking the feature and letting
-                the tool find the surface; <b>picked</b> straight off the mesh, for a single point;
-                or <b>constructed</b> from elements you already have — an axis through two circles,
-                a midpoint between two points, a plane offset from another.
-              </p>
+                {tr("An element is either")}{' '}<b>{tr("fitted")}</b> {tr("to the scan, by clicking the feature and letting the tool find the surface;")}{' '}<b>{tr("picked")}</b> {tr("straight off the mesh, for a single point; or")}{' '}<b>{tr("constructed")}</b> {tr("from elements you already have — an axis through two circles, a midpoint between two points, a plane offset from another.")}{' '}</p>
               <p>
-                Which of those a kind offers appears as <i>Created</i> once you choose it.
-              </p>
+                {tr("Which of those a kind offers appears as")}{' '}<i>{tr("Created")}</i> {tr("once you choose it.")}{' '}</p>
               <p>
-                The kind stays in hand after <b>Create</b>, ready for the next one, as a sketch
-                tool does — <b>Cancel</b> or <b>Esc</b> puts it down; on a box with picks in it,
-                <b> Esc</b> first empties the box.
-              </p>
+                {tr("The kind stays in hand after")}{' '}<b>{tr("Create")}</b>{tr(", ready for the next one, as a sketch tool does —")}{' '}<b>{tr("Cancel")}</b> {tr("or")}{' '}<b>{tr("Esc")}</b> {tr("puts it down; on a box with picks in it,")}{' '}<b> {tr("Esc")}</b> {tr("first empties the box.")}{' '}</p>
               <p>
-                <b>Section</b> is not an element but a cut: the scan sliced with a plane taken
-                across an element&apos;s direction, to be measured on the sheet of the 2D Measure
-                workspace.
-              </p>
+                <b>{tr("Section")}</b> {tr("is not an element but a cut: the scan sliced with a plane taken across an element&apos;s direction, to be measured on the sheet of the 2D Measure workspace.")}{' '}</p>
             </InfoDot>
           </div>
           <div className={pulseKind && !busy ? 'kindrow featurekeys three pulse' : 'kindrow featurekeys three'}>
@@ -253,17 +234,17 @@ export function Panel({
                 onClick={() => onStartDraft(k.id)}
               >
                 <Icon name={KIND_ICON[k.id]} />
-                <span>{k.label}</span>
+                <span>{tr(k.label)}</span>
               </button>
             ))}
             <button
               data-test="fit-section"
               disabled={!fileName || busy || dimDraft !== null}
-              title="Cut the scan with a plane, to measure the cut in the 2D Measure workspace"
+              title={tr("Cut the scan with a plane, to measure the cut in the 2D Measure workspace")}
               onClick={onStartSection}
             >
               <Icon name="section" />
-              <span>Section</span>
+              <span>{tr("Section")}</span>
             </button>
           </div>
         </div>
@@ -278,24 +259,20 @@ export function Panel({
         <div className="group" data-test="discarded-draft">
           <div className="g-label">
             <span>
-              Discarded{' '}
+              {tr("Discarded")}{' '}
               {discarded.editId !== undefined
                 ? `edit of ${elements.find((e) => e.id === discarded.editId)?.name ?? 'element'}`
                 : elementKindInfo(discarded.kind).noun}
             </span>
-            <b>{discarded.selection.length.toLocaleString('en-US')} points</b>
+            <b>{discarded.selection.length.toLocaleString('en-US')} {tr("points")}</b>
           </div>
           <p className="hint">
-            Its marked surface is kept until the next element is started — bring it back to carry
-            on where you were, marking and all.
-          </p>
+            {tr("Its marked surface is kept until the next element is started — bring it back to carry on where you were, marking and all.")}{' '}</p>
           <div className="toolrow">
             <button data-test="restore-draft" onClick={onRestoreDraft}>
-              Restore
-            </button>
+              {tr("Restore")}{' '}</button>
             <button data-test="forget-draft" onClick={forgetDiscarded}>
-              Forget
-            </button>
+              {tr("Forget")}{' '}</button>
           </div>
         </div>
       )}
@@ -316,7 +293,7 @@ export function Panel({
       {elements.length > 0 && (
         <div className="group">
           <div className="g-label">
-            <span>Elements</span>
+            <span>{tr("Elements")}</span>
             <ShowAllButton
               anyVisible={elements.some((e) => e.visible)}
               what="elements"
@@ -335,8 +312,7 @@ export function Panel({
                 el.status === 'fitting' ? (
                   <b className="working">
                     <span className="spinner" />
-                    fitting
-                  </b>
+                    {tr("fitting")}{' '}</b>
                 ) : el.fit ? (
                   <b>{formatPrimary(el.fit, units)}</b>
                 ) : (
@@ -359,7 +335,7 @@ export function Panel({
       {sections.length > 0 && (
         <div className="group">
           <div className="g-label">
-            <span>Sections</span>
+            <span>{tr("Sections")}</span>
             <ShowAllButton
               anyVisible={sections.some((sec) => sec.visible)}
               what="sections"
@@ -412,9 +388,7 @@ export function Panel({
             )
           })}
           <p className="hint">
-            Measure a section in the <b>2D Measure</b> workspace. What you fit on its sheet is drawn
-            on the cut here and goes into the STEP file with the section.
-          </p>
+            {tr("Measure a section in the")}{' '}<b>{tr("2D Measure")}</b> {tr("workspace. What you fit on its sheet is drawn on the cut here and goes into the STEP file with the section.")}{' '}</p>
         </div>
       )}
 
@@ -426,31 +400,15 @@ export function Panel({
           <div className="divider" />
           <label className="field">
             <span>
-              STEP as
-              <InfoDot title="What the STEP file contains">
+              {tr("STEP as")}{' '}<InfoDot title={tr("What the STEP file contains")}>
                 <p>
-                  <b>Solids &amp; faces:</b> each element as geometry CAD can build on — a plane as a
-                  bounded planar face with real edges, a cylinder and a sphere as closed solid
-                  bodies, each its own named body in the tree. Sketch on them, offset them, cut with
-                  them.
-                </p>
+                  <b>{tr("Solids & faces:")}</b> {tr("each element as geometry CAD can build on — a plane as a bounded planar face with real edges, a cylinder and a sphere as closed solid bodies, each its own named body in the tree. Sketch on them, offset them, cut with them.")}{' '}</p>
                 <p>
-                  <b>Construction surfaces:</b> the same geometry as trimmed analytic surfaces and
-                  curves in one set, with no topology — the form metrology packages hand measured
-                  datums over in. Unmistakably reference geometry rather than a part, and the safer
-                  choice for an importer that chokes on bodies.
-                </p>
+                  <b>{tr("Construction surfaces:")}</b> {tr("the same geometry as trimmed analytic surfaces and curves in one set, with no topology — the form metrology packages hand measured datums over in. Unmistakably reference geometry rather than a part, and the safer choice for an importer that chokes on bodies.")}{' '}</p>
                 <p>
-                  Points and lines are points and lines either way. Whatever an element has been
-                  extended to is what gets written, and a sphere, cylinder or circle given an
-                  assumed Ø when it was created is written at that Ø — everything else as measured.
-                </p>
+                  {tr("Points and lines are points and lines either way. Whatever an element has been extended to is what gets written, and a sphere, cylinder or circle given an assumed Ø when it was created is written at that Ø — everything else as measured.")}{' '}</p>
                 <p>
-                  What was measured on a section's sheet in 2D Measure — its points, lines, circles
-                  and arcs — comes too, as curves lying in the cutting plane, in a group named after
-                  the section. Cut a section through a bore, fit its circle on the sheet, and CAD
-                  gets a circle in space to sketch on.
-                </p>
+                  {tr("What was measured on a section's sheet in 2D Measure — its points, lines, circles and arcs — comes too, as curves lying in the cutting plane, in a group named after the section. Cut a section through a bore, fit its circle on the sheet, and CAD gets a circle in space to sketch on.")}{' '}</p>
               </InfoDot>
             </span>
             <select
@@ -458,28 +416,19 @@ export function Panel({
               value={stepStyle}
               onChange={(e) => setStepStyle(e.target.value as StepStyle)}
             >
-              <option value="solids">Solids &amp; faces</option>
-              <option value="surfaces">Construction surfaces</option>
+              <option value="solids">{tr("Solids & faces")}</option>
+              <option value="surfaces">{tr("Construction surfaces")}</option>
             </select>
           </label>
           <label className="field">
             <span>
-              Point cloud as
-              <InfoDot title="What the point cloud contains">
+              {tr("Point cloud as")}{' '}<InfoDot title={tr("What the point cloud contains")}>
                 <p>
-                  Every vertex of the scan with its normal, where the part now stands — any
-                  alignment or move you applied comes with it — for the reverse-engineering tools
-                  that model over points rather than triangles. Millimetres, like everything here.
-                </p>
+                  {tr("Every vertex of the scan with its normal, where the part now stands — any alignment or move you applied comes with it — for the reverse-engineering tools that model over points rather than triangles. Millimetres, like everything here.")}{' '}</p>
                 <p>
-                  <b>PLY:</b> binary and compact, read by Geomagic, CloudCompare, MeshLab, ReCap and
-                  most others. Points only, no faces — a reader that wants a cloud gets a cloud.
-                </p>
+                  <b>{tr("PLY:")}</b> {tr("binary and compact, read by Geomagic, CloudCompare, MeshLab, ReCap and most others. Points only, no faces — a reader that wants a cloud gets a cloud.")}{' '}</p>
                 <p>
-                  <b>XYZ text:</b> one point per line, x y z nx ny nz — the universal fallback, the
-                  same file ASC readers take. Autodesk ReCap turns either into an RCP for AutoCAD
-                  and Inventor.
-                </p>
+                  <b>{tr("XYZ text:")}</b> {tr("one point per line, x y z nx ny nz — the universal fallback, the same file ASC readers take. Autodesk ReCap turns either into an RCP for AutoCAD and Inventor.")}{' '}</p>
               </InfoDot>
             </span>
             <select
@@ -487,8 +436,8 @@ export function Panel({
               value={cloudFormat}
               onChange={(e) => setCloudFormat(e.target.value as CloudFormat)}
             >
-              <option value="ply">PLY (binary, with normals)</option>
-              <option value="xyz">XYZ text (x y z nx ny nz)</option>
+              <option value="ply">{tr("PLY (binary, with normals)")}</option>
+              <option value="xyz">{tr("XYZ text (x y z nx ny nz)")}</option>
             </select>
           </label>
           <div className="toolrow">
@@ -501,24 +450,22 @@ export function Panel({
               data-test="export-step"
               disabled={elements.every((e) => !e.fit) && !anyMeasuredOnSections && !anyBlock}
               onClick={onExportStep}
-              title="Export the created elements — and what was measured on the sections, and the extruded shadows — as analytic geometry in a STEP file"
+              title={tr("Export the created elements — and what was measured on the sections, and the extruded shadows — as analytic geometry in a STEP file")}
             >
-              Export STEP
-            </button>
+              {tr("Export STEP")}{' '}</button>
             <ExportMeshButton
               testId="export-mesh"
               disabled={busy}
               onExport={onExportMesh}
-              title="Save the scan as an STL or a 3MF where it now stands — any alignment or move you applied comes with it"
+              title={tr("Save the scan as an STL or a 3MF where it now stands — any alignment or move you applied comes with it")}
             />
             <button
               data-test="export-cloud"
               disabled={busy}
               onClick={onExportCloud}
-              title="Save the scan as a point cloud where it now stands — every vertex with its normal, any alignment or move you applied included"
+              title={tr("Save the scan as a point cloud where it now stands — every vertex with its normal, any alignment or move you applied included")}
             >
-              Export cloud
-            </button>
+              {tr("Export cloud")}{' '}</button>
           </div>
         </>
       )}
@@ -548,7 +495,7 @@ function ModelSlotBlock({
         busy={busy}
         onOpen={onOpenScan}
       />
-      {!fileName && <p className="hint">Drop it anywhere in the window.</p>}
+      {!fileName && <p className="hint">{tr("Drop it anywhere in the window.")}</p>}
     </>
   )
 }

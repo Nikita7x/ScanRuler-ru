@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../../src/i18n'
 // Cut: the scan cut by a plane, one side taken off and the cut capped flat
 // where the part was closed.
 
@@ -24,32 +25,19 @@ export function CutTool({ ready, busy, onCut }: { ready: boolean; busy: boolean;
   return (
     <div className="group" data-test="cut-tool">
       <div className="sec-head">
-        Cut
-        <InfoDot title="Cutting the scan">
+        {tr("Cut")}{' '}<InfoDot title={tr("Cutting the scan")}>
           <p>
-            The scan cut with a plane and one side of it taken off: the turntable or the table the
-            part stood on, a flat bottom for a part that is to be printed, one half of a part to
-            model on its own. While the tool is in hand the part is shown cut where the plane is,
-            the side that goes already taken away and the cut closed as it will be closed.
-          </p>
+            {tr("The scan cut with a plane and one side of it taken off: the turntable or the table the part stood on, a flat bottom for a part that is to be printed, one half of a part to model on its own. While the tool is in hand the part is shown cut where the plane is, the side that goes already taken away and the cut closed as it will be closed.")}{' '}</p>
           <p>
-            The plane is taken across one of the scan's <b>coordinate planes</b> — after a datum
-            alignment, the datum's, so <b>Z</b> 0 is the face the part was set on and <b>Z</b> 0.5
-            half a unit above it — or across an <b>element</b> with a direction: a plane's normal, the axis
-            of a cylinder, cone or line. It starts through the middle of the part; type where it
-            should be.
-          </p>
+            {tr("The plane is taken across one of the scan's")}{' '}<b>{tr("coordinate planes")}</b> {tr("— after a datum alignment, the datum's, so")}{' '}<b>Z</b> {tr("0 is the face the part was set on and")}{' '}<b>Z</b> {tr("0.5 half a unit above it — or across an")}{' '}<b>{tr("element")}</b> {tr("with a direction: a plane's normal, the axis of a cylinder, cone or line. It starts through the middle of the part; type where it should be.")}{' '}</p>
           <p>
-            <b>Close flat</b> fills the cut face wherever the plane goes all the way round the
-            part, so a closed part stays closed. Where the scan is open across the plane the rim
-            stays open, and the result says so. The cut is made on the edited copy;{' '}
-            <b>Ctrl+Z</b> puts it back.
-          </p>
+            <b>{tr("Close flat")}</b> {tr("fills the cut face wherever the plane goes all the way round the part, so a closed part stays closed. Where the scan is open across the plane the rim stays open, and the result says so. The cut is made on the edited copy;")}{' '}
+            <b>{tr("Ctrl+Z")}</b> {tr("puts it back.")}{' '}</p>
         </InfoDot>
       </div>
 
       <label className="field">
-        <span>Cut across</span>
+        <span>{tr("Cut across")}</span>
         <select
           data-test="cut-ref"
           value={String(m.cutRef)}
@@ -58,7 +46,7 @@ export function CutTool({ ready, busy, onCut }: { ready: boolean; busy: boolean;
         >
           <PlaneRefOptions options={options} />
           {!axisName && !options.some((el) => el.id === m.cutRef) && (
-            <option value={String(m.cutRef)}>(deleted element)</option>
+            <option value={String(m.cutRef)}>{tr("(deleted element)")}</option>
           )}
         </select>
       </label>
@@ -80,8 +68,8 @@ export function CutTool({ ready, busy, onCut }: { ready: boolean; busy: boolean;
       />
 
       <div className="field">
-        <span>Keep</span>
-        <div className="moderow" role="radiogroup" aria-label="Side to keep">
+        <span>{tr("Keep")}</span>
+        <div className="moderow" role="radiogroup" aria-label={tr("Side to keep")}>
           {(['plus', 'minus'] as const).map((k) => (
             <button
               key={k}
@@ -111,13 +99,10 @@ export function CutTool({ ready, busy, onCut }: { ready: boolean; busy: boolean;
           checked={m.cutCap}
           onChange={(e) => m.setCutCap(e.target.checked)}
         />
-        <span>Close flat</span>
-        <InfoDot title="Close flat">
+        <span>{tr("Close flat")}</span>
+        <InfoDot title={tr("Close flat")}>
           <p>
-            Close the part with a flat face where the plane goes all the way round it — a ring where
-            it crosses a bore, a disc where it crosses a solid. Off, the cut is left open, as a scan
-            of a surface would be.
-          </p>
+            {tr("Close the part with a flat face where the plane goes all the way round it — a ring where it crosses a bore, a disc where it crosses a solid. Off, the cut is left open, as a scan of a surface would be.")}{' '}</p>
         </InfoDot>
       </label>
 
@@ -131,13 +116,12 @@ export function CutTool({ ready, busy, onCut }: { ready: boolean; busy: boolean;
         {m.editing ? (
           <>
             <span className="spinner" />
-            Cutting…
-          </>
+            {tr("Cutting…")}{' '}</>
         ) : (
           'Cut'
         )}
       </button>
-      {!plane && <p className="hint">Choose what to cut across.</p>}
+      {!plane && <p className="hint">{tr("Choose what to cut across.")}</p>}
       {plane && ready && <CutOutcomeLine outcome={m.cutPreview} cap={m.cutCap} />}
     </div>
   )
@@ -148,33 +132,29 @@ function CutOutcomeLine({ outcome, cap }: { outcome: CutOutcome | null; cap: boo
   if (!outcome) {
     return (
       <p className="hint">
-        <span className="spinner" /> Working out the cut…
-      </p>
+        <span className="spinner" /> {tr("Working out the cut…")}{' '}</p>
     )
   }
   if (!outcome.cuts) {
     return (
       <p className="hint" data-test="cut-misses">
-        The plane misses the part, or takes all of it — move it to where the part is to be cut.
-      </p>
+        {tr("The plane misses the part, or takes all of it — move it to where the part is to be cut.")}{' '}</p>
     )
   }
-  if (!cap) return <p className="hint">The part is shown as the cut would leave it, open.</p>
+  if (!cap) return <p className="hint">{tr("The part is shown as the cut would leave it, open.")}</p>
   const n = (k: number, one: string, many: string) => `${count(k)} ${k === 1 ? one : many}`
   const bridged =
     outcome.bridged > 0 ? `, bridging ${n(outcome.bridged, 'hole', 'holes')} in the scan at the cut` : ''
   if (outcome.open === 0) {
     return (
       <p className="hint" data-test="cut-closes">
-        The part is shown as the cut would leave it: closed flat{bridged}.
+        {tr("The part is shown as the cut would leave it: closed flat")}{bridged}.
       </p>
     )
   }
   return (
     <p className="hint" data-test="cut-open">
-      The scan is open across the plane, so {n(outcome.open, 'stretch', 'stretches')} of the cut will
-      stay open — drawn grey on the part
-      {outcome.capped > 0 ? `; the rest closes flat${bridged}` : ''}.
+      {tr("The scan is open across the plane, so")}{' '}{n(outcome.open, 'stretch', 'stretches')} {tr("of the cut will stay open — drawn grey on the part")}{' '}{outcome.capped > 0 ? `; the rest closes flat${bridged}` : ''}.
     </p>
   )
 }

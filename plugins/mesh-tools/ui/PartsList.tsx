@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../src/i18n'
 // The parts of the scan as a list: each piece with its size and an eye, the
 // small ones that a removal would take marked.
 
@@ -37,7 +38,7 @@ export function PartsList({ busy, onExportReduced, onExportTrimmed }: { busy: bo
   return (
     <div className="group" data-test="mesh-parts">
       <div className="g-label">
-        <span>Parts</span>
+        <span>{tr("Parts")}</span>
         <b>{1 + (report ? 1 : 0) + (made ? 1 : 0) + bodies.length}</b>
       </div>
       <PartRow
@@ -56,7 +57,7 @@ export function PartsList({ busy, onExportReduced, onExportTrimmed }: { busy: bo
           name="Reduced mesh"
           dot="#7f8ba0"
           reading={`${count(report.triangles)} triangles`}
-          title="The scan reduced for CAD — shown in the scan's place, the two lying on one surface"
+          title={tr("The scan reduced for CAD — shown in the scan's place, the two lying on one surface")}
           shown={shownReduced}
           what="the reduced mesh"
           onToggle={() => setPartShown('reduced', !shownReduced)}
@@ -91,9 +92,7 @@ export function PartsList({ busy, onExportReduced, onExportTrimmed }: { busy: bo
         )
       })}
       <p className="hint">
-        What the viewport shows with no tool in hand. The scan and the reduced mesh lie on one
-        surface and are shown one at a time; with the piece shown, the scan is a veil over it.
-      </p>
+        {tr("What the viewport shows with no tool in hand. The scan and the reduced mesh lie on one surface and are shown one at a time; with the piece shown, the scan is a veil over it.")}{' '}</p>
       {(report || made) && (
         <div className="toolrow">
           {report && (
@@ -102,7 +101,7 @@ export function PartsList({ busy, onExportReduced, onExportTrimmed }: { busy: bo
               testId="parts-export-reduced"
               disabled={busy}
               onExport={onExportReduced}
-              title="Save the reduced mesh as an STL or a 3MF where the part now stands"
+              title={tr("Save the reduced mesh as an STL or a 3MF where the part now stands")}
             />
           )}
           {made && (
@@ -111,7 +110,7 @@ export function PartsList({ busy, onExportReduced, onExportTrimmed }: { busy: bo
               testId="parts-export-trimmed"
               disabled={busy}
               onExport={onExportTrimmed}
-              title="Save the piece as an STL or a 3MF where the part now stands — any alignment or move you applied comes with it"
+              title={tr("Save the piece as an STL or a 3MF where the part now stands — any alignment or move you applied comes with it")}
             />
           )}
         </div>

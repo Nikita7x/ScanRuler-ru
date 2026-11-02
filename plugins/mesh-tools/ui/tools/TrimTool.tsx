@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../../src/i18n'
 // Trim to scan: a solid trimmed where the scan breaks off, the piece kept
 // and handed on.
 
@@ -55,39 +56,22 @@ export function TrimTool({
     <>
       <div className="group" data-test="trim-tool">
         <div className="sec-head">
-          Trim to scan
-          <InfoDot title="Trimming a body to the scanned break">
+          {tr("Trim to scan")}{' '}<InfoDot title={tr("Trimming a body to the scanned break")}>
             <p>
-              For a part with a piece broken off: scan what is left, model the missing piece as a body
-              in the Reverse engineer workspace — to the part's nominal shape, and {tooLong} too long
-              at the break, so it reaches into the material that is still there — and cut it
-              here with the scanned fracture. What comes back is the piece that fits, to print and glue
-              in. The fracture is far too rough to model; it does not have to be.
-            </p>
+              {tr("For a part with a piece broken off: scan what is left, model the missing piece as a body in the Reverse engineer workspace — to the part's nominal shape, and")}{' '}{tooLong} {tr("too long at the break, so it reaches into the material that is still there — and cut it here with the scanned fracture. What comes back is the piece that fits, to print and glue in. The fracture is far too rough to model; it does not have to be.")}{' '}</p>
             <p>
-              Click the body on the part. The <b>break</b> is found where the scan lies deeper inside
-              the body than the <b>depth</b> — the fracture does, the part's own skins only dip into a
-              body modelled a little larger than the part — and marked on the part in teal. Put it right
-              with the marking tools if it caught something else, or mark it by hand; <b>Find again</b>{' '}
-              marks it as found.
-            </p>
+              {tr("Click the body on the part. The")}{' '}<b>{tr("break")}</b> {tr("is found where the scan lies deeper inside the body than the")}{' '}<b>{tr("depth")}</b> {tr("— the fracture does, the part's own skins only dip into a body modelled a little larger than the part — and marked on the part in teal. Put it right with the marking tools if it caught something else, or mark it by hand;")}{' '}<b>{tr("Find again")}</b>{' '}
+              {tr("marks it as found.")}{' '}</p>
             <p>
-              The break is carried on past the body at its edges, thickened into a thin sheet, and the
-              body cut with it: the side the missing piece is on is kept (<b>Keep the other side</b>{' '}
-              turns that round). The body's own faces are never cut by anything but the break, so where
-              the model and the part differ a little, a small step at the joint is all it shows.
-            </p>
+              {tr("The break is carried on past the body at its edges, thickened into a thin sheet, and the body cut with it: the side the missing piece is on is kept (")}<b>{tr("Keep the other side")}</b>{' '}
+              {tr("turns that round). The body's own faces are never cut by anything but the break, so where the model and the part differ a little, a small step at the joint is all it shows.")}{' '}</p>
             <p>
-              <b>Offset from break</b> sets the piece's mating face back from the fracture: 0 cuts on it,
-              {glue} of {inch ? 'an inch' : 'a millimetre'} leaves room for glue. The piece is shown over the scan
-              ghosted, its mating face in teal, and is not saved with the project — it is made again
-              with a click.
-            </p>
+              <b>{tr("Offset from break")}</b> {tr("sets the piece's mating face back from the fracture: 0 cuts on it,")}{' '}{glue} {tr("of")}{' '}{inch ? 'an inch' : 'a millimetre'} {tr("leaves room for glue. The piece is shown over the scan ghosted, its mating face in teal, and is not saved with the project — it is made again with a click.")}{' '}</p>
           </InfoDot>
         </div>
 
         {solids.length > 0 && (
-          <div className="boolean-solids" role="radiogroup" aria-label="Body to trim" data-test="trim-solids">
+          <div className="boolean-solids" role="radiogroup" aria-label={tr("Body to trim")} data-test="trim-solids">
             {solids.map((x) => (
               <label key={x.key} className="checkrow" data-test="trim-solid" data-key={x.key}>
                 <input type="radio" name="trim-solid" checked={m.trimSolid === x.key} disabled={busy} onChange={() => m.setTrimSolid(x.key)} />
@@ -100,29 +84,23 @@ export function TrimTool({
         )}
         {solids.length === 0 && (
           <p className="hint" data-test="trim-no-solid">
-            Model the missing piece as a body in the Reverse engineer workspace, {tooLong} longer at
-            the break so it reaches into the part.
-          </p>
+            {tr("Model the missing piece as a body in the Reverse engineer workspace,")}{' '}{tooLong} {tr("longer at the break so it reaches into the part.")}{' '}</p>
         )}
         {solids.length > 0 && !solid && (
           <p className="hint" data-test="trim-pick-hint">
-            Click the body on the part — the one modelled to fill what is missing.
-          </p>
+            {tr("Click the body on the part — the one modelled to fill what is missing.")}{' '}</p>
         )}
 
         {solid && !onPiece && (
           <>
             {found === null && m.trimBreakError === null && (
               <p className="hint" data-test="trim-finding">
-                <span className="spinner" /> Finding the break…
-              </p>
+                <span className="spinner" /> {tr("Finding the break…")}{' '}</p>
             )}
             {found && (
               <p className="hint" data-test="trim-break">
-                The break is marked on the part in teal — {len.area(found.area, 1)}
-                {found.pieces > 1 ? ` in ${count(found.pieces)} pieces` : ''}. Put it right with the marking
-                tools if it caught anything but the fracture.
-              </p>
+                {tr("The break is marked on the part in teal —")}{' '}{len.area(found.area, 1)}
+                {found.pieces > 1 ? ` in ${count(found.pieces)} pieces` : ''}{tr(". Put it right with the marking tools if it caught anything but the fracture.")}{' '}</p>
             )}
             {m.trimBreakError && (
               <p className="warnnote" data-test="trim-break-error">
@@ -135,10 +113,9 @@ export function TrimTool({
               data-test="trim-find-again"
               disabled={busy}
               onClick={m.findTrimBreakAgain}
-              title="Mark the break afresh, where the scan lies deeper in the body than the depth — any change made by hand goes"
+              title={tr("Mark the break afresh, where the scan lies deeper in the body than the depth — any change made by hand goes")}
             >
-              Find again
-            </button>
+              {tr("Find again")}{' '}</button>
           </>
         )}
 
@@ -156,7 +133,7 @@ export function TrimTool({
 
         <label className="checkrow" data-test="trim-flip">
           <input type="checkbox" checked={m.trimFlip} disabled={busy} onChange={(e) => m.setTrimFlip(e.target.checked)} />
-          <span>Keep the other side</span>
+          <span>{tr("Keep the other side")}</span>
         </label>
 
         <button
@@ -164,10 +141,9 @@ export function TrimTool({
           data-test="trim-advanced"
           aria-expanded={advanced}
           onClick={() => setAdvanced((on) => !on)}
-          title="The depth the break is found at"
+          title={tr("The depth the break is found at")}
         >
-          Advanced
-        </button>
+          {tr("Advanced")}{' '}</button>
         {advanced && (
           <NumberField
             label="Depth"
@@ -192,8 +168,7 @@ export function TrimTool({
           {running ? (
             <>
               <span className="spinner" />
-              Trimming…
-            </>
+              {tr("Trimming…")}{' '}</>
           ) : solid ? (
             `Trim ${solid.name} to the break`
           ) : (
@@ -211,7 +186,7 @@ export function TrimTool({
         <div className="group" data-test="trim-result">
           <div className="dro hero">
             <div className="dro-label">
-              <span>{made.name}, trimmed</span>
+              <span>{made.name}{tr(", trimmed")}</span>
               <span>{made.report.offset > 0 ? `${typedLen(made.report.offset, len.units)} off the break` : 'on the break'}</span>
             </div>
             <div className="dro-window" data-test="trim-volume">
@@ -219,28 +194,23 @@ export function TrimTool({
               <span>{len.word(3).toUpperCase()}</span>
             </div>
             <div className="dro-note">
-              of {len.vol(made.report.bodyVolume, 1)} in the body{made.flip ? ' · the other side' : ''}
+              {tr("of")}{' '}{len.vol(made.report.bodyVolume, 1)} {tr("in the body")}{made.flip ? ' · the other side' : ''}
             </div>
           </div>
           <div className="kv" data-test="trim-mating">
-            <span className="name">Mating face</span>
+            <span className="name">{tr("Mating face")}</span>
             <b>{len.area(made.report.matingArea, 1)}</b>
           </div>
           {made.report.fit && (
             <div className="kv" data-test="trim-gap">
               <span className="name">
-                Off the part
-                <InfoDot title="The gap, measured">
+                {tr("Off the part")}{' '}<InfoDot title={tr("The gap, measured")}>
                   <p>
-                    How far the mating face is from the scan, where it lies over the break: at the
-                    median, and the range 90 % of it lies in. It is the offset, as near as the scan
-                    lets it be — {made.report.slab / 2 === made.report.offset ? '' : `${inch ? len.fmt(made.report.slab / 2, 2) : 'a hundredth'} at an offset of 0, the thinnest the cut can be, and `}
-                    further off in a groove narrower than twice the offset, which the face bridges,
-                    and along the joint's edges, where the break was carried out past the part.
-                  </p>
+                    {tr("How far the mating face is from the scan, where it lies over the break: at the median, and the range 90 % of it lies in. It is the offset, as near as the scan lets it be —")}{' '}{made.report.slab / 2 === made.report.offset ? '' : `${inch ? len.fmt(made.report.slab / 2, 2) : 'a hundredth'} at an offset of 0, the thinnest the cut can be, and `}
+                    {tr("further off in a groove narrower than twice the offset, which the face bridges, and along the joint's edges, where the break was carried out past the part.")}{' '}</p>
                   <p>
-                    <b>Gap</b> in the view bar colours the face by it. Least:{' '}
-                    {len.fmt(made.report.slab / 2 + made.report.fit.min, 3)}, most:{' '}
+                    <b>{tr("Gap")}</b> {tr("in the view bar colours the face by it. Least:")}{' '}
+                    {len.fmt(made.report.slab / 2 + made.report.fit.min, 3)}{tr(", most:")}{' '}
                     {len.fmt(made.report.slab / 2 + made.report.fit.max, 3)}.
                   </p>
                 </InfoDot>
@@ -255,20 +225,18 @@ export function TrimTool({
             </div>
           )}
           <div className="kv">
-            <span className="name">Break</span>
+            <span className="name">{tr("Break")}</span>
             <b>{len.area(made.report.break.area, 1)}</b>
           </div>
           {made.report.pieces > 1 && (
             <div className="kv">
-              <span className="name">Pieces</span>
+              <span className="name">{tr("Pieces")}</span>
               <b>{count(made.report.pieces)}</b>
             </div>
           )}
           {stale && (
             <p className="hint" data-test="trim-stale">
-              The settings have changed since this was trimmed — trim again to apply them. The export
-              writes the piece on screen.
-            </p>
+              {tr("The settings have changed since this was trimmed — trim again to apply them. The export writes the piece on screen.")}{' '}</p>
           )}
           <div className="divider" />
           <ExportMeshButton
@@ -276,7 +244,7 @@ export function TrimTool({
             testId="export-trimmed-mesh"
             disabled={busy}
             onExport={onExport}
-            title="Save the piece as an STL or a 3MF where the part now stands — any alignment or move you applied comes with it"
+            title={tr("Save the piece as an STL or a 3MF where the part now stands — any alignment or move you applied comes with it")}
           />
         </div>
       )}

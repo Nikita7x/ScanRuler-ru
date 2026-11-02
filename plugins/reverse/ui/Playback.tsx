@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../src/i18n'
 // The feature list's playback (app/playback.ts) in the panel and on the
 // stage: the key that starts it in the list's heading, the keys that hold
 // it, step it and end it while it runs, and the caption the viewport
@@ -33,8 +34,7 @@ export function PlaybackKey() {
       onClick={() => startPlayback()}
     >
       <KeyIcon name="play" size={13} />
-      Play
-    </button>
+      {tr("Play")}{' '}</button>
   )
 }
 
@@ -62,27 +62,27 @@ export function PlaybackBar() {
   return (
     <div className="playbar" data-test="playback-bar">
       <div className="playkeys">
-        <button data-test="playback-back" disabled={playbackStepFrom(playback.at, -1, steps) === null} title="One step back — the playback held there (←)" aria-label="Step back" onClick={() => stepPlayback(-1)}>
+        <button data-test="playback-back" disabled={playbackStepFrom(playback.at, -1, steps) === null} title={tr("One step back — the playback held there (←)")} aria-label={tr("Step back")} onClick={() => stepPlayback(-1)}>
           <KeyIcon name="stepBack" size={16} />
         </button>
         {playback.playing ? (
-          <button data-test="playback-pause" title="Hold the playback at this step (Space)" aria-label="Pause" onClick={() => pausePlayback()}>
+          <button data-test="playback-pause" title={tr("Hold the playback at this step (Space)")} aria-label={tr("Pause")} onClick={() => pausePlayback()}>
             <KeyIcon name="pause" size={16} />
           </button>
         ) : (
-          <button data-test="playback-play" title={atEnd ? 'Play again from the top (Space)' : 'Carry on from this step (Space)'} aria-label="Play" onClick={() => resumePlayback()}>
+          <button data-test="playback-play" title={atEnd ? 'Play again from the top (Space)' : 'Carry on from this step (Space)'} aria-label={tr("Play")} onClick={() => resumePlayback()}>
             <KeyIcon name="play" size={16} />
           </button>
         )}
-        <button data-test="playback-forward" disabled={atEnd} title="One step on — the playback held there (→)" aria-label="Step forward" onClick={() => stepPlayback(1)}>
+        <button data-test="playback-forward" disabled={atEnd} title={tr("One step on — the playback held there (→)")} aria-label={tr("Step forward")} onClick={() => stepPlayback(1)}>
           <KeyIcon name="stepForward" size={16} />
         </button>
-        <button data-test="playback-stop" title="End the playback — the rollback bar back where it stood (Escape)" aria-label="Stop" onClick={() => stopPlayback()}>
+        <button data-test="playback-stop" title={tr("End the playback — the rollback bar back where it stood (Escape)")} aria-label={tr("Stop")} onClick={() => stopPlayback()}>
           <KeyIcon name="stop" size={16} />
         </button>
       </div>
-      <label className="playhold" title="How long each step is held once it is built">
-        <span>Hold</span>
+      <label className="playhold" title={tr("How long each step is held once it is built")}>
+        <span>{tr("Hold")}</span>
         <select data-test="playback-hold" value={stepMs} onChange={(e) => useRePrefs.getState().setPlaybackStepMs(Number(e.target.value))}>
           {holds.map((ms) => (
             <option key={ms} value={ms}>
@@ -91,14 +91,12 @@ export function PlaybackBar() {
           ))}
         </select>
       </label>
-      <label className="playcaption" title="Name each step in the top left of the viewport, for the recording">
+      <label className="playcaption" title={tr("Name each step in the top left of the viewport, for the recording")}>
         <input type="checkbox" data-test="playback-caption" checked={caption} onChange={(e) => useRePrefs.getState().setPlaybackCaption(e.target.checked)} />
-        Caption
-      </label>
-      <label className="playcaption" title="Pass over the sketches: only the steps that change the geometry are shown, each profile going straight to the body made of it">
+        {tr("Caption")}{' '}</label>
+      <label className="playcaption" title={tr("Pass over the sketches: only the steps that change the geometry are shown, each profile going straight to the body made of it")}>
         <input type="checkbox" data-test="playback-skip-sketches" checked={skipSketches} onChange={(e) => useRePrefs.getState().setPlaybackSkipSketches(e.target.checked)} />
-        Skip sketches
-      </label>
+        {tr("Skip sketches")}{' '}</label>
     </div>
   )
 }
@@ -136,7 +134,7 @@ export function PlaybackCaption() {
   return (
     <div className="playcaption-card" data-test="playback-caption-card">
       <div className="playstep">
-        Step {steps.filter((n) => n > 0 && n <= playback.at).length} / {steps.length - 1}
+        {tr("Step")}{' '}{steps.filter((n) => n > 0 && n <= playback.at).length} / {steps.length - 1}
       </div>
       <div className="playname">
         {f ? <KeyIcon name={FEATURE_ICONS[f.kind]} size={20} /> : <Icon name="scan" size={20} />}

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The ways of looking at the parts, in the bottom-left corner of the stage —
 // the corner the instrument leaves free, with the colour scale down the right
 // edge and the orientation gizmo bottom right. Every key here is a way of
@@ -148,7 +149,7 @@ export function ViewBar({
               label="Scan"
               testId="toggle-scan"
               shown={scanShown}
-              title="Show the scan, or put it away. How it is drawn is in the menu over the key"
+              title={tr("Show the scan, or put it away. How it is drawn is in the menu over the key")}
               changed={anyChanged([scanSeeThrough, scanMesh, scanBackfaces, ...(scanColors ? [scanColours] : [])]) || Boolean(scanKey?.menuChanged)}
             >
               <PartOption
@@ -156,21 +157,21 @@ export function ViewBar({
                 label="Transparent"
                 testId="toggle-translucent"
                 value={scanSeeThrough}
-                title="Draw the scan transparent — what lies inside it, the fitted elements and the pinned readings show instead of hiding behind the surface in front of them"
+                title={tr("Draw the scan transparent — what lies inside it, the fitted elements and the pinned readings show instead of hiding behind the surface in front of them")}
               />
               <PartOption
                 icon={<Icon name="mesh" size={16} />}
                 label="Mesh"
                 testId="toggle-wireframe"
                 value={scanMesh}
-                title="Draw the triangle edges on the scan, to see how fine it is and where it is patchy. The mesh comes up as you zoom in: from a distance the triangles are smaller than a pixel, and the edges fade out rather than turning the part black"
+                title={tr("Draw the triangle edges on the scan, to see how fine it is and where it is patchy. The mesh comes up as you zoom in: from a distance the triangles are smaller than a pixel, and the edges fade out rather than turning the part black")}
               />
               <PartOption
                 icon={<Icon name="backfaces" size={16} />}
                 label="Backfaces"
                 testId="toggle-backfaces"
                 value={scanBackfaces}
-                title="Colour the far side of every triangle — holes in the scan and inverted normals stop looking like solid part"
+                title={tr("Colour the far side of every triangle — holes in the scan and inverted normals stop looking like solid part")}
               />
               {scanColors && (
                 <PartOption
@@ -178,7 +179,7 @@ export function ViewBar({
                   label="Colours"
                   testId="toggle-scan-colours"
                   value={scanColours}
-                  title="Show the scan in the colours it was captured in — its texture — or plain, in the stage's scan colour. Maps and tints are drawn over either"
+                  title={tr("Show the scan in the colours it was captured in — its texture — or plain, in the stage's scan colour. Maps and tints are drawn over either")}
                 />
               )}
               {scanKey?.menu}
@@ -189,7 +190,7 @@ export function ViewBar({
                 label="Reference"
                 testId="toggle-reference"
                 shown={referenceShown}
-                title="Show the reference, or put it away — inside the scan it is a ghost, solid with the scan put away, which is how it is checked to be the right part"
+                title={tr("Show the reference, or put it away — inside the scan it is a ghost, solid with the scan put away, which is how it is checked to be the right part")}
                 changed={anyChanged([referenceSeeThrough, referenceMesh, referenceBackfaces])}
               >
                 <PartOption
@@ -197,21 +198,21 @@ export function ViewBar({
                   label="Transparent"
                   testId="toggle-reference-translucent"
                   value={referenceSeeThrough}
-                  title="Draw the reference transparent while it is solid"
+                  title={tr("Draw the reference transparent while it is solid")}
                 />
                 <PartOption
                   icon={<Icon name="mesh" size={16} />}
                   label="Mesh"
                   testId="toggle-reference-wireframe"
                   value={referenceMesh}
-                  title="Draw the triangle edges on the reference — how finely the model was exported"
+                  title={tr("Draw the triangle edges on the reference — how finely the model was exported")}
                 />
                 <PartOption
                   icon={<Icon name="backfaces" size={16} />}
                   label="Backfaces"
                   testId="toggle-reference-backfaces"
                   value={referenceBackfaces}
-                  title="Colour the far side of every triangle of the reference while it is solid — holes and inverted normals in the model stop looking like solid part"
+                  title={tr("Colour the far side of every triangle of the reference while it is solid — holes and inverted normals in the model stop looking like solid part")}
                 />
               </PartKey>
             )}
@@ -222,7 +223,7 @@ export function ViewBar({
                 label="Elements"
                 testId="toggle-elements"
                 shown={elementsShown}
-                title="Show the elements, the dimensions and the sections on the part, or put them all away — each one's own eye in the list stays as it is"
+                title={tr("Show the elements, the dimensions and the sections on the part, or put them all away — each one's own eye in the list stays as it is")}
                 changed={anyChanged([labels])}
               >
                 <PartOption
@@ -230,7 +231,7 @@ export function ViewBar({
                   label="Labels"
                   testId="toggle-labels"
                   value={labels}
-                  title="Show the name tags and readouts on the part. The fitted elements, the sections and the dimension lines stay either way"
+                  title={tr("Show the name tags and readouts on the part. The fitted elements, the sections and the dimension lines stay either way")}
                 />
               </PartKey>
             )}
@@ -252,8 +253,7 @@ export function ViewBar({
                 }
               >
                 <Icon name="splitView" size={16} />
-                Split view
-              </button>
+                {tr("Split view")}{' '}</button>
             )}
             <button
               className={showMap ? 'on' : undefined}
@@ -268,8 +268,7 @@ export function ViewBar({
               }
             >
               <Icon name="colourPlot" size={16} />
-              Colour plot
-            </button>
+              {tr("Colour plot")}{' '}</button>
             {onReference && (
               <button
                 className={mapOn === 'reference' ? 'on' : undefined}
@@ -301,11 +300,10 @@ export function ViewBar({
                 if (view.on) view.close()
                 else view.open(viewDirection(), stageCentre())
               }}
-              title="Cut the parts open at a plane to look inside — the scan, the reference and everything measured on them. Closed parts are closed where they are cut; an open scan stays a shell. Slide the plane with the arrow, tilt it with the rings"
+              title={tr("Cut the parts open at a plane to look inside — the scan, the reference and everything measured on them. Closed parts are closed where they are cut; an open scan stays a shell. Slide the plane with the arrow, tilt it with the rings")}
             >
               <Icon name="sectionView" size={16} />
-              Section
-            </button>
+              {tr("Section")}{' '}</button>
           </div>
         )}
       </div>

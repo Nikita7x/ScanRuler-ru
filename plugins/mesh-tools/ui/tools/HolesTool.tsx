@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../../src/i18n'
 // Fill holes: the gaps in the scan under a size closed, flat or following
 // the surface round them.
 
@@ -23,24 +24,13 @@ export function HolesTool({ ready, busy, onFill }: { ready: boolean; busy: boole
   return (
     <div className="group" data-test="holes-tool">
       <div className="sec-head">
-        Fill holes
-        <InfoDot title="Filling holes">
+        {tr("Fill holes")}{' '}<InfoDot title={tr("Filling holes")}>
           <p>
-            A scanner leaves holes where it could not see: the bottom of a blind bore, the inside of
-            a sharp corner, a shiny spot, the pin the part stood on. Every rim smaller across than
-            the size below is a hole, marked on the part in orange and ringed; larger rims — the
-            scan's own open border, a hole too big to guess across — are drawn faint and left open.
-          </p>
+            {tr("A scanner leaves holes where it could not see: the bottom of a blind bore, the inside of a sharp corner, a shiny spot, the pin the part stood on. Every rim smaller across than the size below is a hole, marked on the part in orange and ringed; larger rims — the scan's own open border, a hole too big to guess across — are drawn faint and left open.")}{' '}</p>
           <p>
-            Each hole is closed with the patch across it that bends least, given points as dense as
-            the scan around it, and smoothed: <b>Curved</b> carries the surface's curvature across
-            the hole, so a patch on a ball bulges with the ball; <b>Flat</b> lays the tightest patch
-            across the rim, flat wherever the rim is. The scan's own points stay where they are.
-          </p>
+            {tr("Each hole is closed with the patch across it that bends least, given points as dense as the scan around it, and smoothed:")}{' '}<b>{tr("Curved")}</b> {tr("carries the surface's curvature across the hole, so a patch on a ball bulges with the ball;")}{' '}<b>{tr("Flat")}</b> {tr("lays the tightest patch across the rim, flat wherever the rim is. The scan's own points stay where they are.")}{' '}</p>
           <p>
-            A filled patch is a guess at what the scanner did not see — the deviation and thickness
-            maps read it like any other surface. <b>Ctrl+Z</b> opens the holes again.
-          </p>
+            {tr("A filled patch is a guess at what the scanner did not see — the deviation and thickness maps read it like any other surface.")}{' '}<b>{tr("Ctrl+Z")}</b> {tr("opens the holes again.")}{' '}</p>
         </InfoDot>
       </div>
 
@@ -57,8 +47,8 @@ export function HolesTool({ ready, busy, onFill }: { ready: boolean; busy: boole
       />
 
       <div className="field">
-        <span>Patch</span>
-        <div className="moderow" role="radiogroup" aria-label="Patch shape">
+        <span>{tr("Patch")}</span>
+        <div className="moderow" role="radiogroup" aria-label={tr("Patch shape")}>
           {(['curved', 'flat'] as const).map((mode) => (
             <button
               key={mode}
@@ -82,36 +72,31 @@ export function HolesTool({ ready, busy, onFill }: { ready: boolean; busy: boole
 
       {ready && !s && (
         <p className="hint">
-          <span className="spinner" /> Looking for holes…
-        </p>
+          <span className="spinner" /> {tr("Looking for holes…")}{' '}</p>
       )}
       {s && (
         <>
           <div className="kv" data-test="holes-rims">
-            <span className="name">Open rims in the scan</span>
+            <span className="name">{tr("Open rims in the scan")}</span>
             <b>{count(s.rims)}</b>
           </div>
           <div className="kv" data-test="holes-count">
-            <span className="name">Holes, under {typedLen(s.maxSize, len.units)}</span>
+            <span className="name">{tr("Holes, under")}{' '}{typedLen(s.maxSize, len.units)}</span>
             <b>{count(s.holes)}</b>
           </div>
           {s.holes > 0 && (
             <p className="hint" data-test="holes-gap">
-              Marked on the part in orange, each in a ring — click a ring to fill just that hole.
-              The largest is{' '}
-              {len.fmt(s.largestHole!, 2)} across
-              {s.smallestOpen !== null ? `, the smallest rim left open ${len.fmt(s.smallestOpen, 2)}` : ''}.
+              {tr("Marked on the part in orange, each in a ring — click a ring to fill just that hole. The largest is")}{' '}
+              {len.fmt(s.largestHole!, 2)} {tr("across")}{' '}{s.smallestOpen !== null ? `, the smallest rim left open ${len.fmt(s.smallestOpen, 2)}` : ''}.
             </p>
           )}
           {s.rims === 0 && (
             <p className="hint" data-test="holes-closed">
-              The scan is closed — it has no open edge anywhere.
-            </p>
+              {tr("The scan is closed — it has no open edge anywhere.")}{' '}</p>
           )}
           {s.rims > 0 && s.holes === 0 && (
             <p className="hint" data-test="holes-none">
-              No rim is smaller than that — the smallest is {len.fmt(s.smallestOpen!, 2)} across.
-            </p>
+              {tr("No rim is smaller than that — the smallest is")}{' '}{len.fmt(s.smallestOpen!, 2)} {tr("across.")}{' '}</p>
           )}
         </>
       )}
@@ -126,8 +111,7 @@ export function HolesTool({ ready, busy, onFill }: { ready: boolean; busy: boole
         {editing ? (
           <>
             <span className="spinner" />
-            Filling…
-          </>
+            {tr("Filling…")}{' '}</>
         ) : s && s.holes > 0 ? (
           `Fill ${holes(s.holes)}`
         ) : (

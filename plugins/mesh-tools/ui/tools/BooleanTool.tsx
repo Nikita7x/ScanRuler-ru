@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../../src/i18n'
 // Boolean: the scan joined with, cut by or intersected with the solids the
 // workspace has.
 
@@ -36,37 +37,19 @@ export function BooleanTool({ ready, busy, onBoolean }: { ready: boolean; busy: 
   return (
     <div className="group" data-test="boolean-tool">
       <div className="sec-head">
-        Boolean
-        <InfoDot title="A boolean with a solid">
+        {tr("Boolean")}{' '}<InfoDot title={tr("A boolean with a solid")}>
           <p>
-            The mesh and a solid body made one: the solid <b>subtracted</b> from the mesh, <b>added</b>{' '}
-            to it, or the two cut down to what they share (<b>intersect</b>). Every solid on offer is
-            drawn on the part while the tool is in hand, and faintly through it, so its whole length is
-            in view; nothing is in hand as the tool opens — click each one to use, or tick it in the
-            list (<b>Select all</b> takes every one), and click it again to take it out. Those in
-            hand take the colour of what will happen to them — red what goes, green what
-            is added, blue what is kept. Several go as one, their union: every bore of a flange taken
-            out in one edit, the part trimmed to what either of two boxes holds. The tool is put away
-            once the operation is done.
-          </p>
+            {tr("The mesh and a solid body made one: the solid")}{' '}<b>{tr("subtracted")}</b> {tr("from the mesh,")}{' '}<b>{tr("added")}</b>{' '}
+            {tr("to it, or the two cut down to what they share (")}<b>{tr("intersect")}</b>{tr("). Every solid on offer is drawn on the part while the tool is in hand, and faintly through it, so its whole length is in view; nothing is in hand as the tool opens — click each one to use, or tick it in the list (")}<b>{tr("Select all")}</b> {tr("takes every one), and click it again to take it out. Those in hand take the colour of what will happen to them — red what goes, green what is added, blue what is kept. Several go as one, their union: every bore of a flange taken out in one edit, the part trimmed to what either of two boxes holds. The tool is put away once the operation is done.")}{' '}</p>
           <p>
-            The solids are the cylinders, cones and spheres shown in 3D Measure — each as it is drawn
-            there, at its <b>Assumed Ø</b> and out as far as it was extended — and the bodies modelled
-            in the Reverse engineer workspace. A bore the scanner could not see to the bottom of,
-            which the scanning software closed part way down, is cut out the way it was made: fit a
-            cylinder to the wall the scan does show, extend it down past the bottom of the bore and
-            up out through the surface, and subtract it here — give it the bore's design Ø as its
-            Assumed Ø if that is what it is to come out at.
-          </p>
+            {tr("The solids are the cylinders, cones and spheres shown in 3D Measure — each as it is drawn there, at its")}{' '}<b>{tr("Assumed Ø")}</b> {tr("and out as far as it was extended — and the bodies modelled in the Reverse engineer workspace. A bore the scanner could not see to the bottom of, which the scanning software closed part way down, is cut out the way it was made: fit a cylinder to the wall the scan does show, extend it down past the bottom of the bore and up out through the surface, and subtract it here — give it the bore's design Ø as its Assumed Ø if that is what it is to come out at.")}{' '}</p>
           <p>
-            A boolean needs the mesh closed: close its holes with <b>Fill holes</b> first. The surface
-            the solid brings — a bore's wall and floor — has no scan under it and is grey in the{' '}
-            <b>Deviation</b> view. <b>Ctrl+Z</b> puts the mesh back.
-          </p>
+            {tr("A boolean needs the mesh closed: close its holes with")}{' '}<b>{tr("Fill holes")}</b> {tr("first. The surface the solid brings — a bore's wall and floor — has no scan under it and is grey in the")}{' '}
+            <b>{tr("Deviation")}</b> {tr("view.")}{' '}<b>{tr("Ctrl+Z")}</b> {tr("puts the mesh back.")}{' '}</p>
         </InfoDot>
       </div>
 
-      <div className="moderow boolean-ops" role="radiogroup" aria-label="Boolean operation">
+      <div className="moderow boolean-ops" role="radiogroup" aria-label={tr("Boolean operation")}>
         {BOOLEAN_OPS.map((o) => (
           <button
             key={o.id}
@@ -88,23 +71,21 @@ export function BooleanTool({ ready, busy, onBoolean }: { ready: boolean; busy: 
           <button
             data-test="boolean-select-all"
             disabled={busy || inHand === solids.length}
-            title="Put every solid on offer in hand, to go as one"
+            title={tr("Put every solid on offer in hand, to go as one")}
             onClick={() => setSolids(solids.map((x) => x.key))}
           >
-            Select all
-          </button>
+            {tr("Select all")}{' '}</button>
           <button
             data-test="boolean-select-none"
             disabled={busy || inHand === 0}
-            title="Take every solid out of hand"
+            title={tr("Take every solid out of hand")}
             onClick={() => setSolids([])}
           >
-            Unselect all
-          </button>
+            {tr("Unselect all")}{' '}</button>
         </div>
       )}
       {solids.length > 0 && (
-        <div className="boolean-solids" role="group" aria-label="Solids" data-test="boolean-solids">
+        <div className="boolean-solids" role="group" aria-label={tr("Solids")} data-test="boolean-solids">
           {solids.map((x) => (
             <label key={x.key} className="checkrow" data-test="boolean-solid" data-key={x.key}>
               <input type="checkbox" checked={chosen.includes(x.key)} disabled={busy} onChange={() => toggleSolid(x.key)} />
@@ -128,10 +109,7 @@ export function BooleanTool({ ready, busy, onBoolean }: { ready: boolean; busy: 
       )}
       {solids.length === 0 && (
         <p className="hint" data-test="boolean-no-solid">
-          Fit a cylinder, cone or sphere in 3D Measure, or model a body in the Reverse engineer
-          workspace. For a bore, fit a cylinder to its wall and extend it down past the bottom and
-          out through the surface.
-        </p>
+          {tr("Fit a cylinder, cone or sphere in 3D Measure, or model a body in the Reverse engineer workspace. For a bore, fit a cylinder to its wall and extend it down past the bottom and out through the surface.")}{' '}</p>
       )}
 
       {ready && (
@@ -148,8 +126,7 @@ export function BooleanTool({ ready, busy, onBoolean }: { ready: boolean; busy: 
         {editing ? (
           <>
             <span className="spinner" />
-            Working…
-          </>
+            {tr("Working…")}{' '}</>
         ) : (
           'Perform operation'
         )}

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../../src/i18n'
 // Smooth: the scan's noise taken out, over the whole part or a marked
 // region, its edges kept or let soften.
 
@@ -26,39 +27,22 @@ export function SmoothTool({
   return (
     <div className="group" data-test="smooth-tool">
       <div className="sec-head">
-        Smooth
-        <InfoDot title="Smoothing the scan">
+        {tr("Smooth")}{' '}<InfoDot title={tr("Smoothing the scan")}>
           <p>
-            A scanner's scatter is bumps across the surface: it makes a flat face read as orange
-            peel, a reduction keep triangles for it, a thickness map speckle. Smoothing moves every
-            point onto a surface fitted to the scan around it — a gently curved patch{' '}
-            <b>Smooth bumps up to</b> across. A bump smaller than the patch is averaged away; a face,
-            a bore or a fillet larger than it is what the patch fits, and stays where it was, so the
-            part is not shrunk. Points move along the surface's normal only.
-          </p>
+            {tr("A scanner's scatter is bumps across the surface: it makes a flat face read as orange peel, a reduction keep triangles for it, a thickness map speckle. Smoothing moves every point onto a surface fitted to the scan around it — a gently curved patch")}{' '}
+            <b>{tr("Smooth bumps up to")}</b> {tr("across. A bump smaller than the patch is averaged away; a face, a bore or a fillet larger than it is what the patch fits, and stays where it was, so the part is not shrunk. Points move along the surface's normal only.")}{' '}</p>
           <p>
-            No point ever moves further than <b>Move at most</b> from where the scanner put it. It
-            starts well past the scatter of a good scan, to hold back only a fit that has run off;
-            set it lower to be sure of what the part's shape can lose.
-          </p>
+            {tr("No point ever moves further than")}{' '}<b>{tr("Move at most")}</b> {tr("from where the scanner put it. It starts well past the scatter of a good scan, to hold back only a fit that has run off; set it lower to be sure of what the part's shape can lose.")}{' '}</p>
           <p>
-            <b>Keep sharp edges</b> fits each side of an edge where the surface turns by more than
-            30° on its own, so the faces are smoothed right up to the edge and the edge itself is
-            left as scanned: a machined edge is detail, not noise. Smoothing changes the edited
-            copy; <b>Ctrl+Z</b> puts it back.
-          </p>
+            <b>{tr("Keep sharp edges")}</b> {tr("fits each side of an edge where the surface turns by more than 30° on its own, so the faces are smoothed right up to the edge and the edge itself is left as scanned: a machined edge is detail, not noise. Smoothing changes the edited copy;")}{' '}<b>{tr("Ctrl+Z")}</b> {tr("puts it back.")}{' '}</p>
           <p>
-            <b>Marked region</b> smooths only the surface you mark with a window, the brush or a
-            lasso — a face that came out rough, leaving a textured one as it is. Each point moves
-            by less the nearer it is to the edge of the region, nothing at the edge itself, so the
-            smoothed patch runs into the scan around it without a step.
-          </p>
+            <b>{tr("Marked region")}</b> {tr("smooths only the surface you mark with a window, the brush or a lasso — a face that came out rough, leaving a textured one as it is. Each point moves by less the nearer it is to the edge of the region, nothing at the edge itself, so the smoothed patch runs into the scan around it without a step.")}{' '}</p>
         </InfoDot>
       </div>
 
       <div className="field">
-        <span>Smooth</span>
-        <div className="moderow" role="radiogroup" aria-label="What to smooth">
+        <span>{tr("Smooth")}</span>
+        <div className="moderow" role="radiogroup" aria-label={tr("What to smooth")}>
           {(['all', 'marked'] as const).map((scope) => (
             <button
               key={scope}
@@ -109,7 +93,7 @@ export function SmoothTool({
           checked={m.smoothEdges}
           onChange={(e) => m.setSmoothEdges(e.target.checked)}
         />
-        <span>Keep sharp edges</span>
+        <span>{tr("Keep sharp edges")}</span>
       </label>
 
       <button
@@ -122,8 +106,7 @@ export function SmoothTool({
         {m.editing ? (
           <>
             <span className="spinner" />
-            Smoothing…
-          </>
+            {tr("Smoothing…")}{' '}</>
         ) : regional ? (
           'Smooth the marked region'
         ) : (
@@ -131,7 +114,7 @@ export function SmoothTool({
         )}
       </button>
       {regional && marked === 0 && (
-        <p className="hint">Mark the surface to smooth — pick Window, Brush or Lasso above.</p>
+        <p className="hint">{tr("Mark the surface to smooth — pick Window, Brush or Lasso above.")}</p>
       )}
     </div>
   )

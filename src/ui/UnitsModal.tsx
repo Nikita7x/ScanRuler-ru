@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The units window: what an STL about to be opened is in. Put up by the
 // import (state/unitsPromptStore) before it reads the file, with the last
 // answer offered first; Open reads the file in the units picked, Cancel and
@@ -55,17 +56,15 @@ export function UnitsModal() {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modalhead">
-          <h2 id="units-title">Units of {request.fileName}</h2>
-          <button className="x" data-test="units-cancel" onClick={cancel} aria-label="Cancel">
+          <h2 id="units-title">{tr("Units of")}{' '}{request.fileName}</h2>
+          <button className="x" data-test="units-cancel" onClick={cancel} aria-label={tr("Cancel")}>
             ×
           </button>
         </div>
         <p className="dim">
-          An STL file carries no units — a 1 in it is whatever the program that wrote it meant.
-          Say what this one is in and it is read in millimetres, like everything measured here.
-        </p>
+          {tr("An STL file carries no units — a 1 in it is whatever the program that wrote it meant. Say what this one is in and it is read in millimetres, like everything measured here.")}{' '}</p>
         <div className="setting">
-          <span id="units-label">Coordinates in</span>
+          <span id="units-label">{tr("Coordinates in")}</span>
           <div className="keys" role="radiogroup" aria-labelledby="units-label">
             {MESH_UNITS.map((u) => (
               <button
@@ -89,15 +88,12 @@ export function UnitsModal() {
             onChange={(e) => setRemember(e.target.checked)}
           />
           <span>
-            <b>Don't ask again</b> — read every STL in these units. Settings brings the question
-            back.
-          </span>
+            <b>{tr("Don't ask again")}</b> {tr("— read every STL in these units. Settings brings the question back.")}{' '}</span>
         </label>
         <div className="modalfoot">
-          <button onClick={cancel}>Cancel</button>
+          <button onClick={cancel}>{tr("Cancel")}</button>
           <button className="primary" data-test="units-open" onClick={() => answer(units, remember)}>
-            Open
-          </button>
+            {tr("Open")}{' '}</button>
         </div>
       </div>
     </div>

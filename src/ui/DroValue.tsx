@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The DRO windows the panel reads its measurements in — big digits, small
 // legend — shared so the draft preview, the dimension preview and the
 // dimension rows all write their numbers the same way.
@@ -53,7 +54,7 @@ export function ValueWindow({
 }) {
   return value.invalid ? (
     <div className="dro-window alarm" data-test={testId}>
-      <b>no value</b>
+      <b>{tr("no value")}</b>
     </div>
   ) : (
     <div className={over ? 'dro-window over' : 'dro-window'} data-test={testId}>

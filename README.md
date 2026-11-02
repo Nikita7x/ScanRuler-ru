@@ -5,6 +5,8 @@
 
 # ScanRuler by CNC Kitchen
 
+> Russian/English community localization fork of [ScanRuler by CNC Kitchen](https://github.com/CNCKitchen/ScanRuler). The interface follows the browser language on first launch; use the **Eng / Rus** switch in the top bar to change it. Source project and authorship are credited to the upstream project. Licensed under AGPL-3.0-only; see [LICENSE](LICENSE).
+
 **Use it live at <https://scanruler.com/>** — nothing to install.
 
 > **Open source under the AGPL, with commercial licenses available.** Want to

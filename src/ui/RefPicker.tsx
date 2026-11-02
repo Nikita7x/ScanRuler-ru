@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // A dropdown whose options can be pointed at: hovering one tells the owner,
 // who shows the thing on the part — a plane in a list is a name, a plane on
 // the scan is a place. A native <select> cannot say which option the cursor
@@ -134,7 +135,7 @@ export function RefPicker({
                 })}
             </div>
           ))}
-          {options.length === 0 && <div className="pickoption empty">Nothing to choose from</div>}
+          {options.length === 0 && <div className="pickoption empty">{tr("Nothing to choose from")}</div>}
         </div>
       )}
     </div>

@@ -6,6 +6,7 @@ import { useRef, type RefObject } from 'react'
 import { SCAN_ACCEPT, SCAN_FORMATS } from '../core/formats'
 import { usePulse } from '../app/useHints'
 import { bundleFiles } from '../app/scanFiles'
+import { tr } from '../i18n'
 
 /** A file input out of sight, opened through `inputRef` by the key that
  *  stands for it, and emptied after every pick so the same file can come
@@ -62,8 +63,8 @@ export function ModelSlot({
         style={{ background: name ? dotColor : 'transparent', borderColor: dotColor }}
       />
       <div className="slotname">
-        <b title={name ?? undefined}>{name ?? `No ${role.toLowerCase()} loaded`}</b>
-        <span>{name ? detail : formats}</span>
+        <b title={name ?? undefined}>{name ?? tr(`No ${role.toLowerCase()} loaded`)}</b>
+        <span>{name ? detail : tr(formats)}</span>
       </div>
       <button
         data-test={`open-${slot}`}
@@ -71,7 +72,7 @@ export function ModelSlot({
         disabled={busy}
         onClick={() => inputRef.current?.click()}
       >
-        {name ? 'Replace…' : 'Open…'}
+        {tr(name ? 'Replace…' : 'Open…')}
       </button>
     </div>
   )

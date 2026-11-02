@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../src/i18n'
 // The Revolve box: the profiles picked, the axis, the angle or a coil's
 // pitch and turns, the body operation, with the preview and the live map.
 
@@ -46,9 +47,9 @@ export function RevolveEditor() {
       <div className="sec-head">{draft.featureId !== undefined ? `Edit ${draft.name}` : coil ? 'New coil' : 'New revolve'}</div>
       {draft.featureId !== undefined && <NameField value={draft.name ?? ''} testId="revolve-name" onChange={(name) => set({ name })} />}
       <label className="field">
-        <span>Sketch</span>
+        <span>{tr("Sketch")}</span>
         <select data-test="revolve-sketch" value={draft.sketchId ?? ''} onChange={(e) => set({ sketchId: e.target.value === '' ? null : Number(e.target.value), axis: null })}>
-          <option value="">Select…</option>
+          <option value="">{tr("Select…")}</option>
           {sketches.map((s) => (
             <option key={s.id} value={s.id}>
               {s.name}
@@ -59,19 +60,15 @@ export function RevolveEditor() {
       <ProfilesField picked={draft.regions.length} found={found} testPrefix="revolve" />
       <label className="field">
         <span>
-          Axis
-          <InfoDot title="Axis">
+          {tr("Axis")}{' '}<InfoDot title={tr("Axis")}>
             <p>
-              Click a line of the sketch on the part, or a line, cylinder, cone or circle element,
-              or choose here. A construction line drawn down the middle of the profile is the
-              usual axis.
-            </p>
+              {tr("Click a line of the sketch on the part, or a line, cylinder, cone or circle element, or choose here. A construction line drawn down the middle of the profile is the usual axis.")}{' '}</p>
           </InfoDot>
         </span>
         <RefPicker
           value={axisKey || null}
           options={axisOptions.map((o) => ({ key: o.key, label: o.label, group: o.key.startsWith('sketch:') ? 'Sketch lines' : o.key.startsWith('element:') ? 'Elements' : 'Coordinate axes' }))}
-          placeholder="Click in the viewport, or choose…"
+          placeholder={tr("Click in the viewport, or choose…")}
           testId="revolve-axis"
           onChange={(key) => {
             const o = axisOptions.find((x) => x.key === key)
@@ -86,14 +83,11 @@ export function RevolveEditor() {
       <label className="checkrow">
         <input type="checkbox" data-test="revolve-coil" checked={coil} onChange={(e) => re.getState().setRevolveCoil(e.target.checked)} />
         <span>
-          Coil — climb along the axis
-          <InfoDot title="Coil">
+          {tr("Coil — climb along the axis")}{' '}<InfoDot title={tr("Coil")}>
             <p>
-              The profile turns about the axis and climbs along it by the pitch every turn: a spring, a thread, a worm. The angle runs on past 360° — as many turns as you like; type them as turns or as a height, or wind the ring round and round.
-            </p>
+              {tr("The profile turns about the axis and climbs along it by the pitch every turn: a spring, a thread, a worm. The angle runs on past 360° — as many turns as you like; type them as turns or as a height, or wind the ring round and round.")}{' '}</p>
             <p>
-              The profile has to reach less far along the axis than the pitch, or each turn would run into the next. For a thread, draw the groove's section on a plane through the bar's axis, reaching a little past the bar, and set Result to Cut.
-            </p>
+              {tr("The profile has to reach less far along the axis than the pitch, or each turn would run into the next. For a thread, draw the groove's section on a plane through the bar's axis, reaching a little past the bar, and set Result to Cut.")}{' '}</p>
           </InfoDot>
         </span>
       </label>
@@ -121,24 +115,22 @@ export function RevolveEditor() {
           <Num label="Height" testId="revolve-height" slot="height" value={Math.round(Math.abs(draft.pitch) * (draft.angleDeg / 360) * 1e4) / 1e4} onCommit={(v) => set({ angleDeg: revolveAngle((Math.abs(v) / Math.abs(draft.pitch)) * 360, draft.pitch) })} hint="How far the profile climbs along the axis from start to end — the turns times the pitch. Typed, it sets the turns." />
           <label className="checkrow">
             <input type="checkbox" data-test="revolve-left" checked={draft.leftHanded} onChange={(e) => set({ leftHanded: e.target.checked })} />
-            <span>Left-handed</span>
+            <span>{tr("Left-handed")}</span>
           </label>
           <div className="toolrow">
-            <button className="withicon" data-test="revolve-flip" title="Climb the other way along the axis — the hand stays as it is" onClick={() => set({ pitch: -draft.pitch })}>
+            <button className="withicon" data-test="revolve-flip" title={tr("Climb the other way along the axis — the hand stays as it is")} onClick={() => set({ pitch: -draft.pitch })}>
               <Icon name="flip" size={16} />
-              Reverse direction
-            </button>
+              {tr("Reverse direction")}{' '}</button>
           </div>
         </>
       )}
       <OpFields op={draft.op} canCut={targets.length > 0} testPrefix="revolve" onOp={(op) => set({ op })} />
-      <button className="primary block" data-test="revolve-create" disabled={!ready} title="Enter or a middle click does the same" onClick={() => { re.getState().setHint(null); re.getState().commitRevolve() }}>
+      <button className="primary block" data-test="revolve-create" disabled={!ready} title={tr("Enter or a middle click does the same")} onClick={() => { re.getState().setHint(null); re.getState().commitRevolve() }}>
         {draft.featureId !== undefined ? 'Save changes' : coil ? 'Create coil' : 'Create revolve'}
       </button>
       <div className="toolrow">
         <button data-test="revolve-cancel" onClick={() => { re.getState().setHint(null); re.getState().cancelRevolve() }}>
-          Cancel
-        </button>
+          {tr("Cancel")}{' '}</button>
       </div>
     </div>
   )

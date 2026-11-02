@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../src/i18n'
 // The Reverse engineer faceplate: the scan, the kernel's standing, the
 // feature tools, the editors, the feature list and the body list — in the
 // shape of the measure panel, so an operator at home in one is at home here.
@@ -178,9 +179,8 @@ export function ReversePanel({ onOpenScan, onExportStep, onCompare, chainsOf }: 
     >
       <span className="grip" />
       {rolledBack.length > 0 && rollDrag === null && !playback && (
-        <button data-test="rollback-end" disabled={editorOpen} title="Move the rollback bar to the end of the list: every feature is built again" onPointerDown={(e) => e.stopPropagation()} onClick={() => re.getState().rollTo(null)}>
-          To end
-        </button>
+        <button data-test="rollback-end" disabled={editorOpen} title={tr("Move the rollback bar to the end of the list: every feature is built again")} onPointerDown={(e) => e.stopPropagation()} onClick={() => re.getState().rollTo(null)}>
+          {tr("To end")}{' '}</button>
       )}
     </div>
   )
@@ -208,22 +208,13 @@ export function ReversePanel({ onOpenScan, onExportStep, onCompare, chainsOf }: 
     <aside className="panel">
       <div className="group">
         <div className="sec-head">
-          Model
-          <InfoDot title="Reverse engineering">
+          {tr("Model")}{' '}<InfoDot title={tr("Reverse engineering")}>
             <p>
-              Turn the scan into a <b>solid body</b> CAD opens as one: sketch on a section, a fitted
-              plane or a coordinate plane, extrude or revolve the sketch's regions, and export the
-              bodies as STEP.
-            </p>
+              {tr("Turn the scan into a")}{' '}<b>{tr("solid body")}</b> {tr("CAD opens as one: sketch on a section, a fitted plane or a coordinate plane, extrude or revolve the sketch's regions, and export the bodies as STEP.")}{' '}</p>
             <p>
-              The body is built in the frame the part stands in now — align the part onto its
-              fitted planes first, in the 3D Measure workspace, so the model is square.
-            </p>
+              {tr("The body is built in the frame the part stands in now — align the part onto its fitted planes first, in the 3D Measure workspace, so the model is square.")}{' '}</p>
             <p>
-              Modelling runs on <b>Open CASCADE Technology</b> (LGPL-2.1 with the Open CASCADE
-              exception), compiled to WebAssembly by occt-wasm and loaded as a separate file when
-              this workspace is first opened. Everything stays in this browser.
-            </p>
+              {tr("Modelling runs on")}{' '}<b>{tr("Open CASCADE Technology")}</b> {tr("(LGPL-2.1 with the Open CASCADE exception), compiled to WebAssembly by occt-wasm and loaded as a separate file when this workspace is first opened. Everything stays in this browser.")}{' '}</p>
           </InfoDot>
         </div>
         <ModelSlot role="Scan" name={fileName} detail={`${triangleCount.toLocaleString('en-US')} triangles`} dotColor="#8b9099" busy={busy} onOpen={onOpenScan} />
@@ -231,13 +222,12 @@ export function ReversePanel({ onOpenScan, onExportStep, onCompare, chainsOf }: 
           {kernelStatus === 'idle' && 'CAD kernel: waiting.'}
           {kernelStatus === 'loading' && (
             <>
-              <span className="spinner" /> Loading the CAD kernel (Open CASCADE, about 5 MB)…
-            </>
+              <span className="spinner" /> {tr("Loading the CAD kernel (Open CASCADE, about 5 MB)…")}{' '}</>
           )}
           {kernelStatus === 'ready' && `CAD kernel ready — ${kernelVersion}.`}
           {kernelStatus === 'unavailable' && <>
             <span className="warn">⚠ {kernelMessage}</span>
-            <button data-test="retry-kernel" onClick={() => useReverse.getState().setKernel('idle')}>Retry CAD kernel</button>
+            <button data-test="retry-kernel" onClick={() => useReverse.getState().setKernel('idle')}>{tr("Retry CAD kernel")}</button>
           </>}
         </p>
       </div>
@@ -247,135 +237,127 @@ export function ReversePanel({ onOpenScan, onExportStep, onCompare, chainsOf }: 
       {!editorOpen && (
         <div className="group">
           <div className="sec-head">
-            Create feature
-            <InfoDot title="Features">
+            {tr("Create feature")}{' '}<InfoDot title={tr("Features")}>
               <p>
-                <b>Sketch</b> on a plane: the slice the plane cuts through the scan is fitted with
-                lines and arcs, corners are inferred and the profile closed. The sketch then shows
-                on the part. <b>Extrude</b> picks the sketch's regions in the viewport and pulls
-                them by a distance, to a plane, between two planes or symmetrically; <b>Revolve</b>{' '}
-                turns them about a line, a cylinder's axis or a sketch line. Both show the body
-                as a ghost with grips to drag while they are set up.
-              </p>
+                <b>{tr("Sketch")}</b> {tr("on a plane: the slice the plane cuts through the scan is fitted with lines and arcs, corners are inferred and the profile closed. The sketch then shows on the part.")}{' '}<b>{tr("Extrude")}</b> {tr("picks the sketch's regions in the viewport and pulls them by a distance, to a plane, between two planes or symmetrically;")}{' '}<b>{tr("Revolve")}</b>{' '}
+                {tr("turns them about a line, a cylinder's axis or a sketch line. Both show the body as a ghost with grips to drag while they are set up.")}{' '}</p>
               <p>
-                Every extrude or revolve makes a <b>new body</b>, or <b>joins</b> or <b>cuts</b>{' '}
-                one made before. Features rebuild in order whenever one changes; one whose plane or
-                sketch has gone says so and the rest still build.
-              </p>
+                {tr("Every extrude or revolve makes a")}{' '}<b>{tr("new body")}</b>{tr(", or")}{' '}<b>{tr("joins")}</b> {tr("or")}{' '}<b>{tr("cuts")}</b>{' '}
+                {tr("one made before. Features rebuild in order whenever one changes; one whose plane or sketch has gone says so and the rest still build.")}{' '}</p>
             </InfoDot>
           </div>
           <label className="field">
-            <span>Sketch on</span>
-            <PlaneSelect value={null} testId="sketch-plane-select" placeholder="Choose a plane…" onChange={startSketchOn} />
+            <span>{tr("Sketch on")}</span>
+            <PlaneSelect value={null} testId="sketch-plane-select" placeholder={tr("Choose a plane…")} onChange={startSketchOn} />
           </label>
           <div className="kindrow featurekeys" data-test="feature-keys">
-            <button data-test="feature-extrude" disabled={!ready || sketches.length === 0} title="Extrude a sketch's regions — pick them in the viewport" onClick={() => re.getState().startExtrude()}>
+            <button data-test="feature-extrude" disabled={!ready || sketches.length === 0} title={tr("Extrude a sketch's regions — pick them in the viewport")} onClick={() => re.getState().startExtrude()}>
               <Icon name="extrude" />
-              <span>Extrude</span>
+              <span>{tr("Extrude")}</span>
             </button>
-            <button data-test="feature-revolve" disabled={!ready || sketches.length === 0} title="Revolve a sketch's regions about an axis" onClick={() => re.getState().startRevolve()}>
+            <button data-test="feature-revolve" disabled={!ready || sketches.length === 0} title={tr("Revolve a sketch's regions about an axis")} onClick={() => re.getState().startRevolve()}>
               <Icon name="revolve" />
-              <span>Revolve</span>
+              <span>{tr("Revolve")}</span>
             </button>
-            <button data-test="feature-extract" disabled={!fileName || !ready || (!hasSolidElement && !hasShadow)} title="A measured plane, cylinder, cone or sphere as a body at its extents, extended as in 3D Measure — a boss or a pin without a sketch — or a shadow section as its block, the outline through the part's thickness" onClick={() => re.getState().startFeature('extract')}>
+            <button data-test="feature-extract" disabled={!fileName || !ready || (!hasSolidElement && !hasShadow)} title={tr("A measured plane, cylinder, cone or sphere as a body at its extents, extended as in 3D Measure — a boss or a pin without a sketch — or a shadow section as its block, the outline through the part's thickness")} onClick={() => re.getState().startFeature('extract')}>
               <Icon name="extract" />
-              <span>Extract</span>
+              <span>{tr("Extract")}</span>
             </button>
-            <StepFileKey testId="feature-import" disabled={!ready} title="Bring a STEP file in as bodies of its own — a bought-in part, a mating part, the CAD model to check the scan against. A body for every solid in the file, named as the file names its parts; Move body puts them where they belong" onFile={(file) => re.getState().startFeature('import', { file, name: file.name.replace(/\.(step|stp)$/i, '') })}>
+            <StepFileKey testId="feature-import" disabled={!ready} title={tr("Bring a STEP file in as bodies of its own — a bought-in part, a mating part, the CAD model to check the scan against. A body for every solid in the file, named as the file names its parts; Move body puts them where they belong")} onFile={(file) => re.getState().startFeature('import', { file, name: file.name.replace(/\.(step|stp)$/i, '') })}>
               <KeyIcon name="importStep" />
-              <span>Import STEP</span>
+              <span>{tr("Import STEP")}</span>
             </StepFileKey>
-            <button data-test="feature-shell" disabled={!hasBody} title="Hollow the body to a wall — click the faces to open, or none for a closed hollow; the wall comes from the Thickness map when one was measured" onClick={() => startShell()}>
+            <button data-test="feature-shell" disabled={!hasBody} title={tr("Hollow the body to a wall — click the faces to open, or none for a closed hollow; the wall comes from the Thickness map when one was measured")} onClick={() => startShell()}>
               <Icon name="shell" />
-              <span>Shell</span>
+              <span>{tr("Shell")}</span>
             </button>
-            <button data-test="feature-fillet" disabled={!hasBody} title="Round edges of the body — click them; the radius is read off the scan across the first" onClick={() => re.getState().startFeature('fillet')}>
+            <button data-test="feature-fillet" disabled={!hasBody} title={tr("Round edges of the body — click them; the radius is read off the scan across the first")} onClick={() => re.getState().startFeature('fillet')}>
               <Icon name="fillet" />
-              <span>Fillet</span>
+              <span>{tr("Fillet")}</span>
             </button>
-            <button data-test="feature-chamfer" disabled={!hasBody} title="Chamfer edges of the body — click them" onClick={() => re.getState().startFeature('chamfer')}>
+            <button data-test="feature-chamfer" disabled={!hasBody} title={tr("Chamfer edges of the body — click them")} onClick={() => re.getState().startFeature('chamfer')}>
               <Icon name="chamfer" />
-              <span>Chamfer</span>
+              <span>{tr("Chamfer")}</span>
             </button>
-            <button data-test="feature-draft" disabled={!hasBody} title="Lean faces of the body about a neutral plane — a moulding's draft, put on after the fact: click the flat face that stays, then the faces to lean" onClick={() => re.getState().startFeature('draft')}>
+            <button data-test="feature-draft" disabled={!hasBody} title={tr("Lean faces of the body about a neutral plane — a moulding's draft, put on after the fact: click the flat face that stays, then the faces to lean")} onClick={() => re.getState().startFeature('draft')}>
               <Icon name="draft" />
-              <span>Draft</span>
+              <span>{tr("Draft")}</span>
             </button>
-            <button data-test="feature-move-face" disabled={!hasBody} title="Offset faces of the body by a distance — a flat face along its normal, a round face in radius; several picked together grow or shrink as a whole, a cylinder's wall and its ends. One face can be snapped onto the scan instead: pick it, take Snap to scan, and click the scan where it should lie" onClick={() => re.getState().startFeature('moveFace')}>
+            <button data-test="feature-move-face" disabled={!hasBody} title={tr("Offset faces of the body by a distance — a flat face along its normal, a round face in radius; several picked together grow or shrink as a whole, a cylinder's wall and its ends. One face can be snapped onto the scan instead: pick it, take Snap to scan, and click the scan where it should lie")} onClick={() => re.getState().startFeature('moveFace')}>
               <Icon name="moveFace" />
-              <span>Move face</span>
+              <span>{tr("Move face")}</span>
             </button>
-            <button data-test="feature-delete-face" disabled={!hasBody} title="Delete faces of the body and heal the gap — a fillet, a chamfer, a hole or a boss taken out, the faces round it run on to close over where it was: click a face of it, and the rest of the round or hole comes with it" onClick={() => re.getState().startFeature('deleteFace')}>
+            <button data-test="feature-delete-face" disabled={!hasBody} title={tr("Delete faces of the body and heal the gap — a fillet, a chamfer, a hole or a boss taken out, the faces round it run on to close over where it was: click a face of it, and the rest of the round or hole comes with it")} onClick={() => re.getState().startFeature('deleteFace')}>
               <KeyIcon name="deleteFace" />
-              <span>Delete face</span>
+              <span>{tr("Delete face")}</span>
             </button>
-            <button data-test="feature-hole" disabled={!hasBody} title="A hole through the body along a cylinder or circle element, or a round face of the body" onClick={() => re.getState().startFeature('hole')}>
+            <button data-test="feature-hole" disabled={!hasBody} title={tr("A hole through the body along a cylinder or circle element, or a round face of the body")} onClick={() => re.getState().startFeature('hole')}>
               <Icon name="hole" />
-              <span>Hole</span>
+              <span>{tr("Hole")}</span>
             </button>
-            <button data-test="feature-thread" disabled={!hasBody} title="A modeled screw thread on a round face of the body — a bolt's on a boss, a nut's in a bore: ISO metric, UNC or UNF, a 45° form that prints without supports, or a diameter and pitch of your own, with an offset for clearance when printing" onClick={() => re.getState().startFeature('thread')}>
+            <button data-test="feature-thread" disabled={!hasBody} title={tr("A modeled screw thread on a round face of the body — a bolt's on a boss, a nut's in a bore: ISO metric, UNC or UNF, a 45° form that prints without supports, or a diameter and pitch of your own, with an offset for clearance when printing")} onClick={() => re.getState().startFeature('thread')}>
               <ThreadIcon />
-              <span>Thread</span>
+              <span>{tr("Thread")}</span>
             </button>
-            <button data-test="feature-cut-plane" disabled={!hasBody} title="Cut the body at a plane and keep one side" onClick={() => re.getState().startFeature('cutPlane')}>
+            <button data-test="feature-cut-plane" disabled={!hasBody} title={tr("Cut the body at a plane and keep one side")} onClick={() => re.getState().startFeature('cutPlane')}>
               <Icon name="cutPlane" />
-              <span>Cut by plane</span>
+              <span>{tr("Cut by plane")}</span>
             </button>
-            <button data-test="feature-mirror" disabled={!hasBody} title="Mirror the body about a plane, joined with the source" onClick={() => re.getState().startFeature('mirror')}>
+            <button data-test="feature-mirror" disabled={!hasBody} title={tr("Mirror the body about a plane, joined with the source")} onClick={() => re.getState().startFeature('mirror')}>
               <Icon name="mirror" />
-              <span>Mirror</span>
+              <span>{tr("Mirror")}</span>
             </button>
-            <button data-test="feature-boolean" disabled={!hasBody || bodies.length < 2} title="Join, cut or intersect two bodies made separately — or trim a sheet by a solid, or sew two sheets into one, before Thicken" onClick={() => re.getState().startFeature('boolean')}>
+            <button data-test="feature-boolean" disabled={!hasBody || bodies.length < 2} title={tr("Join, cut or intersect two bodies made separately — or trim a sheet by a solid, or sew two sheets into one, before Thicken")} onClick={() => re.getState().startFeature('boolean')}>
               <Icon name="combine" />
-              <span>Combine</span>
+              <span>{tr("Combine")}</span>
             </button>
-            <button data-test="feature-sheet" disabled={!ready || sketches.length === 0} title="A sketch's pieces — an open chain will do — extruded as a surface: a cutter to split a body with" onClick={() => re.getState().startFeature('sheet')}>
+            <button data-test="feature-sheet" disabled={!ready || sketches.length === 0} title={tr("A sketch's pieces — an open chain will do — extruded as a surface: a cutter to split a body with")} onClick={() => re.getState().startFeature('sheet')}>
               <Icon name="sheet" />
-              <span>Sheet</span>
+              <span>{tr("Sheet")}</span>
             </button>
-            <button data-test="feature-split" disabled={!hasBody || bodies.length < 2} title="Split a body by a sheet and keep the fragments that lie on the scan — or trim a sheet by sheets or solids, keeping its pieces on the scan" onClick={() => re.getState().startFeature('split')}>
+            <button data-test="feature-split" disabled={!hasBody || bodies.length < 2} title={tr("Split a body by a sheet and keep the fragments that lie on the scan — or trim a sheet by sheets or solids, keeping its pieces on the scan")} onClick={() => re.getState().startFeature('split')}>
               <Icon name="split" />
-              <span>Split</span>
+              <span>{tr("Split")}</span>
             </button>
-            <button data-test="feature-loft" disabled={!ready || sketches.length < 2} title="A solid through the profiles of two or more sketches on their own planes" onClick={() => re.getState().startFeature('loft')}>
+            <button data-test="feature-loft" disabled={!ready || sketches.length < 2} title={tr("A solid through the profiles of two or more sketches on their own planes")} onClick={() => re.getState().startFeature('loft')}>
               <Icon name="loft" />
-              <span>Loft</span>
+              <span>{tr("Loft")}</span>
             </button>
-            <button data-test="feature-sweep" disabled={!ready || sketches.length < 2} title="A sketch's region swept along a chain of lines and arcs in another sketch — a bent bar, a handle, a rim that follows a curve" onClick={() => re.getState().startFeature('sweep')}>
+            <button data-test="feature-sweep" disabled={!ready || sketches.length < 2} title={tr("A sketch's region swept along a chain of lines and arcs in another sketch — a bent bar, a handle, a rim that follows a curve")} onClick={() => re.getState().startFeature('sweep')}>
               <SweepIcon />
-              <span>Sweep</span>
+              <span>{tr("Sweep")}</span>
             </button>
-            <button data-test="feature-pattern" disabled={!hasBody} title="Copies of the body about an axis, along a direction, or in a grid" onClick={() => re.getState().startFeature('pattern')}>
+            <button data-test="feature-pattern" disabled={!hasBody} title={tr("Copies of the body about an axis, along a direction, or in a grid")} onClick={() => re.getState().startFeature('pattern')}>
               <Icon name="pattern" />
-              <span>Pattern</span>
+              <span>{tr("Pattern")}</span>
             </button>
-            <button data-test="feature-move-body" disabled={!hasBody} title="Move and turn bodies — the ones selected on the part or picked in the body list (Ctrl+click or Shift+click rows for several), or click them on the part: drag the gizmo's arrows and rings, or type the distances and angles. Tick Copy to move a copy and leave the body where it is" onClick={() => re.getState().startFeature('moveBody', { bodies: movingBodies() })}>
+            <button data-test="feature-move-body" disabled={!hasBody} title={tr("Move and turn bodies — the ones selected on the part or picked in the body list (Ctrl+click or Shift+click rows for several), or click them on the part: drag the gizmo's arrows and rings, or type the distances and angles. Tick Copy to move a copy and leave the body where it is")} onClick={() => re.getState().startFeature('moveBody', { bodies: movingBodies() })}>
               <KeyIcon name="moveBody" />
-              <span>Move body</span>
+              <span>{tr("Move body")}</span>
             </button>
-            <button data-test="feature-offset-body" disabled={!hasBody} title="Grow a body all round by a distance, or shrink it — kept beside it as a body of its own, a keep-out round a part or the pocket that holds it with clearance" onClick={() => re.getState().startFeature('offsetBody')}>
+            <button data-test="feature-offset-body" disabled={!hasBody} title={tr("Grow a body all round by a distance, or shrink it — kept beside it as a body of its own, a keep-out round a part or the pocket that holds it with clearance")} onClick={() => re.getState().startFeature('offsetBody')}>
               <KeyIcon name="offsetBody" />
-              <span>Offset body</span>
+              <span>{tr("Offset body")}</span>
             </button>
-            <button data-test="feature-surface" disabled={!fileName || !ready} title="A smooth freeform surface fitted through a region of the scan — click faces or mark them — for the trim to close into a solid with the others" onClick={() => re.getState().startFeature('surface')}>
+            <button data-test="feature-surface" disabled={!fileName || !ready} title={tr("A smooth freeform surface fitted through a region of the scan — click faces or mark them — for the trim to close into a solid with the others")} onClick={() => re.getState().startFeature('surface')}>
               <Icon name="surface" />
-              <span>Fit surface</span>
+              <span>{tr("Fit surface")}</span>
             </button>
-            <button data-test="feature-network" disabled={!fileName || !ready} title="Curves drawn on the scan, and the regions they close filled with patches fitted to the scan together — tangent across every curve not marked a crease, sharing their edges: a sheet, or a solid where the network closes. For a freeform skin that folds back or wants more than one patch" onClick={() => re.getState().startFeature('network')}>
+            <button data-test="feature-network" disabled={!fileName || !ready} title={tr("Curves drawn on the scan, and the regions they close filled with patches fitted to the scan together — tangent across every curve not marked a crease, sharing their edges: a sheet, or a solid where the network closes. For a freeform skin that folds back or wants more than one patch")} onClick={() => re.getState().startFeature('network')}>
               <Icon name="surface" />
-              <span>Patch network</span>
+              <span>{tr("Patch network")}</span>
             </button>
-            <button data-test="feature-trim" disabled={!fileName || !ready || (!bodies.some((b) => b.surface) && !hasSolidElement)} title="Close a set of fitted surfaces, sheets and measured planes, cylinders, cones and spheres into a solid: the faces they cut space into are kept where they lie on the scan and sewn" onClick={() => re.getState().startFeature('trim')}>
+            <button data-test="feature-trim" disabled={!fileName || !ready || (!bodies.some((b) => b.surface) && !hasSolidElement)} title={tr("Close a set of fitted surfaces, sheets and measured planes, cylinders, cones and spheres into a solid: the faces they cut space into are kept where they lie on the scan and sewn")} onClick={() => re.getState().startFeature('trim')}>
               <Icon name="trim" />
-              <span>Trim</span>
+              <span>{tr("Trim")}</span>
             </button>
-            <button data-test="feature-thicken" disabled={!ready || !bodies.some((b) => b.surface)} title="Make a sheet or a fitted surface a solid of a thickness — a freeform thin shell's wall from its one skin, where a shell or an offset of a lofted body will not go" onClick={() => re.getState().startFeature('thicken')}>
+            <button data-test="feature-thicken" disabled={!ready || !bodies.some((b) => b.surface)} title={tr("Make a sheet or a fitted surface a solid of a thickness — a freeform thin shell's wall from its one skin, where a shell or an offset of a lofted body will not go")} onClick={() => re.getState().startFeature('thicken')}>
               <KeyIcon name="shell" />
-              <span>Thicken</span>
+              <span>{tr("Thicken")}</span>
             </button>
           </div>
-          {sketches.length === 0 && fileName && <p className="hint">Start with a sketch: choose a plane above, or cut a section in the 3D Measure workspace.</p>}
-          {sketches.length === 0 && !fileName && <p className="hint">Start with a sketch: choose a coordinate plane above. No scan is needed to model.</p>}
+          {sketches.length === 0 && fileName && <p className="hint">{tr("Start with a sketch: choose a plane above, or cut a section in the 3D Measure workspace.")}</p>}
+          {sketches.length === 0 && !fileName && <p className="hint">{tr("Start with a sketch: choose a coordinate plane above. No scan is needed to model.")}</p>}
         </div>
       )}
 
@@ -391,21 +373,17 @@ export function ReversePanel({ onOpenScan, onExportStep, onCompare, chainsOf }: 
         <div className="group" ref={featureListRef}>
           <div className="g-label">
             <span>
-              Features
-              <InfoDot title="The feature list">
+              {tr("Features")}{' '}<InfoDot title={tr("The feature list")}>
                 <p>
-                  The part is built from the top down. The <b>rollback bar</b> under the list is dragged up to go back in its history: the features below it are set aside, the part stands as it stood there, and whatever is made next goes in at the bar — a fillet before the shell, a cut before the pattern. Drag it back down, or press <b>To end</b>, and the rest is built again on top of what was added.
-                </p>
-                <p>A feature below the bar that loses what it stood on says so by name in its row, as any feature does.</p>
+                  {tr("The part is built from the top down. The")}{' '}<b>{tr("rollback bar")}</b> {tr("under the list is dragged up to go back in its history: the features below it are set aside, the part stands as it stood there, and whatever is made next goes in at the bar — a fillet before the shell, a cut before the pattern. Drag it back down, or press")}{' '}<b>{tr("To end")}</b>{tr(", and the rest is built again on top of what was added.")}{' '}</p>
+                <p>{tr("A feature below the bar that loses what it stood on says so by name in its row, as any feature does.")}</p>
                 <p>
-                  <b>Play</b> builds the part up again step by step for the camera: the bar goes to the top and moves down one feature at a time, each held a moment once it is built, and returns where it was at the end. <b>Space</b> holds it or carries it on, the <b>arrow keys</b> step it, <b>Escape</b> ends it. The caption in the viewport names each step.
-                </p>
+                  <b>{tr("Play")}</b> {tr("builds the part up again step by step for the camera: the bar goes to the top and moves down one feature at a time, each held a moment once it is built, and returns where it was at the end.")}{' '}<b>{tr("Space")}</b> {tr("holds it or carries it on, the")}{' '}<b>{tr("arrow keys")}</b> {tr("step it,")}{' '}<b>{tr("Escape")}</b> {tr("ends it. The caption in the viewport names each step.")}{' '}</p>
               </InfoDot>
             </span>
             {building && (
               <span className="working">
-                <span className="spinner" /> building
-              </span>
+                <span className="spinner" /> {tr("building")}{' '}</span>
             )}
             {!playback && <PlaybackKey />}
             <b>{rolledBack.length > 0 ? `${features.length} of ${features.length + rolledBack.length}` : features.length}</b>
@@ -446,8 +424,7 @@ export function ReversePanel({ onOpenScan, onExportStep, onCompare, chainsOf }: 
                 </b>
               ) : r?.trim && !r.trim.closed ? (
                 <b className="warn" title={about}>
-                  ⚠ open
-                </b>
+                  {tr("⚠ open")}{' '}</b>
               ) : fitted ? (
                 <b
                   className="fitted"
@@ -456,8 +433,7 @@ export function ReversePanel({ onOpenScan, onExportStep, onCompare, chainsOf }: 
                     .map(([k, v]) => `${k} fitted to the scan: ${v.value}${v.sigma !== null ? ` ± ${v.sigma}` : ''} (nominal ${v.nominal}${v.sigmas !== null ? `, ${v.sigmas} σ off` : ''}, ${v.points} points)`)
                     .join('\n')}
                 >
-                  fit
-                </b>
+                  {tr("fit")}{' '}</b>
               ) : null
             const blocked = dependentsOf(f.id, [...features, ...rolledBack]).length > 0
             const bodyOf =
@@ -570,14 +546,12 @@ export function ReversePanel({ onOpenScan, onExportStep, onCompare, chainsOf }: 
         <>
           <div className="divider" />
           <div className="toolrow">
-            <button className="withicon" data-test="export-body-step" disabled={!canExport} onClick={onExportStep} title="Write every visible body into one STEP file as solids — what FreeCAD and Fusion open as a body">
+            <button className="withicon" data-test="export-body-step" disabled={!canExport} onClick={onExportStep} title={tr("Write every visible body into one STEP file as solids — what FreeCAD and Fusion open as a body")}>
               <Icon name="exportStep" size={18} />
-              Export body STEP
-            </button>
-            <button className="withicon" data-test="compare-in-deviation" disabled={!canCompare} onClick={onCompare} title="Measure the scan against the visible bodies in the Deviation workspace — its scale, histogram, pins and report. The bodies go in as the reference part; no best fit is run, they stand in the scan's frame already">
+              {tr("Export body STEP")}{' '}</button>
+            <button className="withicon" data-test="compare-in-deviation" disabled={!canCompare} onClick={onCompare} title={tr("Measure the scan against the visible bodies in the Deviation workspace — its scale, histogram, pins and report. The bodies go in as the reference part; no best fit is run, they stand in the scan's frame already")}>
               <Icon name="compare" size={18} />
-              Compare in Deviation
-            </button>
+              {tr("Compare in Deviation")}{' '}</button>
           </div>
         </>
       )}

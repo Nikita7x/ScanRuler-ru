@@ -32,6 +32,7 @@ import {
 
 /** Light or dark chassis, or whichever the operating system is set to. */
 export type UiTheme = 'light' | 'dark' | 'system'
+export type AppLanguage = 'en' | 'ru'
 
 export const UI_THEMES: { id: UiTheme; label: string }[] = [
   { id: 'light', label: 'Light' },
@@ -40,6 +41,7 @@ export const UI_THEMES: { id: UiTheme; label: string }[] = [
 ]
 
 const UI_THEME_KEY = 'scanruler.uitheme'
+const LANGUAGE_KEY = 'scanruler.language'
 const COLORMAP_KEY = 'scanruler.colormap'
 const SECTION_LINES_KEY = 'scanruler.sectionlines'
 const SHEET_LINES_KEY = 'scanruler.sheetlines'
@@ -95,6 +97,12 @@ const storedUiTheme = (): UiTheme => {
   return v === 'dark' || v === 'light' ? v : 'system'
 }
 
+const storedLanguage = (): AppLanguage => {
+  const value = read(LANGUAGE_KEY)
+  if (value === 'en' || value === 'ru') return value
+  return typeof navigator !== 'undefined' && navigator.language.toLowerCase().startsWith('ru') ? 'ru' : 'en'
+}
+
 /** The operating system's preference, watched so that "System" follows it
  *  live rather than at the next reload. Absent outside a browser. */
 const systemDark =
@@ -104,6 +112,7 @@ const resolveDark = (theme: UiTheme): boolean =>
   theme === 'dark' || (theme === 'system' && Boolean(systemDark?.matches))
 
 interface PrefsState {
+  language: AppLanguage
   uiTheme: UiTheme
   /** What the theme comes to right now — the one thing the stylesheet and
    *  the scenes actually read. Derived, never set directly. */
@@ -187,6 +196,7 @@ interface PrefsState {
   setSpaceMouseSpeed: (speed: number) => void
   setSpaceMouseReversed: (axis: SpaceMouseAxisId, reversed: boolean) => void
   openSettings: (open: boolean) => void
+  setLanguage: (language: AppLanguage) => void
 }
 
 export const usePrefs = create<PrefsState>()((set) => {
@@ -195,6 +205,7 @@ export const usePrefs = create<PrefsState>()((set) => {
   const agentLinkStored = read(AGENT_LINK_KEY) === '1'
   const agentDataOk = read(AGENT_DATA_OK_KEY) === '1'
   return {
+    language: storedLanguage(),
     uiTheme,
     dark: resolveDark(uiTheme),
     colormap: colormapById(read(COLORMAP_KEY)).id,
@@ -221,6 +232,10 @@ export const usePrefs = create<PrefsState>()((set) => {
     setUiTheme: (theme) => {
       write(UI_THEME_KEY, theme)
       set({ uiTheme: theme, dark: resolveDark(theme) })
+    },
+    setLanguage: (language) => {
+      write(LANGUAGE_KEY, language)
+      set({ language })
     },
     setColormap: (id) => {
       const colormap = colormapById(id).id

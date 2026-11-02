@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The diameter a sphere is known to be — a gauge ball's, a ballbar's — for
 // the fit to hold. Empty until one is typed: holding a diameter that is not
 // the ball's would move the centre with it, so nothing is suggested. Under
@@ -37,25 +38,14 @@ export function KnownDiameterField({ busy, onChange }: { busy: boolean; onChange
     <>
       <label className="field">
         <span>
-          Known Ø
-          <InfoDot title="Known Ø">
+          {tr("Known Ø")}{' '}<InfoDot title={tr("Known Ø")}>
             <p>
-              The ball's diameter as it is <b>known</b> — a precision sphere, a gauge ball, the balls
-              of a ballbar. The fit then holds this diameter and places only the centre.
-            </p>
+              {tr("The ball's diameter as it is")}{' '}<b>{tr("known")}</b> {tr("— a precision sphere, a gauge ball, the balls of a ballbar. The fit then holds this diameter and places only the centre.")}{' '}</p>
             <p>
-              On a ball scanned only partly, the free fit's diameter and the centre's position
-              along the scanned cap trade off against each other: a surface that reads a few µm off
-              towards the edge of the cap moves both by several times that. Holding the true
-              diameter takes that freedom away, so centre distances come out right.
-            </p>
+              {tr("On a ball scanned only partly, the free fit's diameter and the centre's position along the scanned cap trade off against each other: a surface that reads a few µm off towards the edge of the cap moves both by several times that. Holding the true diameter takes that freedom away, so centre distances come out right.")}{' '}</p>
             <p>
-              The other way round: a scan that reads uniformly large or small (spray, a scanner
-              offset) moves a held centre by about that much towards the scanned side. The
-              diameter the points give when it is free is shown below — it should be close to the
-              known one.
-            </p>
-            <p>Leave it empty for a free fit. It belongs to this sphere alone.</p>
+              {tr("The other way round: a scan that reads uniformly large or small (spray, a scanner offset) moves a held centre by about that much towards the scanned side. The diameter the points give when it is free is shown below — it should be close to the known one.")}{' '}</p>
+            <p>{tr("Leave it empty for a free fit. It belongs to this sphere alone.")}</p>
           </InfoDot>
         </span>
         <span className="unitfield">
@@ -65,7 +55,7 @@ export function KnownDiameterField({ busy, onChange }: { busy: boolean; onChange
             data-test="known-diameter"
             step={u.step(0.001)}
             min={u.min(0.001)}
-            placeholder="free"
+            placeholder={tr("free")}
             disabled={busy}
             defaultValue={shown}
             key={shown}
@@ -82,9 +72,8 @@ export function KnownDiameterField({ busy, onChange }: { busy: boolean; onChange
       </label>
       {held && known !== undefined && (
         <p className="dro-note" data-test="known-diameter-free">
-          Free fit Ø {len.fmt(held.freeDiameter, 4)} ({fine(held.freeDiameter - known, len, true)}) · centre moved{' '}
-          {fine(held.shift, len, false)} by holding it
-        </p>
+          {tr("Free fit Ø")}{' '}{len.fmt(held.freeDiameter, 4)} ({fine(held.freeDiameter - known, len, true)}{tr(") · centre moved")}{' '}
+          {fine(held.shift, len, false)} {tr("by holding it")}{' '}</p>
       )}
     </>
   )

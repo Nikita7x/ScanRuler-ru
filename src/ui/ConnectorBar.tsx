@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The strip under the top bar that tells the person their AI app's
 // ScanRuler connector — the scanruler-mcp server it starts — is older than
 // this page's commands assume, and how to update it: a sentence to ask the
@@ -19,22 +20,17 @@ export function ConnectorBar() {
   const which = server?.version ?? 'old'
   if (hidden === which) return null
   return (
-    <aside className="connector-bar" data-test="connector-bar" aria-label="ScanRuler connector out of date">
+    <aside className="connector-bar" data-test="connector-bar" aria-label={tr("ScanRuler connector out of date")}>
       <p>
-        <b>Your ScanRuler connector is out of date.</b> Your AI app started scanruler-mcp{' '}
-        {server?.version ? server.version : `older than ${WANTS_SERVER}`}; this ScanRuler needs {WANTS_SERVER} or newer, so some of what the
-        agent asks may not work.
-      </p>
+        <b>{tr("Your ScanRuler connector is out of date.")}</b> {tr("Your AI app started scanruler-mcp")}{' '}
+        {server?.version ? server.version : `older than ${WANTS_SERVER}`}{tr("; this ScanRuler needs")}{' '}{WANTS_SERVER} {tr("or newer, so some of what the agent asks may not work.")}{' '}</p>
       <div className="connector-ask" data-test="connector-bar-ask">
-        <b>Easiest: ask your AI agent.</b> Paste this into its chat:
-        <code>{CONNECTOR_ASK}</code>
+        <b>{tr("Easiest: ask your AI agent.")}</b> {tr("Paste this into its chat:")}{' '}<code>{CONNECTOR_ASK}</code>
         <CopyButton label="Copy" className="ghost" onCopy={() => void navigator.clipboard?.writeText(CONNECTOR_ASK)} />
       </div>
       <p>
-        <b>Or by hand:</b> change the app's ScanRuler setting to the one below, then <b>quit the app completely</b> (not just its window){' '}
-        <b>and open it again</b>. With more than one AI app open, the old connector may be another app's — one left open in the background
-        holds the connection for all of them: quit it.
-      </p>
+        <b>{tr("Or by hand:")}</b> {tr("change the app's ScanRuler setting to the one below, then")}{' '}<b>{tr("quit the app completely")}</b> {tr("(not just its window)")}{' '}
+        <b>{tr("and open it again")}</b>{tr(". With more than one AI app open, the old connector may be another app's — one left open in the background holds the connection for all of them: quit it.")}{' '}</p>
       <ul>
         {CONNECTOR_STEPS.map((step) => (
           <li key={step.app}>
@@ -47,8 +43,7 @@ export function ConnectorBar() {
         ))}
       </ul>
       <button className="ghost" data-test="connector-bar-hide" onClick={() => setHidden(which)}>
-        Hide
-      </button>
+        {tr("Hide")}{' '}</button>
     </aside>
   )
 }

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../src/i18n'
 // The body list of the Reverse engineer panel: a row a body — its colour,
 // its name, what it holds and its eye — sorted into components, folders
 // that keep an assembly's parts apart, one inside another
@@ -291,7 +292,7 @@ export function BodyList({ bodies, children }: { bodies: BodyInfo[]; children?: 
       }}
     >
       <div className="g-label">
-        <span>Bodies</span>
+        <span>{tr("Bodies")}</span>
         {bodies.length > 0 && (
           <button
             className="x newfolder"
@@ -300,8 +301,7 @@ export function BodyList({ bodies, children }: { bodies: BodyInfo[]; children?: 
             onClick={newFolder}
           >
             <KeyIcon name="component" size={13} />
-            Component
-          </button>
+            {tr("Component")}{' '}</button>
         )}
         {bodies.length > 0 && <ShowAllButton anyVisible={bodies.some((b) => b.visible)} what="bodies" testId="bodies-show-all" onSet={(v) => re.getState().setAllBodiesVisible(v)} />}
         <b>{bodies.length}</b>
@@ -310,39 +310,34 @@ export function BodyList({ bodies, children }: { bodies: BodyInfo[]; children?: 
       {rows}
       {dragging && accepts(null) && (
         <div className={'bodydrop' + (dropAt === null ? ' on' : '')} data-test="body-drop-top" {...dropOn(null)}>
-          Drop here to take it out of its component
-        </div>
+          {tr("Drop here to take it out of its component")}{' '}</div>
       )}
       {move && bodies.length > 1 && (
         <p className="hint" data-test="body-list-move-hint">
-          Click rows to put bodies into the Move or take them out — a component's row all of its bodies; Shift+click puts in every row up to it.
-        </p>
+          {tr("Click rows to put bodies into the Move or take them out — a component's row all of its bodies; Shift+click puts in every row up to it.")}{' '}</p>
       )}
       {!move && pickCount > 0 && (
         <div className="bodysel" data-test="body-selection">
           <span data-test="body-selection-words">{pickWords(listPick, bodies, folders)}</span>
           <button data-test="body-selection-move" disabled={pickedBodies.length === 0 || editorOpen} title={editorOpen ? 'Finish what is open first' : 'Move and turn these bodies together — or copies of them — by the gizmo or by numbers'} onClick={() => re.getState().startFeature('moveBody', { bodies: pickedBodies })}>
             <KeyIcon name="moveBody" size={14} />
-            Move
-          </button>
-          <button data-test="body-selection-component" title="Put what is picked into a new component" onClick={newFolder}>
+            {tr("Move")}{' '}</button>
+          <button data-test="body-selection-component" title={tr("Put what is picked into a new component")} onClick={newFolder}>
             <KeyIcon name="component" size={14} />
-            Component
-          </button>
+            {tr("Component")}{' '}</button>
           {pickedBodies.length > 0 && pickedBodies.length < bodies.length && (
             <button data-test="body-selection-isolate" title={alone ? 'Show every body again' : 'Hide every body but these'} onClick={() => (alone ? re.getState().setAllBodiesVisible(true) : isolateBodies(pickedBodies))}>
               {alone ? 'Show all' : 'Hide others'}
             </button>
           )}
-          <button className="x" data-test="body-selection-clear" title="Let the rows go (Escape)" onClick={() => re.getState().setListSelection(NO_PICK)}>
+          <button className="x" data-test="body-selection-clear" title={tr("Let the rows go (Escape)")} onClick={() => re.getState().setListSelection(NO_PICK)}>
             ✕
           </button>
         </div>
       )}
       {bodies.length > 0 && (
         <p className="hint">
-          Drawn solid, the scan a see-through veil over them. The view bar's Opaque key turns that round; its Scan key puts the scan away, its Bodies key the bodies — the map staying on the scan. Ctrl+click or Shift+click rows to pick several, and drag them onto a component to put them in; right-click a row for more.
-        </p>
+          {tr("Drawn solid, the scan a see-through veil over them. The view bar's Opaque key turns that round; its Scan key puts the scan away, its Bodies key the bodies — the map staying on the scan. Ctrl+click or Shift+click rows to pick several, and drag them onto a component to put them in; right-click a row for more.")}{' '}</p>
       )}
       {menu && <BodyMenu at={menu} bodies={bodies} folders={folders} editorOpen={editorOpen} setNaming={setNaming} close={() => setMenu(null)} />}
     </div>
@@ -436,7 +431,7 @@ function FolderRow({
           data-test="body-folder-name-input"
           autoFocus
           defaultValue={f.name}
-          placeholder="Name"
+          placeholder={tr("Name")}
           onFocus={(e) => e.currentTarget.select()}
           onKeyDown={(e) => {
             e.stopPropagation()
@@ -446,7 +441,7 @@ function FolderRow({
           onBlur={(e) => name(e.currentTarget.value)}
         />
       ) : (
-        <span className="name" data-test="body-folder-name" title="Double-click to name the component" onDoubleClick={() => setNaming(true)}>
+        <span className="name" data-test="body-folder-name" title={tr("Double-click to name the component")} onDoubleClick={() => setNaming(true)}>
           {f.name}
         </span>
       )}
@@ -494,14 +489,14 @@ function BodyRow({ body: b, depth, onPick, onMenu, rowEvents, ...m }: RowMarks &
         {...rowEvents}
         draggable={!naming}
       >
-        <button className="dot swatchkey" data-test="body-color" style={{ background: b.color ?? bodyColor(b.id) }} aria-expanded={painting} aria-label={`Colour of ${b.name}`} title="Colour the body — the STEP file carries it" onClick={() => setPainting(!painting)} />
+        <button className="dot swatchkey" data-test="body-color" style={{ background: b.color ?? bodyColor(b.id) }} aria-expanded={painting} aria-label={`Colour of ${b.name}`} title={tr("Colour the body — the STEP file carries it")} onClick={() => setPainting(!painting)} />
         {naming ? (
           <input
             className="name rename"
             data-test="body-name-input"
             autoFocus
             defaultValue={own?.name ?? b.name}
-            placeholder="Name"
+            placeholder={tr("Name")}
             onKeyDown={(e) => {
               e.stopPropagation()
               if (e.key === 'Enter') name(e.currentTarget.value)
@@ -510,7 +505,7 @@ function BodyRow({ body: b, depth, onPick, onMenu, rowEvents, ...m }: RowMarks &
             onBlur={(e) => name(e.currentTarget.value)}
           />
         ) : (
-          <span className="name" data-test="body-name" title="Double-click to name the body — the name it has in a STEP file; cleared, it is Solid n again" onDoubleClick={() => setNaming(true)}>
+          <span className="name" data-test="body-name" title={tr("Double-click to name the body — the name it has in a STEP file; cleared, it is Solid n again")} onDoubleClick={() => setNaming(true)}>
             {b.name}
           </span>
         )}
@@ -526,9 +521,8 @@ function BodyRow({ body: b, depth, onPick, onMenu, rowEvents, ...m }: RowMarks &
           {BODY_SWATCHES.map((sw) => (
             <button key={sw.name} role="radio" aria-checked={own?.color === sw.color} className={own?.color === sw.color ? 'on' : undefined} style={{ background: sw.color }} title={sw.name[0].toUpperCase() + sw.name.slice(1)} aria-label={sw.name} data-test="body-swatch" onClick={() => paint(sw.color)} />
           ))}
-          <button className="auto" role="radio" aria-checked={!own?.color} data-test="body-swatch-auto" title="The colour the body had — by the feature that made it" onClick={() => paint(null)}>
-            Auto
-          </button>
+          <button className="auto" role="radio" aria-checked={!own?.color} data-test="body-swatch-auto" title={tr("The colour the body had — by the feature that made it")} onClick={() => paint(null)}>
+            {tr("Auto")}{' '}</button>
         </div>
       )}
     </>

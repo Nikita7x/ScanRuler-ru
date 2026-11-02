@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // Two viewports, two cameras, one list of corresponding points. Clicks
 // alternate: a feature on the scan, then the same feature on the reference.
 //
@@ -198,7 +199,7 @@ function PickTools({ onClear }: { onClear: () => void }) {
             className={m.erase ? 'withicon on' : 'withicon'}
             data-test="pick-erase"
             aria-pressed={m.erase}
-            title="The gesture takes surface out of the selection instead of adding it — the right button always does, and Alt inverts either way"
+            title={tr("The gesture takes surface out of the selection instead of adding it — the right button always does, and Alt inverts either way")}
             onClick={() => m.setErase(!m.erase)}
           >
             <Icon name="erase" size={16} />
@@ -208,24 +209,21 @@ function PickTools({ onClear }: { onClear: () => void }) {
             className={m.backfaces ? 'on' : ''}
             data-test="pick-backfaces"
             aria-pressed={m.backfaces}
-            title="Take surface facing away from you as well — off, a window cannot quietly select the far wall of a closed part"
+            title={tr("Take surface facing away from you as well — off, a window cannot quietly select the far wall of a closed part")}
             onClick={() => m.setBackfaces(!m.backfaces)}
           >
-            ⧉ Through
-          </button>
+            {tr("⧉ Through")}{' '}</button>
         </>
       )}
       <button
         data-test="pick-invert"
         disabled={m.count === 0}
-        title="Select everything that is not selected and drop what is — to fit on all but a fixture or a riser, select it and invert"
+        title={tr("Select everything that is not selected and drop what is — to fit on all but a fixture or a riser, select it and invert")}
         onClick={m.invert}
       >
-        Invert selection
-      </button>
+        {tr("Invert selection")}{' '}</button>
       <button data-test="pick-clear" disabled={m.count === 0} onClick={onClear}>
-        Clear selection
-      </button>
+        {tr("Clear selection")}{' '}</button>
       <span className={short ? 'pickcount short' : 'pickcount'} data-test="pick-count">
         {m.count === 0
           ? 'Nothing selected — the whole scan is fitted'
@@ -313,7 +311,7 @@ export function SplitPicker({
     <div className="splitpicker" data-test="split-picker">
       <div className="splitbody">
         <Half
-          title="Scan"
+          title={tr("Scan")}
           subtitle={scanName}
           geometry={scanGeometry}
           markers={scanMarkers}
@@ -324,7 +322,7 @@ export function SplitPicker({
           onPaintChange={(count) => useMark.getState().setCount(count)}
         />
         <Half
-          title="Reference"
+          title={tr("Reference")}
           subtitle={nominalName}
           geometry={nominalGeometry}
           markers={nominalMarkers}
@@ -369,17 +367,14 @@ export function SplitPicker({
           <span className="splitwarn">{alignMessage}</span>
         )}
         {solved && !degenerate && (
-          <span className="splitfit">picked spread {len.fmt(solved.rms, 2)}</span>
+          <span className="splitfit">{tr("picked spread")}{' '}{len.fmt(solved.rms, 2)}</span>
         )}
         <button disabled={running || (!pairs.length && !pendingScan)} onClick={undoPair}>
-          Undo
-        </button>
+          {tr("Undo")}{' '}</button>
         <button disabled={running || (!pairs.length && !pendingScan)} onClick={clearPairs}>
-          Clear
-        </button>
+          {tr("Clear")}{' '}</button>
         <button data-test="split-cancel" disabled={running} onClick={onCancel}>
-          Cancel
-        </button>
+          {tr("Cancel")}{' '}</button>
         {running ? (
           <button
             className="primary"
@@ -397,8 +392,7 @@ export function SplitPicker({
             disabled={!enough}
             onClick={onAlign}
           >
-            Align from these points
-          </button>
+            {tr("Align from these points")}{' '}</button>
         )}
       </div>
     </div>

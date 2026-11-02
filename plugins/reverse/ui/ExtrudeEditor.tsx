@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../src/i18n'
 // The Extrude box: the profiles picked, the extent from and to the sketch's
 // plane or a face, the taper, the direction and the body operation, with
 // the preview and the live map.
@@ -61,23 +62,21 @@ export function ExtrudeEditor() {
       {draft.face ? (
         <div className="field">
           <span>
-            Profile
-            <InfoDot title="A face pulled">
+            {tr("Profile")}{' '}<InfoDot title={tr("A face pulled")}>
               <p>
-                The face itself is the profile: it is found again on the body whenever this extrude is built, and pulled as it stands then — an earlier feature that reshapes the face reshapes what is pulled from it. Nothing is copied into a sketch.
-              </p>
+                {tr("The face itself is the profile: it is found again on the body whenever this extrude is built, and pulled as it stands then — an earlier feature that reshapes the face reshapes what is pulled from it. Nothing is copied into a sketch.")}{' '}</p>
             </InfoDot>
           </span>
           <span className="picked" data-test="extrude-face-profile">
-            {describeFace(draft.face.face)} of {bodies.find((b) => b.id === draft.face!.body)?.name ?? features.find((f) => f.id === draft.face!.body)?.name ?? 'the body'}
+            {describeFace(draft.face.face)} {tr("of")}{' '}{bodies.find((b) => b.id === draft.face!.body)?.name ?? features.find((f) => f.id === draft.face!.body)?.name ?? 'the body'}
           </span>
         </div>
       ) : (
         <>
           <label className="field">
-            <span>Sketch</span>
+            <span>{tr("Sketch")}</span>
             <select data-test="extrude-sketch" value={draft.sketchId ?? ''} onChange={(e) => set({ sketchId: e.target.value === '' ? null : Number(e.target.value) })}>
-              <option value="">Select…</option>
+              <option value="">{tr("Select…")}</option>
               {sketches.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.name}
@@ -91,7 +90,7 @@ export function ExtrudeEditor() {
       <PreviewLine preview={preview} testPrefix="extrude" />
       <AnalysisRow testPrefix="extrude" />
       <label className="field">
-        <span>Extent</span>
+        <span>{tr("Extent")}</span>
         <select
           data-test="extrude-extent"
           value={extent.kind}
@@ -115,14 +114,14 @@ export function ExtrudeEditor() {
             })
           }}
         >
-          <option value="distance">Distance</option>
-          <option value="toPlane">To a plane</option>
-          <option value="toFace">To a face of a body</option>
-          <option value="toBody">To a body</option>
-          <option value="toNext">To next</option>
-          <option value="toLast">To last / through all</option>
-          <option value="betweenPlanes">Between two planes</option>
-          <option value="symmetric">Symmetric</option>
+          <option value="distance">{tr("Distance")}</option>
+          <option value="toPlane">{tr("To a plane")}</option>
+          <option value="toFace">{tr("To a face of a body")}</option>
+          <option value="toBody">{tr("To a body")}</option>
+          <option value="toNext">{tr("To next")}</option>
+          <option value="toLast">{tr("To last / through all")}</option>
+          <option value="betweenPlanes">{tr("Between two planes")}</option>
+          <option value="symmetric">{tr("Symmetric")}</option>
         </select>
       </label>
       <div className="toolrow">
@@ -142,20 +141,17 @@ export function ExtrudeEditor() {
           onClick={() => re.getState().flipExtrude()}
         >
           <Icon name="flip" size={16} />
-          Reverse direction
-        </button>
+          {tr("Reverse direction")}{' '}</button>
       </div>
       {extent.kind === 'distance' && (
         <>
           <Num label="To" testId="extrude-to" slot="extent.to" value={extent.to} nominal="length" passKeys={{ enter: create }} onCommit={(v) => set({ extent: { ...extent, to: v } })} hint="How far along the sketch plane's normal the body ends — in front of the plane. The arrow on that face drags it; a click on the part in front of the plane sets it." />
           <Num label="From" testId="extrude-from" slot="extent.from" value={extent.from} nominal="length" onCommit={(v) => set({ extent: { ...extent, from: v } })} hint="How far along the normal the body starts — 0 is the plane itself, negative is behind it. The arrow on that face drags it; a click on the part behind the plane sets it." />
           <p className="hint" data-test="extrude-pick-hint">
-            Or click the part: in front of the plane sets To, behind it From.
-            <InfoDot title="Up to a point on the part">
+            {tr("Or click the part: in front of the plane sets To, behind it From.")}{' '}<InfoDot title={tr("Up to a point on the part")}>
               <p>
-                Click the scan, a body or a body's corner in the viewport: a point in front of the sketch plane puts <b>To</b> at its height over the plane, a point behind it puts <b>From</b> there. A click on the part's top and one on its bottom make the body that spans them, in either order. For a part lying wholly behind the plane, put To at 0 by hand — a click behind the plane never moves it.
-              </p>
-              <p>The height is read off the point once and kept as a number, which the field and the arrow go on changing. A sketch region under the cursor still takes the click as a profile — turn the part so the point is clear of it.</p>
+                {tr("Click the scan, a body or a body's corner in the viewport: a point in front of the sketch plane puts")}{' '}<b>{tr("To")}</b> {tr("at its height over the plane, a point behind it puts")}{' '}<b>{tr("From")}</b> {tr("there. A click on the part's top and one on its bottom make the body that spans them, in either order. For a part lying wholly behind the plane, put To at 0 by hand — a click behind the plane never moves it.")}{' '}</p>
+              <p>{tr("The height is read off the point once and kept as a number, which the field and the arrow go on changing. A sketch region under the cursor still takes the click as a profile — turn the part so the point is clear of it.")}</p>
             </InfoDot>
           </p>
         </>
@@ -164,16 +160,15 @@ export function ExtrudeEditor() {
         <>
           <Num label="Total" testId="extrude-total" slot="extent.total" value={extent.total} nominal="length" onCommit={(v) => set({ extent: { ...extent, total: v } })} hint="The whole thickness, half on each side of the sketch plane; either arrow drags it" />
           <p className="hint" data-test="extrude-pick-hint">
-            Or click a point on the part: each half reaches it.
-          </p>
+            {tr("Or click a point on the part: each half reaches it.")}{' '}</p>
         </>
       )}
       {extent.kind === 'toPlane' && (
         <>
           <Num label="From" testId="extrude-from" slot="extent.from" value={extent.from} nominal="length" onCommit={(v) => set({ extent: { ...extent, from: v } })} hint="How far along the normal the body starts" />
           <label className="field">
-            <span>Up to</span>
-            <PlaneSelect value={extent.plane} testId="extrude-plane" placeholder="Choose the plane…" onChange={(plane) => set({ extent: { ...extent, plane } })} />
+            <span>{tr("Up to")}</span>
+            <PlaneSelect value={extent.plane} testId="extrude-plane" placeholder={tr("Choose the plane…")} onChange={(plane) => set({ extent: { ...extent, plane } })} />
           </label>
         </>
       )}
@@ -181,7 +176,7 @@ export function ExtrudeEditor() {
         <>
           <Num label="From" testId="extrude-from" slot="extent.from" value={extent.from} nominal="length" onCommit={(v) => set({ extent: { ...extent, from: v } })} hint="How far along the normal the body starts" />
           <div className="field">
-            <span>Up to</span>
+            <span>{tr("Up to")}</span>
             <span className="picked" data-test="extrude-to-face">
               {extent.face ? describeFace(extent.face) : 'Click a face of a body'}
             </span>
@@ -192,9 +187,9 @@ export function ExtrudeEditor() {
         <>
           <Num label="From" testId="extrude-from" slot="extent.from" value={extent.from} nominal="length" onCommit={(v) => set({ extent: { ...extent, from: v } })} hint="How far along the normal the body starts" />
           <label className="field">
-            <span>Up to</span>
+            <span>{tr("Up to")}</span>
             <select data-test="extrude-to-body" value={extent.body >= 0 ? extent.body : ''} onChange={(e) => set({ extent: { ...extent, body: e.target.value === '' ? -1 : Number(e.target.value) } })}>
-              <option value="">Choose the body…</option>
+              <option value="">{tr("Choose the body…")}</option>
               {bodies
                 .filter((b) => b.id !== draft.featureId)
                 .map((b) => (
@@ -204,7 +199,7 @@ export function ExtrudeEditor() {
                 ))}
             </select>
           </label>
-          <p className="hint" data-test="extrude-until">Runs until the profile meets the body’s surface — a solid’s skin or a sheet — the way the body lies; the body has to lie under the whole profile.</p>
+          <p className="hint" data-test="extrude-until">{tr("Runs until the profile meets the body’s surface — a solid’s skin or a sheet — the way the body lies; the body has to lie under the whole profile.")}</p>
         </>
       )}
       {(extent.kind === 'toNext' || extent.kind === 'toLast') && (
@@ -225,12 +220,12 @@ export function ExtrudeEditor() {
       {extent.kind === 'betweenPlanes' && (
         <>
           <label className="field">
-            <span>From plane</span>
-            <PlaneSelect value={extent.a} testId="extrude-plane-a" placeholder="Choose the plane…" onChange={(a) => set({ extent: { ...extent, a } })} />
+            <span>{tr("From plane")}</span>
+            <PlaneSelect value={extent.a} testId="extrude-plane-a" placeholder={tr("Choose the plane…")} onChange={(a) => set({ extent: { ...extent, a } })} />
           </label>
           <label className="field">
-            <span>To plane</span>
-            <PlaneSelect value={extent.b} testId="extrude-plane-b" placeholder="Choose the plane…" onChange={(b) => set({ extent: { ...extent, b } })} />
+            <span>{tr("To plane")}</span>
+            <PlaneSelect value={extent.b} testId="extrude-plane-b" placeholder={tr("Choose the plane…")} onChange={(b) => set({ extent: { ...extent, b } })} />
           </label>
         </>
       )}
@@ -247,13 +242,12 @@ export function ExtrudeEditor() {
       />
       <DirectionField direction={draft.direction} normal={draft.face ? draft.face.face.dir : (sketch?.frame.normal ?? null)} onChange={(direction) => set({ direction })} />
       <OpFields op={draft.op} canCut={targets.length > 0} testPrefix="extrude" onOp={(op) => re.getState().setExtrudeOp(op)} />
-      <button className="primary block" data-test="extrude-create" disabled={!ready} title="Enter or a middle click does the same" onClick={create}>
+      <button className="primary block" data-test="extrude-create" disabled={!ready} title={tr("Enter or a middle click does the same")} onClick={create}>
         {draft.featureId !== undefined ? 'Save changes' : 'Create extrude'}
       </button>
       <div className="toolrow">
         <button data-test="extrude-cancel" onClick={() => { re.getState().setHint(null); re.getState().cancelExtrude() }}>
-          Cancel
-        </button>
+          {tr("Cancel")}{' '}</button>
       </div>
     </div>
   )

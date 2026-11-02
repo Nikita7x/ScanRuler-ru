@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The surface marking controls — gesture row, brush width, back faces, erase,
 // invert and clear — as one block, so both places that mark scan surface by
 // hand offer the same tools and the same escape route: an element fitted to
@@ -68,7 +69,7 @@ export function BrushSlider({ diameter, setDiameter, brush }: BrushDiameter & { 
       max={brush.max}
       step={(brush.max - brush.min) / 200}
       value={Math.min(Math.max(diameter, brush.min), brush.max)}
-      aria-label="Brush diameter"
+      aria-label={tr("Brush diameter")}
       onChange={(e) => setDiameter(Number(e.target.value))}
     />
   )
@@ -115,19 +116,13 @@ export function MarkTools({
         {m.gesture === null
           ? 'Marking is off — the camera has both drags back.'
           : 'Left-drag marks, right-drag rubs out.'}
-        <InfoDot title="Marking tools" testId="mark-help">
+        <InfoDot title={tr("Marking tools")} testId="mark-help">
           <p>
-            <b>Window</b> marks every triangle inside a dragged rectangle. <b>Brush</b> paints with a
-            round tip, for working along an edge. <b>Lasso</b> takes everything inside a free
-            outline.
-          </p>
+            <b>{tr("Window")}</b> {tr("marks every triangle inside a dragged rectangle.")}{' '}<b>{tr("Brush")}</b> {tr("paints with a round tip, for working along an edge.")}{' '}<b>{tr("Lasso")}</b> {tr("takes everything inside a free outline.")}{' '}</p>
           <p>
-            While a tool is live it takes both plain drags: left marks, right rubs out, and Alt
-            inverts either way. Shift-drag still orbits and the middle button is untouched.
-          </p>
+            {tr("While a tool is live it takes both plain drags: left marks, right rubs out, and Alt inverts either way. Shift-drag still orbits and the middle button is untouched.")}{' '}</p>
           <p>
-            <b>Navigate</b>, Esc, or clicking the live tool again hands the drags back to the camera;
-            what is marked stays marked. {escapeNote}
+            <b>{tr("Navigate")}</b>{tr(", Esc, or clicking the live tool again hands the drags back to the camera; what is marked stays marked.")}{' '}{escapeNote}
           </p>
         </InfoDot>
       </p>
@@ -135,7 +130,7 @@ export function MarkTools({
       {m.gesture === 'brush' && (
         <>
           <label className="field">
-            <span>Brush Ø ({len.word()})</span>
+            <span>{tr("Brush Ø (")}{len.word()})</span>
             <BrushNumber diameter={m.diameter} setDiameter={m.setDiameter} testId="mark-brush-diameter" />
           </label>
           <BrushSlider diameter={m.diameter} setDiameter={m.setDiameter} brush={brush} />
@@ -149,16 +144,12 @@ export function MarkTools({
           checked={m.backfaces}
           onChange={(e) => m.setBackfaces(e.target.checked)}
         />
-        <span>Mark faces pointing away too</span>
-        <InfoDot title="Faces pointing away">
+        <span>{tr("Mark faces pointing away too")}</span>
+        <InfoDot title={tr("Faces pointing away")}>
           <p>
-            Off, only surface turned towards you is taken, so a window dragged over a closed part
-            cannot quietly mark the far wall as well.
-          </p>
+            {tr("Off, only surface turned towards you is taken, so a window dragged over a closed part cannot quietly mark the far wall as well.")}{' '}</p>
           <p>
-            On, the gesture goes straight through — useful for taking a whole rib or boss in one
-            sweep, and for a scan whose normals came out inverted.
-          </p>
+            {tr("On, the gesture goes straight through — useful for taking a whole rib or boss in one sweep, and for a scan whose normals came out inverted.")}{' '}</p>
         </InfoDot>
       </label>
 
@@ -168,7 +159,7 @@ export function MarkTools({
           data-test="mark-erase"
           aria-pressed={m.erase}
           onClick={() => m.setErase(!m.erase)}
-          title="The gesture takes marking away instead of laying it down — the right button always does, and Alt inverts either way"
+          title={tr("The gesture takes marking away instead of laying it down — the right button always does, and Alt inverts either way")}
         >
           <Icon name="erase" size={16} />
           {m.erase ? 'Erasing' : 'Erase'}
@@ -178,20 +169,18 @@ export function MarkTools({
           data-test="mark-invert"
           disabled={m.count === 0}
           onClick={m.invert}
-          title="Mark everything that is not marked and rub out what is — to take all but a small piece, mark the piece and invert"
+          title={tr("Mark everything that is not marked and rub out what is — to take all but a small piece, mark the piece and invert")}
         >
           <Icon name="markInvert" size={16} />
-          Invert
-        </button>
+          {tr("Invert")}{' '}</button>
         <button data-test="mark-clear" disabled={m.count === 0} onClick={onClear}>
-          Clear marking
-        </button>
+          {tr("Clear marking")}{' '}</button>
       </div>
 
       {showCount && (
         <div className="kv">
-          <span className="name">Marked</span>
-          <b data-test="mark-count">{m.count.toLocaleString('en-US')} points</b>
+          <span className="name">{tr("Marked")}</span>
+          <b data-test="mark-count">{m.count.toLocaleString('en-US')} {tr("points")}</b>
         </div>
       )}
     </>

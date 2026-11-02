@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The two controls every colour scale carries whatever it measures: discrete
 // bands instead of the continuous ramp, and the histogram beside the scale.
 // The deviation and thickness panels both show them, wired to their own
@@ -23,13 +24,12 @@ export function ScaleControls({
   return (
     <>
       <label className="field">
-        <span>Bands</span>
+        <span>{tr("Bands")}</span>
         <select value={bands ?? 0} onChange={(e) => onBands(Number(e.target.value) || null)}>
-          <option value={0}>Continuous</option>
+          <option value={0}>{tr("Continuous")}</option>
           {BAND_CHOICES.map((b) => (
             <option key={b} value={b}>
-              {b} bands
-            </option>
+              {b} {tr("bands")}{' '}</option>
           ))}
         </select>
       </label>
@@ -40,7 +40,7 @@ export function ScaleControls({
           checked={showHistogram}
           onChange={(e) => onShowHistogram(e.target.checked)}
         />
-        <span>Histogram beside the scale</span>
+        <span>{tr("Histogram beside the scale")}</span>
       </label>
     </>
   )

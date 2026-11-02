@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The volume error — the deviation as volumes — panel-side: the button that
 // measures it under the
 // alignment in hand, the totals — material the reference has and the part has
@@ -56,27 +57,18 @@ export function VolumeSection({
   return (
     <div className={className} data-test="volume-section">
       <div className="sec-head">
-        Volume error
-        <InfoDot title="Volume error">
+        {tr("Volume error")}{' '}<InfoDot title={tr("Volume error")}>
           <p>
-            The scan and the reference compared as solids rather than surfaces: on a grid of small
-            cells, each cell inside one and not the other is an error, and touching cells make a
-            region. <b>Excess</b> is material the reference has and the part has not, <b>missing</b>{' '}
-            the other way round — a boss not modelled, a pocket not cut, wherever it is, behind a wall
-            or inside a cavity too.
-          </p>
+            {tr("The scan and the reference compared as solids rather than surfaces: on a grid of small cells, each cell inside one and not the other is an error, and touching cells make a region.")}{' '}<b>{tr("Excess")}</b> {tr("is material the reference has and the part has not,")}{' '}<b>{tr("missing")}</b>{' '}
+            {tr("the other way round — a boss not modelled, a pocket not cut, wherever it is, behind a wall or inside a cavity too.")}{' '}</p>
           <p>
-            Where the scan has a hole, the reference stands in for it. What the scan still does not
-            say is <b>unsure</b>, never called an error. Within the tolerance of the scan's surface a
-            difference is the scan's noise and not counted, and nothing thinner than about two cells
-            is seen: the surface map stays the tool for fine offsets.
-          </p>
+            {tr("Where the scan has a hole, the reference stands in for it. What the scan still does not say is")}{' '}<b>{tr("unsure")}</b>{tr(", never called an error. Within the tolerance of the scan's surface a difference is the scan's noise and not counted, and nothing thinner than about two cells is seen: the surface map stays the tool for fine offsets.")}{' '}</p>
         </InfoDot>
       </div>
       <button className="primary block" data-test="volume-measure" disabled={running} onClick={onMeasure}>
         {running ? (
           <>
-            <span className="spinner" /> Finding volume errors…{progress !== null ? ` ${Math.round(progress * 100)} %` : ''}
+            <span className="spinner" /> {tr("Finding volume errors…")}{progress !== null ? ` ${Math.round(progress * 100)} %` : ''}
           </>
         ) : volume ? (
           'Find volume errors again'
@@ -87,12 +79,12 @@ export function VolumeSection({
       {message && <p className="alarmtext">{message}</p>}
       {!volume && !running && !message && (
         <p className="hint">
-          Material the model has too much of or lacks — a boss not modelled, a pocket not cut — as volumes. Takes some seconds on a large scan; uses the tolerance ±{typed(tolerance)}.
+          {tr("Material the model has too much of or lacks — a boss not modelled, a pocket not cut — as volumes. Takes some seconds on a large scan; uses the tolerance ±")}{typed(tolerance)}.
         </p>
       )}
       {volume && (
         <>
-          {volume.tolerance !== tolerance && <p className="hint">Measured at ±{typed(volume.tolerance)}; the tolerance is ±{typed(tolerance)} now.</p>}
+          {volume.tolerance !== tolerance && <p className="hint">{tr("Measured at ±")}{typed(volume.tolerance)}{tr("; the tolerance is ±")}{typed(tolerance)} {tr("now.")}</p>}
           {(['excess', 'missing', 'unsure'] as const).map((k) => (
             <div className="kv" key={k} data-test={`volume-total-${k}`}>
               <span className="dot" style={{ background: VOLUME_COLORS[k] }} />
@@ -103,15 +95,14 @@ export function VolumeSection({
             </div>
           ))}
           <p className="hint">
-            Cells {len.fmt(volume.cell, 2)} — sees {len.fmt(volume.smallestSeen, 2)} and thicker. Of the
-            reference's {mm3(volume.modelVolume)}, in {(volume.timings.total / 1000).toFixed(1)} s.
+            {tr("Cells")}{' '}{len.fmt(volume.cell, 2)} {tr("— sees")}{' '}{len.fmt(volume.smallestSeen, 2)} {tr("and thicker. Of the reference's")}{' '}{mm3(volume.modelVolume)}{tr(", in")}{' '}{(volume.timings.total / 1000).toFixed(1)} s.
           </p>
           <label className="checkrow">
             <input type="checkbox" data-test="volume-show" checked={show} onChange={(e) => setShow(e.target.checked)} />
-            <span>Show the regions</span>
+            <span>{tr("Show the regions")}</span>
           </label>
           {kept.length === 0 ? (
-            <p className="hint">No region bigger than a few cells.</p>
+            <p className="hint">{tr("No region bigger than a few cells.")}</p>
           ) : (
             <div onPointerLeave={() => setHover(null)}>
               {kept.slice(0, LISTED).map((r) => {
@@ -128,13 +119,12 @@ export function VolumeSection({
                   >
                     <span className="dot" style={{ background: VOLUME_COLORS[r.kind] }} />
                     <span className="name">
-                      {KIND_NAMES[r.kind]} · {len.fmt(r.maxDepth, 1)} deep
-                    </span>
+                      {KIND_NAMES[r.kind]} · {len.fmt(r.maxDepth, 1)} {tr("deep")}{' '}</span>
                     <b>{mm3(r.volume)}</b>
                   </div>
                 )
               })}
-              {kept.length > LISTED && <p className="hint">and {kept.length - LISTED} smaller.</p>}
+              {kept.length > LISTED && <p className="hint">{tr("and")}{' '}{kept.length - LISTED} {tr("smaller.")}</p>}
             </div>
           )}
         </>

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../src/i18n'
 // The way an extrude sweeps its profile, in the Extrude box: along the
 // sketch plane's normal, as it starts — or askew, along a measured line or
 // axis, a coordinate axis, or three numbers typed: an oblique prism whose
@@ -46,12 +47,10 @@ export function DirectionField({ direction, normal, onChange }: { direction: Vec
     <>
       <label className="field">
         <span>
-          Direction
-          <InfoDot title="The way the profile is swept">
+          {tr("Direction")}{' '}<InfoDot title={tr("The way the profile is swept")}>
             <p>
-              Along the sketch plane's normal, as an extrude starts — or askew of it: along a measured line or axis, a coordinate axis, or three numbers typed. The ends stay in planes parallel to the sketch's, the distances count along the direction and a taper leans the sides about it — a leaning boss on a level sketch, with no tilted sketch plane to make.
-            </p>
-            <p>An axis is read once and kept as a direction, turned to the plane's front; one lying in the sketch plane sweeps nothing and is not offered.</p>
+              {tr("Along the sketch plane's normal, as an extrude starts — or askew of it: along a measured line or axis, a coordinate axis, or three numbers typed. The ends stay in planes parallel to the sketch's, the distances count along the direction and a taper leans the sides about it — a leaning boss on a level sketch, with no tilted sketch plane to make.")}{' '}</p>
+            <p>{tr("An axis is read once and kept as a direction, turned to the plane's front; one lying in the sketch plane sweeps nothing and is not offered.")}</p>
           </InfoDot>
         </span>
         <select
@@ -67,13 +66,13 @@ export function DirectionField({ direction, normal, onChange }: { direction: Vec
             }
           }}
         >
-          <option value="normal">The sketch plane's normal</option>
+          <option value="normal">{tr("The sketch plane's normal")}</option>
           {offers.map((o) => (
             <option key={o.key} value={o.key} disabled={!along(o.dir)}>
               {o.label}
             </option>
           ))}
-          <option value="typed">Typed…</option>
+          <option value="typed">{tr("Typed…")}</option>
         </select>
       </label>
       {chosen === 'typed' && (
@@ -88,8 +87,7 @@ export function DirectionField({ direction, normal, onChange }: { direction: Vec
       )}
       {chosen !== 'typed' && direction && (
         <p className="hint" data-test="extrude-direction-lean">
-          {Math.round(lean * 10) / 10}° off the sketch plane's normal.
-        </p>
+          {Math.round(lean * 10) / 10}{tr("° off the sketch plane's normal.")}{' '}</p>
       )}
     </>
   )

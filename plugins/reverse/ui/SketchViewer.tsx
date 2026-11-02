@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../src/i18n'
 // The sketch editor's stage: the 2D Measure sheet, laid over the 3D
 // viewport as a see-through layer while a sketch is open in the Reverse
 // engineer workspace — the same FlatScene as the 2D viewport, same
@@ -115,7 +116,7 @@ export function SketchViewer({
     <div className="viewport" ref={containerRef} data-test="sketch-viewport">
       {webglError !== null && (
         <div className="webgl-missing" role="alert">
-          <b>The sketch view could not be started.</b>
+          <b>{tr("The sketch view could not be started.")}</b>
           <p className="webgl-missing-detail">{webglError}</p>
         </div>
       )}

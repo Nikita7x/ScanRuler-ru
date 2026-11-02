@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The box a section is made or edited in: whether it is a cut or a shadow,
 // what to cut across — an element, or one of the scan's coordinate planes —
 // the offset along its direction, typed here or dragged on the part, the
@@ -104,46 +105,20 @@ export function SectionEditor({
       <div className="sec-head">
         <span className="dot" style={{ background: color }} />
         {edited ? `Edit ${edited.name}` : 'New section'}
-        <InfoDot title="Sections">
+        <InfoDot title={tr("Sections")}>
           <p>
-            A section is the scan cut with a plane. It becomes a <b>source in the 2D Measure
-            workspace</b>, listed there beside the flatbed image: the cut’s edges lie on the
-            sheet at true size, ready to be snapped to, fitted and measured exactly like a
-            scan image’s edges.
-          </p>
+            {tr("A section is the scan cut with a plane. It becomes a")}{' '}<b>{tr("source in the 2D Measure workspace")}</b>{tr(", listed there beside the flatbed image: the cut’s edges lie on the sheet at true size, ready to be snapped to, fitted and measured exactly like a scan image’s edges.")}{' '}</p>
           <p>
-            The plane is taken <b>across an element’s direction</b> — a plane’s normal, the
-            axis of a cylinder, cone or line, a circle’s normal — or across one of the scan’s
-            <b> coordinate axes</b>: while nothing is chosen, the XY, YZ and XZ planes are
-            offered through the part’s centre, and clicking one takes it. The plane is moved
-            along its direction by the offset. Zero cuts through the element’s own centre — for
-            a face that is the face itself, so offset into the part to cut through its walls —
-            and for a coordinate plane the offset is the plane’s coordinate on that axis.
-          </p>
+            {tr("The plane is taken")}{' '}<b>{tr("across an element’s direction")}</b> {tr("— a plane’s normal, the axis of a cylinder, cone or line, a circle’s normal — or across one of the scan’s")}{' '}<b> {tr("coordinate axes")}</b>{tr(": while nothing is chosen, the XY, YZ and XZ planes are offered through the part’s centre, and clicking one takes it. The plane is moved along its direction by the offset. Zero cuts through the element’s own centre — for a face that is the face itself, so offset into the part to cut through its walls — and for a coordinate plane the offset is the plane’s coordinate on that axis.")}{' '}</p>
           <p>
-            The gizmo on the plane <b>slides</b> it by the arrow and <b>tilts</b> it by the two
-            rings, each about one of the sheet’s own axes through the point the gizmo sits on. A
-            tilted plane is recorded with its tilt off what it was taken across; <b>Square</b>{' '}
-            turns it back. A <b>click on the scan</b> slides the plane, direction and tilt kept,
-            to pass through the point clicked.
-          </p>
+            {tr("The gizmo on the plane")}{' '}<b>{tr("slides")}</b> {tr("it by the arrow and")}{' '}<b>{tr("tilts")}</b> {tr("it by the two rings, each about one of the sheet’s own axes through the point the gizmo sits on. A tilted plane is recorded with its tilt off what it was taken across;")}{' '}<b>{tr("Square")}</b>{' '}
+            {tr("turns it back. A")}{' '}<b>{tr("click on the scan")}</b> {tr("slides the plane, direction and tilt kept, to pass through the point clicked.")}{' '}</p>
           <p>
-            The plane is fixed when the section is created. Re-fitting or deleting the element
-            it was cut along leaves the section where it is; a datum alignment moves it with
-            the part.
-          </p>
+            {tr("The plane is fixed when the section is created. Re-fitting or deleting the element it was cut along leaves the section where it is; a datum alignment moves it with the part.")}{' '}</p>
           <p>
-            A <b>shadow</b> is the whole scan projected along the plane’s normal onto it — the
-            outline the part casts, its widest extent with every indentation filled, where a
-            cut is only what one plane passes through. It is what a straight-walled bin, a foam
-            cutout or a pocket for the part is drawn from: on the 2D sheet, then out as DXF.
-            The outline is read as lines and arcs, the way a sketch is drawn, to the{' '}
-            <b>tolerance</b>, and always lies outside the part: at least the <b>play</b> and at
-            most the play plus twice the tolerance outside its exact silhouette. A positive play
-            is clearance; a negative one, a press fit. Where two lines meet turning by less than{' '}
-            <b>Round below</b> (30° by default) the corner is rounded by an arc tangent to both,
-            so a faceted curve comes out smooth; a sharper corner stays sharp, and 0 keeps them all.
-          </p>
+            A <b>{tr("shadow")}</b> {tr("is the whole scan projected along the plane’s normal onto it — the outline the part casts, its widest extent with every indentation filled, where a cut is only what one plane passes through. It is what a straight-walled bin, a foam cutout or a pocket for the part is drawn from: on the 2D sheet, then out as DXF. The outline is read as lines and arcs, the way a sketch is drawn, to the")}{' '}
+            <b>{tr("tolerance")}</b>{tr(", and always lies outside the part: at least the")}{' '}<b>{tr("play")}</b> {tr("and at most the play plus twice the tolerance outside its exact silhouette. A positive play is clearance; a negative one, a press fit. Where two lines meet turning by less than")}{' '}
+            <b>{tr("Round below")}</b> {tr("(30° by default) the corner is rounded by an arc tangent to both, so a faceted curve comes out smooth; a sharper corner stays sharp, and 0 keeps them all.")}{' '}</p>
         </InfoDot>
       </div>
 
@@ -152,7 +127,7 @@ export function SectionEditor({
       )}
 
       <div className="field">
-        <span id="section-kind-label">Kind</span>
+        <span id="section-kind-label">{tr("Kind")}</span>
         <div className="keys" role="radiogroup" aria-labelledby="section-kind-label">
           {(['cut', 'shadow'] as const).map((k) => (
             <button
@@ -192,7 +167,7 @@ export function SectionEditor({
 
       {radial && (
         <label className="field">
-          <span>Angle (°)</span>
+          <span>{tr("Angle (°)")}</span>
           <input
             type="number"
             step="any"
@@ -223,7 +198,7 @@ export function SectionEditor({
             step="any"
             data-test="section-offset"
             disabled={!draft.axis}
-            title="Where the plane lies along its normal, which is where it cuts the part"
+            title={tr("Where the plane lies along its normal, which is where it cuts the part")}
             // Re-keyed on the value, so a grip dragged in the viewport types
             // itself into the field.
             key={shownOffset}
@@ -245,12 +220,12 @@ export function SectionEditor({
       {shadow && (
         <>
           <label className="field">
-            <span>Play ({u.word})</span>
+            <span>{tr("Play (")}{u.word})</span>
             <input
               type="number"
               step="any"
               data-test="section-play"
-              title="How far outside the part the outline lies: positive is clearance, negative a press fit"
+              title={tr("How far outside the part the outline lies: positive is clearance, negative a press fit")}
               key={`play-${shownLen(params.play)}`}
               defaultValue={shownLen(params.play)}
               onBlur={(e) => {
@@ -264,13 +239,13 @@ export function SectionEditor({
             />
           </label>
           <label className="field">
-            <span>Tolerance ({u.word})</span>
+            <span>{tr("Tolerance (")}{u.word})</span>
             <input
               type="number"
               step="any"
               min="0"
               data-test="section-tolerance"
-              title="How closely the lines and arcs follow the outline; it is traced on cells of half of it"
+              title={tr("How closely the lines and arcs follow the outline; it is traced on cells of half of it")}
               key={`tol-${shownLen(params.tolerance)}`}
               defaultValue={shownLen(params.tolerance)}
               onBlur={(e) => {
@@ -284,14 +259,14 @@ export function SectionEditor({
             />
           </label>
           <label className="field">
-            <span>Round below (°)</span>
+            <span>{tr("Round below (°)")}</span>
             <input
               type="number"
               step="any"
               min="0"
               max="180"
               data-test="section-smooth"
-              title="Corners where the outline turns by less than this are rounded; sharper ones stay sharp. 0 keeps every corner sharp."
+              title={tr("Corners where the outline turns by less than this are rounded; sharper ones stay sharp. 0 keeps every corner sharp.")}
               key={`smooth-${params.smoothDeg}`}
               defaultValue={params.smoothDeg}
               onBlur={(e) => {
@@ -311,27 +286,25 @@ export function SectionEditor({
               checked={params.extrude}
               onChange={(e) => setShadow({ extrude: e.target.checked })}
             />
-            <span title="A block through the part along the plane’s normal, drawn here and written to the STEP file as a solid">
-              Extrude to the part’s thickness
-            </span>
+            <span title={tr("A block through the part along the plane’s normal, drawn here and written to the STEP file as a solid")}>
+              {tr("Extrude to the part’s thickness")}{' '}</span>
           </label>
         </>
       )}
 
       {tilt > 0 && (
         <div className="field">
-          <span>Tilt</span>
+          <span>{tr("Tilt")}</span>
           <span className="tilt" data-test="section-tilt">
             {tilt.toFixed(1)}°{refName ? ` off ${refName}` : ''}
             {draft.ref !== null && (
               <button
                 type="button"
                 data-test="section-square"
-                title="Turn the plane square to what it was taken across again"
+                title={tr("Turn the plane square to what it was taken across again")}
                 onClick={() => setRef(draft.ref)}
               >
-                Square
-              </button>
+                {tr("Square")}{' '}</button>
             )}
           </span>
         </div>
@@ -346,7 +319,7 @@ export function SectionEditor({
           <span>{shadow ? 'Shadow' : 'Cut'}</span>
           {shadow
             ? words && <span data-test="section-band">{words.band}</span>
-            : summary && <span data-test="section-points">{summary.points.toLocaleString('en-US')} points</span>}
+            : summary && <span data-test="section-points">{summary.points.toLocaleString('en-US')} {tr("points")}</span>}
         </div>
         <div
           className={
@@ -357,7 +330,7 @@ export function SectionEditor({
           data-test="section-status"
         >
           {draft.status === 'empty' && (
-            <b style={{ fontSize: 12, fontWeight: 400, color: 'var(--dim)' }}>No element chosen</b>
+            <b style={{ fontSize: 12, fontWeight: 400, color: 'var(--dim)' }}>{tr("No element chosen")}</b>
           )}
           {draft.status === 'slicing' && (
             <b>
@@ -373,7 +346,7 @@ export function SectionEditor({
               </b>
             ) : summary && summary.chains > 0 ? (
               <b className="tinted" style={tintStyle(color, { fontSize: 13 })}>
-                {summary.chains} edge chain{summary.chains === 1 ? '' : 's'}
+                {summary.chains} {tr("edge chain")}{summary.chains === 1 ? '' : 's'}
               </b>
             ) : (
               <b style={{ fontSize: 12, fontWeight: 400, color: 'var(--dim)' }}>
@@ -383,15 +356,12 @@ export function SectionEditor({
         </div>
         {shape?.widened && draft.status === 'ready' && (
           <p className="hint" data-test="section-shadow-cell">
-            A part this size is traced on {len.fmt(shape.cell, 2)} cells, not{' '}
-            {len.fmt(shape.tolerance / 2, 2)}: features narrower than that may close.
-          </p>
+            {tr("A part this size is traced on")}{' '}{len.fmt(shape.cell, 2)} {tr("cells, not")}{' '}
+            {len.fmt(shape.tolerance / 2, 2)}{tr(": features narrower than that may close.")}{' '}</p>
         )}
         {shape && params.extrude && draft.status === 'ready' && shape.loops.length > 0 && (
           <p className="hint" data-test="section-extrude-height">
-            A block {len.fmt(shape.extent.max - shape.extent.min, 2)} high, through the part from
-            its lowest point to its highest — exported as a solid with STEP as Solids &amp; faces.
-          </p>
+            {tr("A block")}{' '}{len.fmt(shape.extent.max - shape.extent.min, 2)} {tr("high, through the part from its lowest point to its highest — exported as a solid with STEP as Solids & faces.")}{' '}</p>
         )}
       </div>
 
@@ -405,8 +375,7 @@ export function SectionEditor({
       </button>
       <div className="toolrow">
         <button data-test="cancel-section" onClick={onCancel}>
-          Cancel
-        </button>
+          {tr("Cancel")}{' '}</button>
       </div>
     </div>
   )

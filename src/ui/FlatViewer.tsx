@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The 2D Measure viewport and what it is wired to: the settings the sheet
 // view follows as the main view does, and the loupe over the cursor, which
 // shows the image's own pixels, turned and mirrored as the sheet is,
@@ -229,12 +230,9 @@ export function FlatViewer({
       />
       {webglError !== null && (
         <div className="webgl-missing" role="alert">
-          <b>The 2D view could not be started.</b>
+          <b>{tr("The 2D view could not be started.")}</b>
           <p>
-            This tool draws everything with WebGL, and your browser refused to create a WebGL
-            context. Usually that means hardware acceleration is switched off or the graphics
-            driver is blocklisted.
-          </p>
+            {tr("This tool draws everything with WebGL, and your browser refused to create a WebGL context. Usually that means hardware acceleration is switched off or the graphics driver is blocklisted.")}{' '}</p>
           <p className="webgl-missing-detail">{webglError}</p>
         </div>
       )}

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The pinned readings of a map, panel-side: the count, one row per pin and
 // the way to take them off again. The deviation and thickness panels share
 // it — only how a value is written differs, and the caller says that. The
@@ -39,7 +40,7 @@ export function ProbeList({
   return (
     <div className={className}>
       <div className="g-label">
-        <span>Pinned readings</span>
+        <span>{tr("Pinned readings")}</span>
         <b>{probes.length}</b>
       </div>
       {probes.length === 0 ? (
@@ -53,14 +54,11 @@ export function ProbeList({
               checked={hidePinsBehind}
               onChange={(e) => setHidePinsBehind(e.target.checked)}
             />
-            <span>Hide pins behind the part</span>
-            <InfoDot title="Hide pins behind the part">
+            <span>{tr("Hide pins behind the part")}</span>
+            <InfoDot title={tr("Hide pins behind the part")}>
               <p>
-                With this on, a pin whose spot is on the far side of the part, or behind a feature
-                of it, is put away until the part turns to show it — so a part carrying many pins
-                shows only the numbers of the face you are looking at.
-              </p>
-              <p>Off, every pin shows through the part, wherever its spot is.</p>
+                {tr("With this on, a pin whose spot is on the far side of the part, or behind a feature of it, is put away until the part turns to show it — so a part carrying many pins shows only the numbers of the face you are looking at.")}{' '}</p>
+              <p>{tr("Off, every pin shows through the part, wherever its spot is.")}</p>
             </InfoDot>
           </label>
           {probes.map((p, i) => (
@@ -68,14 +66,13 @@ export function ProbeList({
               <span className="probeno">{i + 1}</span>
               <span className="name">{p.point.map((v) => len.fmt(v, 1, { bare: true })).join(', ')}</span>
               <b>{format(p.value)}</b>
-              <button className="x" title="Remove" onClick={() => onRemove(p.id)}>
+              <button className="x" title={tr("Remove")} onClick={() => onRemove(p.id)}>
                 <Icon name="bin" size={14} />
               </button>
             </div>
           ))}
           <button className="block" onClick={onClear}>
-            Clear pins
-          </button>
+            {tr("Clear pins")}{' '}</button>
         </>
       )}
     </div>

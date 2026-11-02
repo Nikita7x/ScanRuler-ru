@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // A part's key on the view bar — the scan, the reference, the elements, a
 // workspace's own. A click shows the part or puts it away; the menu that
 // opens over the key, on hover or from its caret, says how the part is
@@ -109,11 +110,11 @@ export function PartKey({
         onClick={() => {
           if (!shown.disabled) shown.set(!shown.on)
         }}
-        title={shown.disabled ?? title}
+        title={tr(shown.disabled ?? title)}
       >
         {icon}
-        {label}
-        {changed && <span className="partdot" role="img" aria-label="set otherwise in its menu" />}
+        {tr(label)}
+        {changed && <span className="partdot" role="img" aria-label={tr("set otherwise in its menu")} />}
       </button>
       {hasMenu && (
         <button
@@ -127,7 +128,7 @@ export function PartKey({
             pinned.current = !close
             setOpen(!close)
           }}
-          title={`How the ${label.toLowerCase()} ${label.endsWith('s') ? 'are' : 'is'} drawn`}
+          title={tr(`How the ${label.toLowerCase()} ${label.endsWith('s') ? 'are' : 'is'} drawn`)}
         >
           <svg width="8" height="8" viewBox="0 0 8 8" aria-hidden="true" focusable="false">
             <path d="M1 5.5 4 2.5 7 5.5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -136,7 +137,7 @@ export function PartKey({
       )}
       {/* Kept in the page while closed, so what stands in it can be read. */}
       {hasMenu && (
-        <div className="partmenu" role="menu" aria-label={label} data-test={`${testId}-options`} hidden={!open}>
+        <div className="partmenu" role="menu" aria-label={tr(label)} data-test={`${testId}-options`} hidden={!open}>
           {children}
         </div>
       )}
@@ -166,10 +167,10 @@ export function PartOption({
       aria-checked={value.on}
       disabled={Boolean(value.disabled)}
       onClick={() => value.set(!value.on)}
-      title={value.disabled ?? title}
+      title={tr(value.disabled ?? title)}
     >
       {icon}
-      {label}
+      {tr(label)}
     </button>
   )
 }
@@ -194,10 +195,10 @@ export function PartChoice<T extends string>({
   title: string
 }) {
   return (
-    <div className="partchoice" role="radiogroup" aria-label={label} title={title}>
+    <div className="partchoice" role="radiogroup" aria-label={tr(label)} title={tr(title)}>
       <span className="partchoice-label">
         {icon}
-        {label}
+        {tr(label)}
       </span>
       <span className="partchoice-keys">
         {options.map((o) => (
@@ -208,9 +209,9 @@ export function PartChoice<T extends string>({
             className={value === o.id ? 'on' : undefined}
             data-test={`${testId}-${o.id}`}
             onClick={() => onChange(o.id)}
-            title={o.title}
+            title={tr(o.title)}
           >
-            {o.label}
+            {tr(o.label)}
           </button>
         ))}
       </span>

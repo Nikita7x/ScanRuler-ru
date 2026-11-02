@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../src/i18n'
 // The fields the Reverse engineer panel's boxes are built from: a number
 // that takes an expression, a point as three numbers, the profiles picked,
 // the body operation, the preview's line and the live map's row, and the
@@ -102,9 +103,8 @@ export function XyzField({ label, unit, kind, slot, value, testId, hint, onCommi
 
 export function ClearPicks({ kind }: { kind: string }) {
   return (
-    <button className="clearpicks" data-test={`${kind}-clear-picks`} title="Let every picked one go and pick again" onClick={() => useReverse.getState().clearDraftPicks()}>
-      Clear
-    </button>
+    <button className="clearpicks" data-test={`${kind}-clear-picks`} title={tr("Let every picked one go and pick again")} onClick={() => useReverse.getState().clearDraftPicks()}>
+      {tr("Clear")}{' '}</button>
   )
 }
 
@@ -123,19 +123,14 @@ export function ProfilesField({ picked, found, testPrefix }: { picked: number; f
     <>
       <div className="field">
         <span>
-          Profiles
-          <InfoDot title="Profiles">
+          {tr("Profiles")}{' '}<InfoDot title={tr("Profiles")}>
             <p>
-              The sketch's closed regions are drawn on the part while this box is open: click one
-              to use it, click it again to let it go. An inner loop left unpicked becomes a hole of
-              the region around it. A sketch with one region has it picked already.
-            </p>
+              {tr("The sketch's closed regions are drawn on the part while this box is open: click one to use it, click it again to let it go. An inner loop left unpicked becomes a hole of the region around it. A sketch with one region has it picked already.")}{' '}</p>
           </InfoDot>
         </span>
         <span className="unitfield">
           <b data-test={`${testPrefix}-profiles`} style={{ fontSize: 12 }}>
-            {picked} of {found} picked
-          </b>
+            {picked} {tr("of")}{' '}{found} {tr("picked")}{' '}</b>
           <button data-test={`${testPrefix}-all-regions`} disabled={found === 0} title={all ? 'Let every region go' : 'Use every closed region of the sketch'} onClick={() => re.getState().pickAllDraftRegions()}>
             {all ? 'None' : 'All'}
           </button>
@@ -170,8 +165,7 @@ export function PreviewLine({ preview, testPrefix }: { preview: PreviewInfo; tes
       {preview.status === 'ok' && preview.trim && (preview.trim.closed ? `Closed: ${preview.trim.kept} of the ${preview.trim.faces} faces the surfaces cut lie on the scan and sew into a solid of ${vol}.` : `⚠ Not closed: ${preview.trim.kept} of ${preview.trim.faces} faces lie on the scan, and they leave ${preview.trim.openEdges.length} open edge${preview.trim.openEdges.length === 1 ? '' : 's'} — drawn red on the part. Fit the surface that is missing there, or widen the tolerance; Create keeps the faces as a surface body meanwhile.`)}
       {preview.status === 'ok' && preview.surface?.shape && (
         <span data-test="surface-held">
-          {preview.surface.shape === 'plane' ? 'A plane' : `A cylinder of R ${len.fmt(preview.surface.radius ?? NaN, 3)}`}: σ {len.fmt(preview.surface.rms, 3)} over {preview.surface.points.toLocaleString('en-US')} points
-          {preview.surface.relations && preview.surface.relations.length > 0
+          {preview.surface.shape === 'plane' ? 'A plane' : `A cylinder of R ${len.fmt(preview.surface.radius ?? NaN, 3)}`}: σ {len.fmt(preview.surface.rms, 3)} {tr("over")}{' '}{preview.surface.points.toLocaleString('en-US')} {tr("points")}{' '}{preview.surface.relations && preview.surface.relations.length > 0
             ? ` (${len.fmt(preview.surface.rmsFree ?? 0, 3)} before it was held). ${preview.surface.relations.map((r) => `${relationWords(preview.surface!.shape!, r.relation, r.refKind)} ${r.name} — the fit was ${r.relation === 'on' && r.shiftMm !== undefined ? `${len.fmt(r.shiftMm, 2)} and ` : ''}${r.tiltDeg.toFixed(2)}° off`).join('; ')}.`
             : '. Held to nothing.'}
         </span>
@@ -203,11 +197,9 @@ export function AnalysisRow({ testPrefix }: { testPrefix: string }) {
       <label className="checkrow">
         <input type="checkbox" data-test="re-analysis-on" checked={on} onChange={(e) => setOn(e.target.checked)} />
         <span>
-          Deviation map
-          <InfoDot title="Deviation map">
+          {tr("Deviation map")}{' '}<InfoDot title={tr("Deviation map")}>
             <p>
-              Colours the scan near the ghost by how far it lies from the ghost's surface — green on it, red outside the body, blue inside — on the Deviation ramp at ± this range, and darker past it. The rest of the scan keeps its colour. Drag the grips and watch the feature settle onto the scan.
-            </p>
+              {tr("Colours the scan near the ghost by how far it lies from the ghost's surface — green on it, red outside the body, blue inside — on the Deviation ramp at ± this range, and darker past it. The rest of the scan keeps its colour. Drag the grips and watch the feature settle onto the scan.")}{' '}</p>
           </InfoDot>
         </span>
       </label>
@@ -229,17 +221,14 @@ export function AnalysisRow({ testPrefix }: { testPrefix: string }) {
 export function OpFields({ op, canCut, testPrefix, onOp }: { op: 'new' | 'join' | 'cut'; canCut: boolean; testPrefix: string; onOp: (op: 'new' | 'join' | 'cut') => void }) {
   return (
     <label className="field">
-      <span>Result</span>
+      <span>{tr("Result")}</span>
       <select data-test={`${testPrefix}-op`} value={op} onChange={(e) => onOp(e.target.value as 'new' | 'join' | 'cut')}>
-        <option value="join" title="Made one with every body it touches; a body of its own where it touches none, one body of all where it bridges several">
-          Join
-        </option>
-        <option value="cut" disabled={!canCut} title="Taken out of every body it goes into; a body it parts is a body a piece">
-          Cut
-        </option>
-        <option value="new" title="A body of its own, whatever it overlaps — a tool to cut the scan with in Mesh Tools">
-          New body
-        </option>
+        <option value="join" title={tr("Made one with every body it touches; a body of its own where it touches none, one body of all where it bridges several")}>
+          {tr("Join")}{' '}</option>
+        <option value="cut" disabled={!canCut} title={tr("Taken out of every body it goes into; a body it parts is a body a piece")}>
+          {tr("Cut")}{' '}</option>
+        <option value="new" title={tr("A body of its own, whatever it overlaps — a tool to cut the scan with in Mesh Tools")}>
+          {tr("New body")}{' '}</option>
       </select>
     </label>
   )
@@ -270,7 +259,7 @@ export function Num({ label, value, unit, testId, nominal, slot, kind, passKeys,
         )}
       </span>
       {round !== null && nominal && (
-        <button className="chip nominal" data-test={`${testId}-nominal`} tabIndex={-1} title="The round number this was probably meant as — click to take it" onClick={() => onCommit(round)}>
+        <button className="chip nominal" data-test={`${testId}-nominal`} tabIndex={-1} title={tr("The round number this was probably meant as — click to take it")} onClick={() => onCommit(round)}>
           → {nominalText(round, nominal, units)}
         </button>
       )}

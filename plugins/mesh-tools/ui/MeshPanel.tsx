@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../src/i18n'
 // The Mesh Tools faceplate: the scan, the tools, the tool in hand — or with
 // none, the parts in the viewport — and the edited copy. The tools are of the two kinds the workspace has — the edits,
 // which change a copy of the scan until it is taken into use for every
@@ -167,21 +168,12 @@ export function MeshPanel({
     <aside className="panel">
       <div className="group">
         <div className="sec-head">
-          Model
-          <InfoDot title="The scan">
+          {tr("Model")}{' '}<InfoDot title={tr("The scan")}>
             <p>
-              The part as scanned — an <b>STL</b>, <b>PLY</b> or <b>OBJ</b> in millimetres. Align it
-              first in 3D Measure if it should land in CAD on its datums: a reduced mesh is made
-              from the scan where it stands, and exported there.
-            </p>
+              {tr("The part as scanned — an")}{' '}<b>{tr("STL")}</b>, <b>{tr("PLY")}</b> {tr("or")}{' '}<b>{tr("OBJ")}</b> {tr("in millimetres. Align it first in 3D Measure if it should land in CAD on its datums: a reduced mesh is made from the scan where it stands, and exported there.")}{' '}</p>
             <p>
-              <b>Remove islands</b>, <b>Delete marked</b>, <b>Flip normals</b>, <b>Cut</b>, <b>Fill holes</b>,{' '}
-              <b>Smooth</b>, <b>Shrink/expand</b>, <b>Boolean</b> and <b>Shell/hollow</b> edit a copy of the scan, shown
-              here in its place; every other workspace
-              goes on measuring the scan as it was until <b>Use for analysis</b> takes the copy into
-              use. <b>Reduce mesh</b> makes a light mesh beside it — of the copy, when there is one —
-              and <b>Trim to scan</b> a piece cut to fit its break.
-            </p>
+              <b>{tr("Remove islands")}</b>, <b>{tr("Delete marked")}</b>, <b>{tr("Flip normals")}</b>, <b>{tr("Cut")}</b>, <b>{tr("Fill holes")}</b>,{' '}
+              <b>{tr("Smooth")}</b>, <b>{tr("Shrink/expand")}</b>, <b>{tr("Boolean")}</b> {tr("and")}{' '}<b>{tr("Shell/hollow")}</b> {tr("edit a copy of the scan, shown here in its place; every other workspace goes on measuring the scan as it was until")}{' '}<b>{tr("Use for analysis")}</b> {tr("takes the copy into use.")}{' '}<b>{tr("Reduce mesh")}</b> {tr("makes a light mesh beside it — of the copy, when there is one — and")}{' '}<b>{tr("Trim to scan")}</b> {tr("a piece cut to fit its break.")}{' '}</p>
           </InfoDot>
         </div>
         <ModelSlot
@@ -192,21 +184,17 @@ export function MeshPanel({
           busy={busy}
           onOpen={onOpenScan}
         />
-        {!scanName && <p className="hint">Drop it anywhere in the window.</p>}
+        {!scanName && <p className="hint">{tr("Drop it anywhere in the window.")}</p>}
       </div>
 
       <div className="group">
         <div className="sec-head">
-          Tools
-          <InfoDot title="Mesh tools">
+          {tr("Tools")}{' '}<InfoDot title={tr("Mesh tools")}>
             <p>
-              Tools that work on the mesh itself rather than measure it. The edits are made on a copy
-              of the scan — each one step of the undo history, kept in a saved project — and reach the
-              other workspaces only when the copy is taken into use.
-            </p>
+              {tr("Tools that work on the mesh itself rather than measure it. The edits are made on a copy of the scan — each one step of the undo history, kept in a saved project — and reach the other workspaces only when the copy is taken into use.")}{' '}</p>
           </InfoDot>
         </div>
-        <div className="kindrow featurekeys three" role="radiogroup" aria-label="Mesh tool">
+        <div className="kindrow featurekeys three" role="radiogroup" aria-label={tr("Mesh tool")}>
           {TOOLS.map((t) => (
             <button
               key={t.id}
@@ -225,8 +213,7 @@ export function MeshPanel({
         </div>
         {tool === null && (
           <p className="hint" data-test="mesh-no-tool">
-            Pick a tool. <b>Escape</b>, or its key again, puts the one in hand away.
-          </p>
+            {tr("Pick a tool.")}{' '}<b>{tr("Escape")}</b>{tr(", or its key again, puts the one in hand away.")}{' '}</p>
         )}
       </div>
 
@@ -261,7 +248,7 @@ export function MeshPanel({
       {edits.length > 0 && (
         <div className="group" data-test="scan-edits">
           <div className="g-label">
-            <span>In use for analysis</span>
+            <span>{tr("In use for analysis")}</span>
             <span>{edits.length}</span>
           </div>
           {edits.map((e, i) => (
@@ -271,9 +258,7 @@ export function MeshPanel({
             </div>
           ))}
           <p className="hint">
-            Edits taken into use: every workspace measures the scan as these left it. Ctrl+Z steps
-            back through them; a saved project keeps the scan as it now is.
-          </p>
+            {tr("Edits taken into use: every workspace measures the scan as these left it. Ctrl+Z steps back through them; a saved project keeps the scan as it now is.")}{' '}</p>
         </div>
       )}
     </aside>

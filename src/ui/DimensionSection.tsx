@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The dimension group: the editor a dimension is assembled in, and the DRO
 // rows the finished dimensions are read from.
 
@@ -130,28 +131,17 @@ export function DimensionSection({
   return (
     <div className="group">
       <div className="sec-head">
-        Create dimensions
-        <InfoDot title="Dimensions">
+        {tr("Create dimensions")}{' '}<InfoDot title={tr("Dimensions")}>
           <p>
-            What you actually read off the part: distances, diameters and angles measured between
-            the elements you have created.
-          </p>
+            {tr("What you actually read off the part: distances, diameters and angles measured between the elements you have created.")}{' '}</p>
           <p>
-            Fill a slot from the dropdown, or click the element straight in the viewport — the
-            dimension type switches to match what you pick, so a click on two circles becomes a
-            centre distance without you choosing it.
-          </p>
+            {tr("Fill a slot from the dropdown, or click the element straight in the viewport — the dimension type switches to match what you pick, so a click on two circles becomes a centre distance without you choosing it.")}{' '}</p>
           <p>
-            Between two spheres you can also measure the surface gap or the outer span instead of
-            centre to centre — a ball-bar length is centre to centre.
-          </p>
+            {tr("Between two spheres you can also measure the surface gap or the outer span instead of centre to centre — a ball-bar length is centre to centre.")}{' '}</p>
           <p>
-            <b>Add dimension</b> leaves the box open for the next one of the same type, its
-            slots empty; <b>Cancel</b> or <b>Esc</b> closes it.
-          </p>
+            <b>{tr("Add dimension")}</b> {tr("leaves the box open for the next one of the same type, its slots empty;")}{' '}<b>{tr("Cancel")}</b> {tr("or")}{' '}<b>{tr("Esc")}</b> {tr("closes it.")}{' '}</p>
           <p>
-            One box is open at a time: while an element kind is in hand, put it down first with
-            <b> Cancel</b> or <b>Esc</b>.
+            {tr("One box is open at a time: while an element kind is in hand, put it down first with")}{' '}<b> {tr("Cancel")}</b> {tr("or")}{' '}<b>{tr("Esc")}</b>.
           </p>
         </InfoDot>
         {own.length > 0 && <b>{own.length}</b>}
@@ -165,10 +155,9 @@ export function DimensionSection({
             disabled={refs.every((e) => !e.fit) || dimDraft !== null || draftOpen}
             onClick={() => startDimension('dist-point-point')}
           >
-            New dimension
-          </button>
+            {tr("New dimension")}{' '}</button>
           {refs.every((e) => !e.fit) && fileName && (
-            <p className="hint">Create at least one element first, then measure between them.</p>
+            <p className="hint">{tr("Create at least one element first, then measure between them.")}</p>
           )}
         </>
       ) : (
@@ -177,7 +166,7 @@ export function DimensionSection({
           <div className="draftbox dimbox">
             <DimDraftHead editId={dimDraft.editId} name={dimDraft.name} dimensions={dimensions} nameTestId="dim-name" onName={(name) => setDimensionName(name)} />
             <label className="field">
-              <span>Type</span>
+              <span>{tr("Type")}</span>
               <select
                 data-test="dim-type"
                 value={dimDraft.type}
@@ -223,15 +212,15 @@ export function DimensionSection({
             ))}
             {dimRefsAreSpheres && (
               <label className="field">
-                <span>Measure</span>
+                <span>{tr("Measure")}</span>
                 <select
                   data-test="dim-anchor"
                   value={dimDraft.anchor}
                   onChange={(e) => setDimensionAnchor(e.target.value as SphereAnchor)}
                 >
-                  <option value="center">Center to center</option>
-                  <option value="gap">Surface gap (− radii)</option>
-                  <option value="span">Outer span (+ radii)</option>
+                  <option value="center">{tr("Center to center")}</option>
+                  <option value="gap">{tr("Surface gap (− radii)")}</option>
+                  <option value="span">{tr("Outer span (+ radii)")}</option>
                 </select>
               </label>
             )}
@@ -272,8 +261,7 @@ export function DimensionSection({
             </button>
             <div className="toolrow">
               <button data-test="cancel-dimension" onClick={cancelDimension}>
-                Cancel
-              </button>
+                {tr("Cancel")}{' '}</button>
             </div>
           </div>
         )
@@ -281,7 +269,7 @@ export function DimensionSection({
 
       {own.length > 0 && (
         <div className="g-label">
-          <span>Dimensions</span>
+          <span>{tr("Dimensions")}</span>
           <ShowAllButton
             anyVisible={own.some((d) => d.visible !== false)}
             what="dimensions"

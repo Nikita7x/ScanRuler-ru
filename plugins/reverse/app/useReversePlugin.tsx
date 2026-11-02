@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../src/i18n'
 // The Reverse engineer workspace's part in the app, for one render: the CAD
 // kernel's worker, the feature build and the bodies on the part (useReverseWorkspace),
 // the 2D sheet laid over the viewport for a sketch, the clicks on the scan,
@@ -481,7 +482,7 @@ export function useReversePlugin(host: PluginHost): PluginRuntime {
         label="Curvature"
         testId="toggle-curvature"
         value={curvatureSwitch}
-        title="Colour the scan by how sharply it bends — flats green, convex rounds towards red, hollows towards blue, sharp edges dark. Where a flat ends and a round or a blend begins is where a surface region should end. While a feature is being set up its ghost takes the map over. Puts the Deviation key's map out"
+        title={tr("Colour the scan by how sharply it bends — flats green, convex rounds towards red, hollows towards blue, sharp edges dark. Where a flat ends and a round or a blend begins is where a surface region should end. While a feature is being set up its ghost takes the map over. Puts the Deviation key's map out")}
       />
     ),
     menuChanged: !sketchStage && anyChanged([curvatureSwitch]),
@@ -502,7 +503,7 @@ export function useReversePlugin(host: PluginHost): PluginRuntime {
           set: (on) => re().setBodiesHidden(!on),
           disabled: hasBodies ? undefined : 'Build a body first',
         }}
-        title="Show the bodies, or put them away as a whole and leave the scan to stand alone — with the deviation map still on it, read against the bodies as they are. Each body's own eye in the panel takes it out of the model and the map instead"
+        title={tr("Show the bodies, or put them away as a whole and leave the scan to stand alone — with the deviation map still on it, read against the bodies as they are. Each body's own eye in the panel takes it out of the model and the map instead")}
         changed={anyChanged([bodiesSolid, overlapsSwitch]) || tangentEdges !== 'visible'}
       >
         <PartOption
@@ -510,14 +511,14 @@ export function useReversePlugin(host: PluginHost): PluginRuntime {
           label="Transparent"
           testId="toggle-bodies-transparent"
           value={bodiesSolid}
-          title="Draw the bodies transparent — the scan, the elements and the bodies inside them show through. With the scan solid as well, each part shows where it stands proud of the other"
+          title={tr("Draw the bodies transparent — the scan, the elements and the bodies inside them show through. With the scan solid as well, each part shows where it stands proud of the other")}
         />
         <PartOption
           icon={<Icon name="opIntersect" size={16} />}
           label="Overlaps"
           testId="toggle-body-overlaps"
           value={overlapsSwitch}
-          title="Draw where two bodies run into each other in hatched red — what they share, over the faces of both that would otherwise fight for the same pixels. Off for bodies that overlap on purpose, a modifier volume for a slicer; saved with the project"
+          title={tr("Draw where two bodies run into each other in hatched red — what they share, over the faces of both that would otherwise fight for the same pixels. Off for bodies that overlap on purpose, a modifier volume for a slicer; saved with the project")}
         />
         <PartChoice
           icon={<KeyIcon name="tangentEdges" size={16} />}
@@ -540,7 +541,7 @@ export function useReversePlugin(host: PluginHost): PluginRuntime {
             ? undefined
             : 'Nothing measured yet — fit elements or cut sections in the 3D Measure workspace and they show here',
         }}
-        title="Show the elements and sections measured in the 3D Measure workspace on the part — the planes, cylinders and cuts the model is built against"
+        title={tr("Show the elements and sections measured in the 3D Measure workspace on the part — the planes, cylinders and cuts the model is built against")}
       />
       {notesOn && hasNotes && (
         <PartKey
@@ -548,14 +549,14 @@ export function useReversePlugin(host: PluginHost): PluginRuntime {
           label="Notes"
           testId="toggle-notes"
           shown={{ on: pinsShown, set: (on) => useNotes.getState().setPinsShown(on) }}
-          title="Show the notes' pins on the part, or put them away. The notes stay, and the agent still reads them. Pinning or opening a note brings the pins back"
+          title={tr("Show the notes' pins on the part, or put them away. The notes stay, and the agent still reads them. Pinning or opening a note brings the pins back")}
         />
       )}
     </>
   )
   const sketchPartView: SketchPartView = !sketchModelShown ? 'none' : sketchSliced ? 'cut' : 'full'
   const viewKeys = sketchStage ? (
-    <div className="keys" role="radiogroup" aria-label="What of the part lies under the sketch">
+    <div className="keys" role="radiogroup" aria-label={tr("What of the part lies under the sketch")}>
       {SKETCH_PART_VIEWS.map((v) => (
         <button
           key={v.id}
@@ -591,8 +592,7 @@ export function useReversePlugin(host: PluginHost): PluginRuntime {
         }
       >
         <Icon name="compare" size={16} />
-        Deviation
-      </button>
+        {tr("Deviation")}{' '}</button>
     </div>
   )
 
@@ -768,8 +768,7 @@ export function useReversePlugin(host: PluginHost): PluginRuntime {
         {!sketchStage && <BuildChip />}
         {!sketchStage && fileName && featureCount === 0 && (
           <div className="hintchip" data-test="reverse-ready-chip">
-            Part loaded — choose a plane in the panel to sketch on
-          </div>
+            {tr("Part loaded — choose a plane in the panel to sketch on")}{' '}</div>
         )}
       </>
     ),

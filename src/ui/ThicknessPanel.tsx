@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The wall thickness faceplate. One model, then the two halves of the job kept
 // apart: what the search is allowed to look for, which only takes effect when
 // the part is measured again, and how the result is read, which takes effect
@@ -41,14 +42,10 @@ export function ThicknessPanel({
     <aside className="panel">
       <div className="group">
         <div className="sec-head">
-          Model
-          <InfoDot title="The scan">
+          {tr("Model")}{' '}<InfoDot title={tr("The scan")}>
             <p>
-              The part as scanned — an <b>STL</b>, <b>PLY</b> or <b>OBJ</b> in millimetres.
-              Nothing else is needed here: wall thickness is a property of the part itself, so
-              there is no reference model and no alignment step.
-            </p>
-            <p>Drop it anywhere in the window. Nothing is uploaded.</p>
+              {tr("The part as scanned — an")}{' '}<b>{tr("STL")}</b>, <b>{tr("PLY")}</b> {tr("or")}{' '}<b>{tr("OBJ")}</b> {tr("in millimetres. Nothing else is needed here: wall thickness is a property of the part itself, so there is no reference model and no alignment step.")}{' '}</p>
+            <p>{tr("Drop it anywhere in the window. Nothing is uploaded.")}</p>
           </InfoDot>
         </div>
         <ModelSlot
@@ -59,30 +56,20 @@ export function ThicknessPanel({
           busy={busy}
           onOpen={onOpenScan}
         />
-        {!scanName && <p className="hint">Drop it anywhere in the window.</p>}
+        {!scanName && <p className="hint">{tr("Drop it anywhere in the window.")}</p>}
       </div>
 
       <div className="group">
-        <div className="sec-head">Measurement</div>
+        <div className="sec-head">{tr("Measurement")}</div>
         <label className="field">
           <span>
-            Method
-            <InfoDot title="How thickness is measured">
+            {tr("Method")}{' '}<InfoDot title={tr("How thickness is measured")}>
               <p>
-                <b>Ray along the normal</b> fires a ray straight into the material at each point
-                and takes how far it travels before it comes out the far side. Simple, and it is
-                what most tools mean by wall thickness.
-              </p>
+                <b>{tr("Ray along the normal")}</b> {tr("fires a ray straight into the material at each point and takes how far it travels before it comes out the far side. Simple, and it is what most tools mean by wall thickness.")}{' '}</p>
               <p>
-                <b>Sphere across the wall</b> places a sphere halfway along that ray and grows it
-                until it touches. It can never read longer than the ray and usually reads shorter,
-                because it is not tied to the ray's direction: it finds a wedge square across, and
-                the width of a block rather than the diagonal its corner points down.
-              </p>
+                <b>{tr("Sphere across the wall")}</b> {tr("places a sphere halfway along that ray and grows it until it touches. It can never read longer than the ray and usually reads shorter, because it is not tied to the ray's direction: it finds a wedge square across, and the width of a block rather than the diagonal its corner points down.")}{' '}</p>
               <p>
-                Neither is wrong — the ray answers “how far through here”, the sphere answers “how
-                much material is actually there”.
-              </p>
+                {tr("Neither is wrong — the ray answers “how far through here”, the sphere answers “how much material is actually there”.")}{' '}</p>
             </InfoDot>
           </span>
           <select
@@ -91,8 +78,8 @@ export function ThicknessPanel({
             disabled={busy}
             onChange={(e) => t.setMethod(e.target.value as 'ray' | 'sphere')}
           >
-            <option value="ray">Ray along the normal</option>
-            <option value="sphere">Sphere across the wall</option>
+            <option value="ray">{tr("Ray along the normal")}</option>
+            <option value="sphere">{tr("Sphere across the wall")}</option>
           </select>
         </label>
 
@@ -107,12 +94,9 @@ export function ThicknessPanel({
           onCommit={t.setMaxThickness}
           hint={
             <>
-              <p>Where the search stops. Nothing thicker than this is measured.</p>
+              <p>{tr("Where the search stops. Nothing thicker than this is measured.")}</p>
               <p>
-                A point with nothing behind it inside this distance is left unmeasured rather than
-                reported, which is what keeps a ray escaping through an open rim from coming back
-                as a wall the length of the part.
-              </p>
+                {tr("A point with nothing behind it inside this distance is left unmeasured rather than reported, which is what keeps a ray escaping through an open rim from coming back as a wall the length of the part.")}{' '}</p>
             </>
           }
         />
@@ -121,17 +105,11 @@ export function ThicknessPanel({
           <>
             <label className="field">
               <span>
-                Rays
-                <InfoDot title="Rays">
+                {tr("Rays")}{' '}<InfoDot title={tr("Rays")}>
                   <p>
-                    A single ray along the normal reads the wall square-on, which over-reads
-                    wherever the surface is not parallel to the one behind it — a chamfer, a
-                    tapered rib, the inside of a corner.
-                  </p>
+                    {tr("A single ray along the normal reads the wall square-on, which over-reads wherever the surface is not parallel to the one behind it — a chamfer, a tapered rib, the inside of a corner.")}{' '}</p>
                   <p>
-                    Spreading extra rays through a cone around the normal and keeping the shortest
-                    finds the true way across instead. More rays cost measurement time.
-                  </p>
+                    {tr("Spreading extra rays through a cone around the normal and keeping the shortest finds the true way across instead. More rays cost measurement time.")}{' '}</p>
                 </InfoDot>
               </span>
               <select
@@ -171,16 +149,12 @@ export function ThicknessPanel({
             checked={t.normalDeviationDeg !== null}
             onChange={(e) => t.setNormalDeviation(e.target.checked ? 60 : null)}
           />
-          <span>Far surface must face back</span>
-          <InfoDot title="Far surface must face back">
+          <span>{tr("Far surface must face back")}</span>
+          <InfoDot title={tr("Far surface must face back")}>
             <p>
-              A surface nearly edge-on to the ray is a rib the ray is running alongside, or the rim
-              of an open scan — not the far side of a wall.
-            </p>
+              {tr("A surface nearly edge-on to the ray is a rib the ray is running alongside, or the rim of an open scan — not the far side of a wall.")}{' '}</p>
             <p>
-              With this on, such a hit is stepped over and the search carries on behind it, so the
-              wall reported is the one a caliper would find.
-            </p>
+              {tr("With this on, such a hit is stepped over and the search carries on behind it, so the wall reported is the one a caliper would find.")}{' '}</p>
           </InfoDot>
         </label>
         {t.normalDeviationDeg !== null && (
@@ -207,15 +181,14 @@ export function ThicknessPanel({
           {t.status === 'running' ? (
             <>
               <span className="spinner" />
-              Measuring…
-            </>
+              {tr("Measuring…")}{' '}</>
           ) : t.status === 'ready' ? (
             'Measure again'
           ) : (
             'Measure wall thickness'
           )}
         </button>
-        <p className="hint">Everything above shapes the search, so changing it means measuring again.</p>
+        <p className="hint">{tr("Everything above shapes the search, so changing it means measuring again.")}</p>
         {t.message && <p className="alarmtext">{t.message}</p>}
       </div>
 
@@ -223,20 +196,13 @@ export function ThicknessPanel({
         <>
           <div className="group">
             <div className="sec-head">
-              Colour scale
-              <InfoDot title="Colour scale">
+              {tr("Colour scale")}{' '}<InfoDot title={tr("Colour scale")}>
                 <p>
-                  Red is thin, blue is thick. Both ends default to the spread of this part, so the
-                  first map you see uses the full range of colour on the walls it actually found.
-                </p>
+                  {tr("Red is thin, blue is thick. Both ends default to the spread of this part, so the first map you see uses the full range of colour on the walls it actually found.")}{' '}</p>
                 <p>
-                  Anything past either end is drawn in a dark cap, so a wall beyond the scale
-                  cannot be mistaken for one sitting exactly on it.
-                </p>
+                  {tr("Anything past either end is drawn in a dark cap, so a wall beyond the scale cannot be mistaken for one sitting exactly on it.")}{' '}</p>
                 <p>
-                  Moving the ends only re-paints — nothing here is re-measured, and nothing above
-                  changes.
-                </p>
+                  {tr("Moving the ends only re-paints — nothing here is re-measured, and nothing above changes.")}{' '}</p>
               </InfoDot>
             </div>
             <NumberField
@@ -269,7 +235,7 @@ export function ThicknessPanel({
           </div>
 
           <div className="group">
-            <div className="sec-head">Minimum wall</div>
+            <div className="sec-head">{tr("Minimum wall")}</div>
             <NumberField
               label="Thinner than"
               testId="thickness-limit"
@@ -281,12 +247,9 @@ export function ThicknessPanel({
               hint={
                 <>
                   <p>
-                    The wall the <b>under {lengthInputText(t.limit, len.units)} {len.word()}</b> figure below the scale counts.
-                  </p>
+                    {tr("The wall the")}{' '}<b>{tr("under")}{' '}{lengthInputText(t.limit, len.units)} {len.word()}</b> {tr("figure below the scale counts.")}{' '}</p>
                   <p>
-                    It is a tally only and does not change the colours. Set the thin end of the
-                    scale to the same number if you want the map itself to call it out.
-                  </p>
+                    {tr("It is a tally only and does not change the colours. Set the thin end of the scale to the same number if you want the map itself to call it out.")}{' '}</p>
                 </>
               }
             />

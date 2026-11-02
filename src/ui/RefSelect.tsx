@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The fields the editors are assembled from: the reference-slot dropdown
 // shared by constructions, dimensions and the alignment datums (in both
 // workspaces), and the name field of whatever is being edited.
@@ -38,7 +39,7 @@ export function NameField({
 }) {
   return (
     <label className="field">
-      <span>Name</span>
+      <span>{tr("Name")}</span>
       <input type="text" data-test={testId} value={value} onChange={(e) => onChange(e.target.value)} />
     </label>
   )

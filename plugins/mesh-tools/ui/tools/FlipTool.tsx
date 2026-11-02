@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../../src/i18n'
 // Flip normals: the triangles turned over, so they face the other way — the
 // whole part, or the surface marked on it.
 
@@ -35,8 +36,7 @@ export function FlipTool({
     editing && asked === scope ? (
       <>
         <span className="spinner" />
-        Flipping…
-      </>
+        {tr("Flipping…")}{' '}</>
     ) : (
       text
     )
@@ -44,27 +44,14 @@ export function FlipTool({
   return (
     <div className="group" data-test="flip-tool">
       <div className="sec-head">
-        Flip normals
-        <InfoDot title="Flipping normals">
+        {tr("Flip normals")}{' '}<InfoDot title={tr("Flipping normals")}>
           <p>
-            Which side of a surface is its outside is set by the order of each triangle's corners.
-            A part exported inside-out faces in everywhere, and a scan stitched from patches can
-            have some of them facing in — and the thickness map, the alignment,{' '}
-            <b>Shrink/expand</b>, <b>Shell/hollow</b> and <b>Boolean</b> all go by which way the
-            surface faces.
-          </p>
+            {tr("Which side of a surface is its outside is set by the order of each triangle's corners. A part exported inside-out faces in everywhere, and a scan stitched from patches can have some of them facing in — and the thickness map, the alignment,")}{' '}
+            <b>{tr("Shrink/expand")}</b>, <b>{tr("Shell/hollow")}</b> {tr("and")}{' '}<b>{tr("Boolean")}</b> {tr("all go by which way the surface faces.")}{' '}</p>
           <p>
-            A part that plainly encloses its volume inside-out is turned the right way out when it
-            is opened; an open scan, a sheet, or one with patches facing both ways is left as it
-            was wound. <b>Backfaces</b>, in the menu over the view bar's Scan key, colours the
-            inside of every triangle, so surface facing the wrong way shows.
-          </p>
+            {tr("A part that plainly encloses its volume inside-out is turned the right way out when it is opened; an open scan, a sheet, or one with patches facing both ways is left as it was wound.")}{' '}<b>{tr("Backfaces")}</b>{tr(", in the menu over the view bar's Scan key, colours the inside of every triangle, so surface facing the wrong way shows.")}{' '}</p>
           <p>
-            <b>Flip all</b> turns every triangle over. <b>Flip marked</b> turns over the surface
-            you mark with a <b>window</b>, a <b>brush</b> or a <b>lasso</b> — a triangle when all
-            three of its corners are marked, exactly the triangles shown in amber. Nothing moves.
-            It flips the edited copy; <b>Ctrl+Z</b> turns it back.
-          </p>
+            <b>{tr("Flip all")}</b> {tr("turns every triangle over.")}{' '}<b>{tr("Flip marked")}</b> {tr("turns over the surface you mark with a")}{' '}<b>{tr("window")}</b>, a <b>{tr("brush")}</b> {tr("or a")}{' '}<b>{tr("lasso")}</b> {tr("— a triangle when all three of its corners are marked, exactly the triangles shown in amber. Nothing moves. It flips the edited copy;")}{' '}<b>{tr("Ctrl+Z")}</b> {tr("turns it back.")}{' '}</p>
         </InfoDot>
       </div>
 
@@ -79,7 +66,7 @@ export function FlipTool({
           data-confirm={1}
           disabled={!ready || busy || marked === 0}
           onClick={() => flip('marked')}
-          title="Turn the marked surface over — the triangles with all three corners marked"
+          title={tr("Turn the marked surface over — the triangles with all three corners marked")}
         >
           {label('marked', 'Flip marked')}
         </button>
@@ -88,18 +75,17 @@ export function FlipTool({
           data-test="flip-all"
           disabled={!ready || busy}
           onClick={() => flip('all')}
-          title="Turn every triangle of the part over"
+          title={tr("Turn every triangle of the part over")}
         >
           {label('all', 'Flip all')}
         </button>
       </div>
       {ready && marked === 0 && !editing && (
-        <p className="hint">Mark the surface that faces the wrong way — pick Window, Brush or Lasso — or flip the whole part.</p>
+        <p className="hint">{tr("Mark the surface that faces the wrong way — pick Window, Brush or Lasso — or flip the whole part.")}</p>
       )}
       {ready && !backfaces && (
         <p className="hint" data-test="flip-backfaces-hint">
-          Turn on <b>Backfaces</b> over the Scan key to see which way the surface faces.
-        </p>
+          {tr("Turn on")}{' '}<b>{tr("Backfaces")}</b> {tr("over the Scan key to see which way the surface faces.")}{' '}</p>
       )}
     </div>
   )

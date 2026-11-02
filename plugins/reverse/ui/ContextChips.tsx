@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../src/i18n'
 // The chips that follow a click on the part in the Reverse engineer
 // workspace when no editor is open: what the thing under the click can
 // become. A sketch's region offers Extrude and Revolve, an element with an
@@ -260,7 +261,7 @@ function BodyLine({ ids }: { ids: number[] }) {
       {one && <span className="dot" style={{ background: one.color ?? bodyColor(one.id) }} />}
       <span className="chipbody-name" title={one ? (path ? `${one.name}, in ${path}` : one.name) : names}>
         <span data-test="chip-body-name">{one ? one.name : `${these.length} bodies`}</span>
-        {path && <small data-test="chip-body-path">in {path}</small>}
+        {path && <small data-test="chip-body-path">{tr("in")}{' '}{path}</small>}
       </span>
       <span className="chipbody-keys">
         <button
@@ -271,8 +272,7 @@ function BodyLine({ ids }: { ids: number[] }) {
             re().setBodiesVisible(ids, false)
           }}
         >
-          Hide
-        </button>
+          {tr("Hide")}{' '}</button>
         {bodies.length > these.length && (
           <button data-test="chip-hide-others" title={alone ? 'Show every body again' : `Hide every body but ${one ? one.name : 'these'}`} onClick={() => (alone ? re().setAllBodiesVisible(true) : isolateBodies(ids))}>
             {alone ? 'Show all' : 'Hide others'}
@@ -287,8 +287,7 @@ function BodyLine({ ids }: { ids: number[] }) {
               useStore.getState().setStatus(`${re().bodyFolders.find((f) => f.id === id)?.name ?? 'A component'} holds them now — double-click its name in the body list to name it.`)
             }}
           >
-            Make component
-          </button>
+            {tr("Make component")}{' '}</button>
         )}
       </span>
     </div>
@@ -356,7 +355,7 @@ export function ContextChips() {
               <span className="chipinfo-value">{r.value}</span>
             </div>
           ))}
-          {selection.kind !== 'bodyItems' && <div className="chipinfo-tip">Ctrl+click adds · Shift+drag a window</div>}
+          {selection.kind !== 'bodyItems' && <div className="chipinfo-tip">{tr("Ctrl+click adds · Shift+drag a window")}</div>}
         </div>
       )}
       {chips.map((c) => (

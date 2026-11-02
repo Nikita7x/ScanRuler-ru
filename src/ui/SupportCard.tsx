@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // Copyright (C) 2026 Stefan Hermann (CNC Kitchen) <stefan@cnckitchen.com>
 
 // Support card — the same call-to-action bumpmesh.com carries, in the
@@ -65,7 +66,7 @@ const supportLinks = (onOpen?: () => void) =>
       <span className="sc-icon" aria-hidden="true">
         {l.icon}
       </span>
-      {l.label}
+      {tr(l.label)}
     </a>
   ))
 
@@ -80,15 +81,13 @@ export function SupportCard() {
   return (
     <aside className="supportcard" data-test="support-card">
       <div className="sc-head">
-        <b>Thanks for using ScanRuler!</b>
-        <button className="sc-x" onClick={close} title="Close" aria-label="Close">
+        <b>{tr("Thanks for using ScanRuler!")}</b>
+        <button className="sc-x" onClick={close} title={tr("Close")} aria-label={tr("Close")}>
           ×
         </button>
       </div>
       <p>
-        This tool is provided <b>completely free</b> by CNC Kitchen. Once you have finished
-        measuring, why not have a look at the store that keeps us making things like this?
-      </p>
+        {tr("This tool is provided")}{' '}<b>{tr("completely free")}</b> {tr("by CNC Kitchen. Once you have finished measuring, why not have a look at the store that keeps us making things like this?")}{' '}</p>
       {supportLinks()}
     </aside>
   )
@@ -144,15 +143,12 @@ export function SupportAsk() {
         aria-labelledby="support-ask-title"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 id="support-ask-title">Thanks for using ScanRuler by CNC Kitchen!</h2>
+        <h2 id="support-ask-title">{tr("Thanks for using ScanRuler by CNC Kitchen!")}</h2>
         <p>
-          This tool is provided <b>completely free</b> by CNC Kitchen. Your file is on its way —
-          why not check out the{' '}
+          {tr("This tool is provided")}{' '}<b>{tr("completely free")}</b> {tr("by CNC Kitchen. Your file is on its way — why not check out the")}{' '}
           <a href={store.href} target="_blank" rel="noopener noreferrer" onClick={close}>
-            store
-          </a>{' '}
-          that helps us keep making things like this?
-        </p>
+            {tr("store")}{' '}</a>{' '}
+          {tr("that helps us keep making things like this?")}{' '}</p>
         {supportLinks(close)}
         <label className="supportask-off">
           <input
@@ -161,12 +157,10 @@ export function SupportAsk() {
             checked={offForAWeek}
             onChange={(e) => setOffForAWeek(e.target.checked)}
           />
-          Don't show this again for a week
-        </label>
+          {tr("Don't show this again for a week")}{' '}</label>
         <div className="supportask-foot">
           <button data-test="support-ask-close" autoFocus onClick={close}>
-            Close &amp; Continue
-          </button>
+            {tr("Close & Continue")}{' '}</button>
         </div>
       </div>
     </div>

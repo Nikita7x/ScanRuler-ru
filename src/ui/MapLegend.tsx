@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The scale beside a map, read the way an inspection report reads it: the ramp
 // itself, the values it stands for, and — on request — how much of the part
 // actually sits at each of them.
@@ -118,7 +119,7 @@ export function MapLegend({
           <div
             className="devramp-cap"
             style={{ background: cssRgb(caps.high) }}
-            title="Beyond the top of the scale"
+            title={tr("Beyond the top of the scale")}
           />
           <div
             className="devramp-bar"
@@ -127,7 +128,7 @@ export function MapLegend({
           <div
             className="devramp-cap"
             style={{ background: cssRgb(caps.low) }}
-            title="Beyond the bottom of the scale"
+            title={tr("Beyond the bottom of the scale")}
           />
           {shown.map((m) => {
             const a = share(m.value)
@@ -247,7 +248,7 @@ function Histogram({
         >
           <b>{range(hover)}</b>
           <span>
-            {bins[hover].toLocaleString('en-US')} pts · {total ? ((bins[hover] / total) * 100).toFixed(1) : '0.0'} %
+            {bins[hover].toLocaleString('en-US')} {tr("pts ·")}{' '}{total ? ((bins[hover] / total) * 100).toFixed(1) : '0.0'} %
           </span>
         </div>
       )}
@@ -326,7 +327,7 @@ function LimitTick({
       className="devtick-edit"
       data-test={`${id}-limit-${end}`}
       style={{ bottom: `${fraction * 100}%` }}
-      title="Click to set the range of the scale"
+      title={tr("Click to set the range of the scale")}
       onClick={() => setEditing(true)}
     >
       {format(value)}

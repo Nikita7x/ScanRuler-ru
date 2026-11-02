@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../src/i18n'
 // The model's parameters, as a folded section at the head of the panel: a
 // row a parameter — its name, its kind, the expression it is given and the
 // value that comes to — and a key to add one. A row refused says why under
@@ -73,7 +74,7 @@ function ParameterRow({ p, focus }: { p: Parameter; focus: boolean }) {
   return (
     <div className={'kv parameter' + (problem ? ' bad' : '')} data-test="parameter-row" data-param={p.id} ref={nameRef}>
       <TextCommit shown={p.name} testId="parameter-name" label="The parameter's name, as expressions use it" mono onCommit={(name) => tell(re.getState().setParameter(p.id, { name }))} />
-      <select data-test="parameter-kind" aria-label="Kind" title={`What the parameter is: a length in ${units === 'in' ? 'inches' : 'millimetres'}, an angle in degrees, a whole number, or a plain number`} value={p.kind} onChange={(e) => tell(re.getState().setParameter(p.id, { kind: e.target.value as Parameter['kind'] }))}>
+      <select data-test="parameter-kind" aria-label={tr("Kind")} title={`What the parameter is: a length in ${units === 'in' ? 'inches' : 'millimetres'}, an angle in degrees, a whole number, or a plain number`} value={p.kind} onChange={(e) => tell(re.getState().setParameter(p.id, { kind: e.target.value as Parameter['kind'] }))}>
         {PARAMETER_KINDS.map((k) => (
           <option key={k.kind} value={k.kind}>
             {k.label}
@@ -89,7 +90,7 @@ function ParameterRow({ p, focus }: { p: Parameter; focus: boolean }) {
       <button
         className="x"
         tabIndex={-1}
-        title="Remove the parameter — refused while anything reads it"
+        title={tr("Remove the parameter — refused while anything reads it")}
         data-test="parameter-remove"
         onClick={() => tell(re.getState().removeParameter(p.id))}
       >
@@ -98,7 +99,7 @@ function ParameterRow({ p, focus }: { p: Parameter; focus: boolean }) {
       <TextCommit shown={shownExpression} testId="parameter-expression" label="The expression the parameter is given — a number, or arithmetic over numbers and other parameters" mono onCommit={(typed) => tell(re.getState().setParameter(p.id, { expression: takeExpression(typed) }))} />
       {noting && (
         <div className="note-row">
-          <TextCommit shown={p.comment ?? ''} testId="parameter-comment" placeholder="A note: what the parameter is for" label="A note on the parameter" onCommit={(comment) => tell(re.getState().setParameter(p.id, { comment }))} />
+          <TextCommit shown={p.comment ?? ''} testId="parameter-comment" placeholder={tr("A note: what the parameter is for")} label="A note on the parameter" onCommit={(comment) => tell(re.getState().setParameter(p.id, { comment }))} />
         </div>
       )}
       {problem && (
@@ -123,35 +124,27 @@ export function ParameterList() {
     <div className="group parameters" data-test="parameters">
       <div className="sec-head">
         <button className="fold" data-test="parameters-fold" aria-expanded={open} title={open ? 'Fold the parameters away' : 'Show the parameters'} onClick={() => setOpen((o) => !o)}>
-          <span aria-hidden="true">{open ? '▾' : '▸'}</span> Parameters
-        </button>
-        <InfoDot title="Parameters">
+          <span aria-hidden="true">{open ? '▾' : '▸'}</span> {tr("Parameters")}{' '}</button>
+        <InfoDot title={tr("Parameters")}>
           <p>
-            A parameter is a named number — a length, an angle, a whole number or a plain number — given as an expression: <code>25</code>, <code>25.4/12</code>,{' '}
-            <code>width/2 + 1</code>. Every number field in the workspace takes an expression too, and a parameter by name: an extrude <code>height + 5</code> deep, a sketch's
-            width <code>width</code>. Change the parameter and every number that reads it follows, and the part is built again.
-          </p>
+            {tr("A parameter is a named number — a length, an angle, a whole number or a plain number — given as an expression:")}{' '}<code>25</code>, <code>25.4/12</code>,{' '}
+            <code>{tr("width/2 + 1")}</code>{tr(". Every number field in the workspace takes an expression too, and a parameter by name: an extrude")}{' '}<code>{tr("height + 5")}</code> {tr("deep, a sketch's width")}{' '}<code>{tr("width")}</code>{tr(". Change the parameter and every number that reads it follows, and the part is built again.")}{' '}</p>
           <p>
-            Numbers add and multiply as in a calculator, with <code>sin cos tan asin acos atan atan2 sqrt abs min max floor ceil round pow</code>, <code>pi</code> and{' '}
-            <code>e</code>; angles are in degrees. A number may carry a unit — <code>1 in</code>, <code>2 cm</code>, <code>30 deg</code> — and one without takes the
-            field's. Kinds are kept apart: a length and an angle cannot be added, and a length times a length is an area no field wants.
-          </p>
+            {tr("Numbers add and multiply as in a calculator, with")}{' '}<code>{tr("sin cos tan asin acos atan atan2 sqrt abs min max floor ceil round pow")}</code>, <code>{tr("pi")}</code> {tr("and")}{' '}
+            <code>e</code>{tr("; angles are in degrees. A number may carry a unit —")}{' '}<code>{tr("1 in")}</code>, <code>{tr("2 cm")}</code>, <code>{tr("30 deg")}</code> {tr("— and one without takes the field's. Kinds are kept apart: a length and an angle cannot be added, and a length times a length is an area no field wants.")}{' '}</p>
           <p>
-            A plain number typed over a field that read a parameter lets the parameter go; so does dragging the field's grip. Renaming a parameter renames it in
-            every expression; one that something reads cannot be removed.
-          </p>
+            {tr("A plain number typed over a field that read a parameter lets the parameter go; so does dragging the field's grip. Renaming a parameter renames it in every expression; one that something reads cannot be removed.")}{' '}</p>
         </InfoDot>
         <b data-test="parameter-count">{parameters.length}</b>
-        <button data-test="parameter-add" title="Add a parameter" onClick={add}>
-          + Add
-        </button>
+        <button data-test="parameter-add" title={tr("Add a parameter")} onClick={add}>
+          {tr("+ Add")}{' '}</button>
       </div>
       <datalist id={PARAMETER_NAMES_LIST}>
         {parameters.map((p) => (
           <option key={p.id} value={p.name} />
         ))}
       </datalist>
-      {open && parameters.length === 0 && <p className="hint">No parameters yet. Add one, name it, and use the name in any number field.</p>}
+      {open && parameters.length === 0 && <p className="hint">{tr("No parameters yet. Add one, name it, and use the name in any number field.")}</p>}
       {open &&
         parameters.map((p) => (
           <ParameterRow key={p.id} p={p} focus={p.id === fresh} />

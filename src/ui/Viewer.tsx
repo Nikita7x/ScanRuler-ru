@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The 3D viewport: a thin React wrapper that builds the SceneManager once on
 // mount and wires its callbacks through refs, so a new handler on every
 // render never builds the scene — and the mesh and BVH in it — again. A
@@ -84,18 +85,12 @@ export function Viewer({
       {webglError === null && <FitButton onFit={() => sceneRef.current?.fitToView()} />}
       {webglError !== null && (
         <div className="webgl-missing" role="alert">
-          <b>The 3D view could not be started.</b>
+          <b>{tr("The 3D view could not be started.")}</b>
           <p>
-            This tool draws everything with WebGL, and your browser refused to create a WebGL
-            context. Usually that means hardware acceleration is switched off or the graphics
-            driver is blocklisted.
-          </p>
+            {tr("This tool draws everything with WebGL, and your browser refused to create a WebGL context. Usually that means hardware acceleration is switched off or the graphics driver is blocklisted.")}{' '}</p>
           <p>
-            In Firefox, check <i>Settings → General → Performance → Use hardware acceleration
-            when available</i> (and that <code>webgl.disabled</code> is <code>false</code> in{' '}
-            <code>about:config</code>), then reload. Failing that, try another browser — nothing
-            is uploaded either way, all processing stays on your machine.
-          </p>
+            {tr("In Firefox, check")}{' '}<i>{tr("Settings → General → Performance → Use hardware acceleration when available")}</i> {tr("(and that")}{' '}<code>{tr("webgl.disabled")}</code> {tr("is")}{' '}<code>{tr("false")}</code> {tr("in")}{' '}
+            <code>{tr("about:config")}</code>{tr("), then reload. Failing that, try another browser — nothing is uploaded either way, all processing stays on your machine.")}{' '}</p>
           <p className="webgl-missing-detail">{webglError}</p>
         </div>
       )}

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The undo and redo keys in the top bar, each naming in its tooltip the step
 // it would take — the editor's own, while an editor with a history of its
 // own is active. The store subscriptions are not read: they are there so the
@@ -31,10 +32,10 @@ export function UndoRedo() {
   const canRedo = !blocked && (local ? local.canRedo() : history.future.length > 0)
   const hint = blocked ? 'Finish the active operation or close its editor first' : null
   return <div className="undokeys" data-test="undo-keys">
-    <button className="ghost" data-test="undo" aria-label="Undo" disabled={!canUndo}
+    <button className="ghost" data-test="undo" aria-label={tr("Undo")} disabled={!canUndo}
       title={hint ?? `Undo${local ? ` ${local.label}` : history.past.at(-1) ? `: ${history.past.at(-1)!.label}` : ''} — ${modLabel}+Z`}
       onClick={() => void undo()}><Icon name="undo" size={16} /></button>
-    <button className="ghost" data-test="redo" aria-label="Redo" disabled={!canRedo}
+    <button className="ghost" data-test="redo" aria-label={tr("Redo")} disabled={!canRedo}
       title={hint ?? `Redo${local ? ` ${local.label}` : history.future.at(-1) ? `: ${history.future.at(-1)!.label}` : ''} — ${modLabel}+Y / ${modLabel}+Shift+Z`}
       onClick={() => void redo()}><Icon name="redo" size={16} /></button>
   </div>

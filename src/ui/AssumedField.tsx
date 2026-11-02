@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The diameter the feature being made is assumed to have been designed at.
 // Empty until the user types one — nothing is suggested, because a guess
 // would reach CAD as if it had been decided. A typed value is sanity-checked:
@@ -39,19 +40,12 @@ export function AssumedField({ fit }: { fit: SizedFit }) {
     <>
       <label className="field">
         <span>
-          Assumed Ø
-          <InfoDot title="Assumed Ø">
+          {tr("Assumed Ø")}{' '}<InfoDot title={tr("Assumed Ø")}>
             <p>
-              The diameter the feature was <b>designed</b> at, if you know it: what measures Ø{' '}
-              {len.units === 'in' ? '0.2495 in was probably drawn at Ø 0.25' : `5.98 ${len.word()} was probably drawn at Ø 6`}.
-              Leave it empty if you don't — nothing is guessed for you.
-            </p>
+              {tr("The diameter the feature was")}{' '}<b>{tr("designed")}</b> {tr("at, if you know it: what measures Ø")}{' '}
+              {len.units === 'in' ? '0.2495 in was probably drawn at Ø 0.25' : `5.98 ${len.word()} was probably drawn at Ø 6`}{tr(". Leave it empty if you don't — nothing is guessed for you.")}{' '}</p>
             <p>
-              The element is drawn at this diameter, and the STEP export writes it instead of the
-              measured one, so CAD receives the feature as designed. Nothing measured changes: the
-              readouts, every dimension and every deviation map keep the fitted diameter. Elements
-              without one are drawn and exported as measured.
-            </p>
+              {tr("The element is drawn at this diameter, and the STEP export writes it instead of the measured one, so CAD receives the feature as designed. Nothing measured changes: the readouts, every dimension and every deviation map keep the fitted diameter. Elements without one are drawn and exported as measured.")}{' '}</p>
           </InfoDot>
         </span>
         <span className="unitfield">

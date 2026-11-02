@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The section view's own row in the view bar while it is on: what the plane
 // is laid across, where along it, which half goes, and — once the gizmo's
 // rings have tilted it — how far off square it stands. See
@@ -34,8 +35,8 @@ export function SectionViewKeys({ viewDirection }: { viewDirection: () => Vec3 }
 
   return (
     <div className="keys sectionkeys" data-test="section-view-keys">
-      <label title="What the plane is laid across: a coordinate plane through the part’s middle, or an element with a direction — a plane’s normal, the axis of a cylinder, cone or line, a circle’s normal. The half toward you is taken away.">
-        <span>Across</span>
+      <label title={tr("What the plane is laid across: a coordinate plane through the part’s middle, or an element with a direction — a plane’s normal, the axis of a cylinder, cone or line, a circle’s normal. The half toward you is taken away.")}>
+        <span>{tr("Across")}</span>
         <select
           data-test="section-view-ref"
           value={orphan ? '' : String(ref)}
@@ -44,13 +45,13 @@ export function SectionViewKeys({ viewDirection }: { viewDirection: () => Vec3 }
             if (v) setRef(isWorldAxis(v) ? v : Number(v), viewDirection())
           }}
         >
-          {orphan && <option value="">(deleted element)</option>}
+          {orphan && <option value="">{tr("(deleted element)")}</option>}
           <PlaneRefOptions options={options} />
         </select>
       </label>
       {/* A plane still square to a coordinate axis has a coordinate, not an
           offset: its Z is what the field holds. */}
-      <label title="Where along its direction the plane lies — drag the arrow on the part, or type it here">
+      <label title={tr("Where along its direction the plane lies — drag the arrow on the part, or type it here")}>
         <span>{isWorldAxis(ref) && tilt === 0 ? ref.toUpperCase() : 'Offset'}</span>
         <input
           type="number"
@@ -77,16 +78,14 @@ export function SectionViewKeys({ viewDirection }: { viewDirection: () => Vec3 }
         <button
           data-test="section-view-square"
           onClick={() => setRef(ref)}
-          title="The rings have tilted the plane off what it was laid across — turn it square again"
+          title={tr("The rings have tilted the plane off what it was laid across — turn it square again")}
         >
-          Square
-          <span className="tilt">{tilt.toFixed(1)}°</span>
+          {tr("Square")}{' '}<span className="tilt">{tilt.toFixed(1)}°</span>
         </button>
       )}
-      <button data-test="section-view-flip" onClick={flip} title="Take away the other half instead">
+      <button data-test="section-view-flip" onClick={flip} title={tr("Take away the other half instead")}>
         <Icon name="flip" size={16} />
-        Flip
-      </button>
+        {tr("Flip")}{' '}</button>
     </div>
   )
 }

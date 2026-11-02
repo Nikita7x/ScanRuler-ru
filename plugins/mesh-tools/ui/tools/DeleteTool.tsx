@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../../src/i18n'
 // Delete marked: the surface marked by hand taken off the scan.
 
 import { useMark } from '../../../../src/state/markStore'
@@ -26,46 +27,35 @@ export function DeleteTool({
   return (
     <div className="group" data-test="delete-tool">
       <div className="sec-head">
-        Delete marked
-        <InfoDot title="Deleting marked surface">
+        {tr("Delete marked")}{' '}<InfoDot title={tr("Deleting marked surface")}>
           <p>
-            What the scanner saw that is not the part: the clamp that held it, the fixture it sat
-            in, a patch of the table, a finger. Mark it on the part with a <b>window</b>, a{' '}
-            <b>brush</b> or a <b>lasso</b> — marked surface turns orange — and delete it. A
-            triangle goes when all three of its corners are marked, exactly the triangles shown in
-            orange.
-          </p>
+            {tr("What the scanner saw that is not the part: the clamp that held it, the fixture it sat in, a patch of the table, a finger. Mark it on the part with a")}{' '}<b>{tr("window")}</b>, a{' '}
+            <b>{tr("brush")}</b> {tr("or a")}{' '}<b>{tr("lasso")}</b> {tr("— marked surface turns orange — and delete it. A triangle goes when all three of its corners are marked, exactly the triangles shown in orange.")}{' '}</p>
           <p>
-            It is deleted from the edited copy. The hole it leaves stays open — close it with{' '}
-            <b>Fill holes</b> if the part should be closed there. <b>Ctrl+Z</b> puts the surface
-            back.
-          </p>
+            {tr("It is deleted from the edited copy. The hole it leaves stays open — close it with")}{' '}
+            <b>{tr("Fill holes")}</b> {tr("if the part should be closed there.")}{' '}<b>{tr("Ctrl+Z")}</b> {tr("puts the surface back.")}{' '}</p>
         </InfoDot>
       </div>
 
       <MarkTools escapeNote="The marking stays until it is deleted or cleared." onClear={onClear} />
 
       {confirming && marked > 0 ? (
-        <div className="confirmbox" data-test="delete-confirm" role="alertdialog" aria-label="Delete the marked surface">
+        <div className="confirmbox" data-test="delete-confirm" role="alertdialog" aria-label={tr("Delete the marked surface")}>
           <p>
-            Delete the surface marked on the part — <b>{count(marked)} points</b> — from the edited
-            copy?
-          </p>
-          <p className="hint">Ctrl+Z puts it back.</p>
+            {tr("Delete the surface marked on the part —")}{' '}<b>{count(marked)} {tr("points")}</b> {tr("— from the edited copy?")}{' '}</p>
+          <p className="hint">{tr("Ctrl+Z puts it back.")}</p>
           <div className="toolrow">
-            <button data-test="delete-keep" onClick={() => setConfirming(false)} title="Leave the scan as it is (Esc)">
-              Keep it
-            </button>
+            <button data-test="delete-keep" onClick={() => setConfirming(false)} title={tr("Leave the scan as it is (Esc)")}>
+              {tr("Keep it")}{' '}</button>
             <button
               className="primary"
               data-test="delete-marked-confirm"
               data-confirm={1}
               disabled={busy}
               onClick={onDelete}
-              title="Take the marked surface off the scan (Enter)"
+              title={tr("Take the marked surface off the scan (Enter)")}
             >
-              Delete
-            </button>
+              {tr("Delete")}{' '}</button>
           </div>
         </div>
       ) : (
@@ -78,14 +68,13 @@ export function DeleteTool({
           {editing ? (
             <>
               <span className="spinner" />
-              Deleting…
-            </>
+              {tr("Deleting…")}{' '}</>
           ) : (
             'Delete marked surface…'
           )}
         </button>
       )}
-      {ready && marked === 0 && !editing && <p className="hint">Pick Window, Brush or Lasso and mark what is to go.</p>}
+      {ready && marked === 0 && !editing && <p className="hint">{tr("Pick Window, Brush or Lasso and mark what is to go.")}</p>}
     </div>
   )
 }

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../src/i18n'
 // The box a sketch is drawn in: the slice chains to fit, the tools, the
 // Dimension key and the relations — each put on what is selected, or, with
 // nothing selected, taken in hand and put on what is clicked next — the
@@ -228,7 +229,7 @@ function NominalChip({ value, kind, testId, onTake }: { value: number; kind: Nom
   const n = nominalOf(value, kind)
   if (n === null) return null
   return (
-    <button className="chip nominal" data-test={testId} tabIndex={-1} title="The round number this was probably designed at — click to take it" onClick={() => onTake(n)}>
+    <button className="chip nominal" data-test={testId} tabIndex={-1} title={tr("The round number this was probably designed at — click to take it")} onClick={() => onTake(n)}>
       → {nominalText(n, kind, units)}
     </button>
   )
@@ -277,10 +278,9 @@ function PictureRow({ draft }: { draft: SketchDraft }) {
     return (
       <div className="toolrow">
         {input}
-        <button className="withicon" data-test="sketch-image-add" title="Lay a photo of the part or a dimensioned drawing under the sketch, to trace — then bring it to scale by two points a known length apart" onClick={() => file.current?.click()}>
+        <button className="withicon" data-test="sketch-image-add" title={tr("Lay a photo of the part or a dimensioned drawing under the sketch, to trace — then bring it to scale by two points a known length apart")} onClick={() => file.current?.click()}>
           <KeyIcon name="sketchImage" size={18} />
-          Picture…
-        </button>
+          {tr("Picture…")}{' '}</button>
       </div>
     )
   }
@@ -300,11 +300,11 @@ function PictureRow({ draft }: { draft: SketchDraft }) {
         {/* The picture's scale as each system reads one: micrometres a
             pixel, or pixels to the inch. */}
         {len.units === 'in' ? (
-          <b title="Pixels per inch of the picture">{(25.4 / image.mmPerPx).toFixed(0)} px/in</b>
+          <b title={tr("Pixels per inch of the picture")}>{(25.4 / image.mmPerPx).toFixed(0)} {tr("px/in")}</b>
         ) : (
-          <b title="Micrometres per pixel of the picture">{(image.mmPerPx * 1000).toFixed(1)} µm/px</b>
+          <b title={tr("Micrometres per pixel of the picture")}>{(image.mmPerPx * 1000).toFixed(1)} {tr("µm/px")}</b>
         )}
-        <button className="x" data-test="sketch-image-remove" title="Take the picture away" onClick={() => re.setSketchImage(null)}>
+        <button className="x" data-test="sketch-image-remove" title={tr("Take the picture away")} onClick={() => re.setSketchImage(null)}>
           ×
         </button>
       </div>
@@ -316,16 +316,15 @@ function PictureRow({ draft }: { draft: SketchDraft }) {
       {pick?.mode === 'scale' && pick.points.length >= 2 && (
         <div className="toolrow">
           <label className="field">
-            <span>Apart on the part</span>
+            <span>{tr("Apart on the part")}</span>
             <ExprInput value={length ?? 0} kind="length" unit={len.word()} testId="sketch-image-length" onCommit={(v) => setLength(v)} onEnter={() => length && re.scaleSketchImage(length)} />
           </label>
           <button className="primary" data-test="sketch-image-apply" disabled={!length} onClick={() => length && re.scaleSketchImage(length)}>
-            Scale
-          </button>
+            {tr("Scale")}{' '}</button>
         </div>
       )}
-      <label className="field" title="How much of the picture shows: faded, the scan and the pieces show through it">
-        <span>Shown</span>
+      <label className="field" title={tr("How much of the picture shows: faded, the scan and the pieces show through it")}>
+        <span>{tr("Shown")}</span>
         <input type="range" min={0.1} max={1} step={0.05} value={image.opacity} data-test="sketch-image-opacity" onChange={(e) => re.setSketchImage({ ...image, opacity: Number(e.target.value) })} />
       </label>
     </div>
@@ -367,13 +366,11 @@ function PatternBox({ spec, selected }: { spec: SketchPatternSpec; selected: num
   const spacing = useLength().presets(PATTERN_SPACING)[0]
   return (
     <div className="subbox" data-test="sketch-pattern-box">
-      <div className="moderow" role="radiogroup" aria-label="How the pieces are repeated">
+      <div className="moderow" role="radiogroup" aria-label={tr("How the pieces are repeated")}>
         <button role="radio" aria-checked={spec.kind === 'rectangular'} className={spec.kind === 'rectangular' ? 'on' : undefined} data-test="sketch-pattern-grid" onClick={() => spec.kind !== 'rectangular' && set({ kind: 'rectangular', step: [spacing, 0], count: 3 })}>
-          <KeyIcon name="sketchPattern" size={16} /> Grid
-        </button>
+          <KeyIcon name="sketchPattern" size={16} /> {tr("Grid")}{' '}</button>
         <button role="radio" aria-checked={spec.kind === 'circular'} className={spec.kind === 'circular' ? 'on' : undefined} data-test="sketch-pattern-round" onClick={() => spec.kind !== 'circular' && set({ kind: 'circular', centre: [0, 0], count: 6, angleDeg: 360 })}>
-          <KeyIcon name="sketchPatternRound" size={16} /> Round
-        </button>
+          <KeyIcon name="sketchPatternRound" size={16} /> {tr("Round")}{' '}</button>
       </div>
       {spec.kind === 'rectangular' ? (
         <>
@@ -393,11 +390,10 @@ function PatternBox({ spec, selected }: { spec: SketchPatternSpec; selected: num
       <p className="hint">{spec.kind === 'rectangular' ? 'Counts take the selection itself in; a negative spacing runs the other way.' : '360° spreads the copies evenly round; less spans that angle, first to last.'}</p>
       <div className="toolrow">
         <button className="primary" data-test="sketch-pattern-apply" disabled={selected === 0} onClick={() => re.applySketchPattern()}>
-          Pattern {selected} piece{selected === 1 ? '' : 's'}
+          {tr("Pattern")}{' '}{selected} {tr("piece")}{selected === 1 ? '' : 's'}
         </button>
         <button data-test="sketch-pattern-cancel" onClick={() => re.cancelSketchPattern()}>
-          Cancel
-        </button>
+          {tr("Cancel")}{' '}</button>
       </div>
     </div>
   )
@@ -528,41 +524,23 @@ export function SketchEditor({ chainsOf }: { chainsOf: () => SketchChains | null
             : null)
 
   const finishKey = (testId: string) => (
-    <button className="primary block" data-test={testId} title="Finish the sketch — Enter or a middle click does the same. With nothing drawn, nothing is made." onClick={() => re.getState().commitSketch()}>
-      Finish sketch
-    </button>
+    <button className="primary block" data-test={testId} title={tr("Finish the sketch — Enter or a middle click does the same. With nothing drawn, nothing is made.")} onClick={() => re.getState().commitSketch()}>
+      {tr("Finish sketch")}{' '}</button>
   )
 
   return (
     <div className="draftbox" data-test="sketch-editor" ref={boxRef}>
       <div className="sec-head">
         {draft.featureId !== undefined ? `Edit ${draft.name}` : 'New sketch'}
-        <InfoDot title="Sketching">
+        <InfoDot title={tr("Sketching")}>
           <p>
-            The sketch lies on its plane — a section, a plane element, a coordinate plane or a
-            face of a body — and is drawn on the part, which faces the plane and is cut open at it;
-            the view bar's <b>Model</b> and <b>Slice</b> keys put the part away and show it whole.
-          </p>
+            {tr("The sketch lies on its plane — a section, a plane element, a coordinate plane or a face of a body — and is drawn on the part, which faces the plane and is cut open at it; the view bar's")}{' '}<b>{tr("Model")}</b> {tr("and")}{' '}<b>{tr("Slice")}</b> {tr("keys put the part away and show it whole.")}{' '}</p>
           <p>
-            <b>Fit all chains</b> cuts every slice chain into lines and arcs, each keeping its
-            slice points: the solver holds every piece to its points while the relations and the
-            dimensions you type are met exactly. <b>Infer corners</b> joins ends within {len.fmt(CORNER_GAP_MM, 0)} and
-            adds a tangency where a line runs into an arc; <b>Close</b> bridges what is left open.
-          </p>
+            <b>{tr("Fit all chains")}</b> {tr("cuts every slice chain into lines and arcs, each keeping its slice points: the solver holds every piece to its points while the relations and the dimensions you type are met exactly.")}{' '}<b>{tr("Infer corners")}</b> {tr("joins ends within")}{' '}{len.fmt(CORNER_GAP_MM, 0)} {tr("and adds a tangency where a line runs into an arc;")}{' '}<b>{tr("Close")}</b> {tr("bridges what is left open.")}{' '}</p>
           <p>
-            Every closed region is filled faintly; <b>Extrude</b> and <b>Revolve</b> appear as soon
-            as one closes and take it straight into a feature. <b>Finish sketch</b> keeps the
-            drawing as a feature for later; Escape only puts the tool down, and a sketch you did not
-            want is undone with Ctrl+Z from the feature list.
-          </p>
+            {tr("Every closed region is filled faintly;")}{' '}<b>{tr("Extrude")}</b> {tr("and")}{' '}<b>{tr("Revolve")}</b> {tr("appear as soon as one closes and take it straight into a feature.")}{' '}<b>{tr("Finish sketch")}</b> {tr("keeps the drawing as a feature for later; Escape only puts the tool down, and a sketch you did not want is undone with Ctrl+Z from the feature list.")}{' '}</p>
           <p>
-            <b>Dimension</b> (D) and the relations work both ways round: on the pieces selected, or,
-            with nothing selected, on what is clicked next. The Line tool (L) draws a chain, each
-            line from the end of the last; press on that end and drag for a tangent arc.
-            A new dimension's number follows the cursor until a click puts it down, and opens there
-            to be typed; Escape takes it back. Later it is dragged to where it reads best, and
-            clicked to be typed over.
-          </p>
+            <b>{tr("Dimension")}</b> {tr("(D) and the relations work both ways round: on the pieces selected, or, with nothing selected, on what is clicked next. The Line tool (L) draws a chain, each line from the end of the last; press on that end and drag for a tangent arc. A new dimension's number follows the cursor until a click puts it down, and opens there to be typed; Escape takes it back. Later it is dragged to where it reads best, and clicked to be typed over.")}{' '}</p>
         </InfoDot>
       </div>
 
@@ -573,7 +551,7 @@ export function SketchEditor({ chainsOf }: { chainsOf: () => SketchChains | null
       )}
 
       <p className="hint" data-test="sketch-plane">
-        On {describePlaneRef(draft.plane, { sections, elements }, len.units)}
+        {tr("On")}{' '}{describePlaneRef(draft.plane, { sections, elements }, len.units)}
         {chainsStatus === 'ready' && ` · ${chainCount} slice chain${chainCount === 1 ? '' : 's'}`}
       </p>
       {planeTakesOffset(draft.plane) && (
@@ -583,8 +561,8 @@ export function SketchEditor({ chainsOf }: { chainsOf: () => SketchChains | null
         </label>
       )}
 
-      <label className="field" data-test="sketch-level" title="Cut the scan this far off the sketch’s plane, along its normal, and fit that level’s outline into this sketch — another height of a stacked part. Fit all chains then lands on the pieces already drawn: a wall they have is not fitted again, and the new walls end on theirs. 0 cuts at the plane (a face’s a hair inside it).">
-        <span>Level</span>
+      <label className="field" data-test="sketch-level" title={tr("Cut the scan this far off the sketch’s plane, along its normal, and fit that level’s outline into this sketch — another height of a stacked part. Fit all chains then lands on the pieces already drawn: a wall they have is not fitted again, and the new walls end on theirs. 0 cuts at the plane (a face’s a hair inside it).")}>
+        <span>{tr("Level")}</span>
         <ExprInput value={draft.level ?? 0} kind="length" unit={len.word()} testId="sketch-level-input" onCommit={(v) => re.getState().setSketchLevel(v)} />
       </label>
 
@@ -592,18 +570,17 @@ export function SketchEditor({ chainsOf }: { chainsOf: () => SketchChains | null
 
       {unaligned && firstFeature && draft.featureId === undefined && (
         <p className="hint" data-test="sketch-align-nudge">
-          Part not aligned yet.{' '}
+          {tr("Part not aligned yet.")}{' '}
           <button
             className="chip nominal"
             data-test="sketch-align-go"
-            title="The part is still in the scanner's frame, and the body will be built in it — a STEP file that lies askew in CAD. Aligning the part onto its fitted planes first makes the model square. This opens the 3-2-1 alignment in the 3D Measure workspace; the sketch stays open and moves with the part."
+            title={tr("The part is still in the scanner's frame, and the body will be built in it — a STEP file that lies askew in CAD. Aligning the part onto its fitted planes first makes the model square. This opens the 3-2-1 alignment in the 3D Measure workspace; the sketch stays open and moves with the part.")}
             onClick={() => {
               useShell.getState().setWorkspace('elements')
               useStore.getState().startAlignment()
             }}
           >
-            Align in 3D Measure…
-          </button>
+            {tr("Align in 3D Measure…")}{' '}</button>
         </p>
       )}
 
@@ -612,15 +589,14 @@ export function SketchEditor({ chainsOf }: { chainsOf: () => SketchChains | null
           className="withicon"
           data-test="sketch-fit-all"
           disabled={chainsStatus !== 'ready' || unfitted <= 0}
-          title="Cut every slice chain into lines and arcs, each with its slice points behind it"
+          title={tr("Cut every slice chain into lines and arcs, each with its slice points behind it")}
           onClick={() => {
             const chains = chainsOf()
             if (chains) re.getState().autoFit(chains.chains, 'all', useRePrefs.getState().fitOptions, SHARE_MM)
           }}
         >
           <Icon name="fitAll" size={18} />
-          Fit all chains
-        </button>
+          {tr("Fit all chains")}{' '}</button>
         <button
           className="withicon"
           data-test="sketch-infer"
@@ -629,29 +605,26 @@ export function SketchEditor({ chainsOf }: { chainsOf: () => SketchChains | null
           onClick={() => re.getState().inferAllCorners()}
         >
           <Icon name="inferCorners" size={18} />
-          Infer corners
-        </button>
+          {tr("Infer corners")}{' '}</button>
         <button
           className="withicon"
           data-test="sketch-close"
           disabled={fittedCount === 0}
-          title="Bridge every gap left open along the fitted chains"
+          title={tr("Bridge every gap left open along the fitted chains")}
           onClick={() => re.getState().closeAll()}
         >
           <Icon name="closeChain" size={18} />
-          Close
-        </button>
+          {tr("Close")}{' '}</button>
       </div>
       <button
         className="chip nominal"
         data-test="sketch-fit-options"
         aria-haspopup="dialog"
         aria-expanded={fitOptionsOpen}
-        title="How fine the slice is cut, the fit tolerance, corners joined, lines laid along the axes — in a window of its own; a change there refits the chains"
+        title={tr("How fine the slice is cut, the fit tolerance, corners joined, lines laid along the axes — in a window of its own; a change there refits the chains")}
         onClick={() => setFitOptionsOpen((on) => !on)}
       >
-        Fit options…
-      </button>
+        {tr("Fit options…")}{' '}</button>
       <FitOptionsModal open={fitOptionsOpen} onClose={() => setFitOptionsOpen(false)} chainsOf={chainsOf} />
 
       <div className="iconrow" data-test="sketch-tools">
@@ -682,8 +655,8 @@ export function SketchEditor({ chainsOf }: { chainsOf: () => SketchChains | null
           data-test="sketch-grid-snap"
           className={gridSnap ? 'on' : undefined}
           aria-pressed={gridSnap}
-          aria-label="Snap to grid"
-          title="Snap to grid — drawn and dragged points snap to the grid as well as to ends, the slice and pieces — off, the grid is only there to read against"
+          aria-label={tr("Snap to grid")}
+          title={tr("Snap to grid — drawn and dragged points snap to the grid as well as to ends, the slice and pieces — off, the grid is only there to read against")}
           onClick={() => useRePrefs.getState().setGridSnap(!gridSnap)}
         >
           <Icon name="gridSnap" size={22} />
@@ -692,16 +665,16 @@ export function SketchEditor({ chainsOf }: { chainsOf: () => SketchChains | null
           data-test="sketch-show-relations"
           className={showRelations ? 'on' : undefined}
           aria-pressed={showRelations}
-          aria-label="Show relations"
-          title="Show relations — draw every relation beside its piece as a glyph. Off, only the one selected in the list below is drawn; the dimensions are always shown"
+          aria-label={tr("Show relations")}
+          title={tr("Show relations — draw every relation beside its piece as a glyph. Off, only the one selected in the list below is drawn; the dimensions are always shown")}
           onClick={() => useRePrefs.getState().setSketchRelations(!showRelations)}
         >
           <Icon name={showRelations ? 'eye' : 'eyeOff'} size={22} />
         </button>
       </div>
       {draft.tool === 'polygon' && (
-        <label className="kv" data-test="sketch-polygon-sides" title="How many sides the polygon has — three and up">
-          <span className="name">Sides</span>
+        <label className="kv" data-test="sketch-polygon-sides" title={tr("How many sides the polygon has — three and up")}>
+          <span className="name">{tr("Sides")}</span>
           <input
             type="number"
             min={3}
@@ -718,14 +691,13 @@ export function SketchEditor({ chainsOf }: { chainsOf: () => SketchChains | null
           className="chip nominal"
           data-test="sketch-spline-fit"
           disabled={chainsStatus !== 'ready'}
-          title="Fit the selected spline to the slice it was drawn over: the slice points along it — within a twentieth of its length — become its soft data, and the solver pulls the curve onto them, its fit points moving as far as its relations let them. Add fit points where the outline bends more than the curve can follow"
+          title={tr("Fit the selected spline to the slice it was drawn over: the slice points along it — within a twentieth of its length — become its soft data, and the solver pulls the curve onto them, its fit points moving as far as its relations let them. Add fit points where the outline bends more than the curve can follow")}
           onClick={() => {
             const chains = chainsOf()
             if (chains) re.getState().fitSplinesToSlice(chains.chains)
           }}
         >
-          Fit spline to slice
-        </button>
+          {tr("Fit spline to slice")}{' '}</button>
       )}
       {hint && (
         <p className="hint" data-test="sketch-hint">
@@ -734,8 +706,8 @@ export function SketchEditor({ chainsOf }: { chainsOf: () => SketchChains | null
       )}
 
       <div className="g-label">
-        <span>Dimension · Relations</span>
-        <b>{draft.selection.length} selected</b>
+        <span>{tr("Dimension · Relations")}</span>
+        <b>{draft.selection.length} {tr("selected")}</b>
       </div>
       <div className="iconrow ten" data-test="sketch-relations">
         <button
@@ -743,7 +715,7 @@ export function SketchEditor({ chainsOf }: { chainsOf: () => SketchChains | null
           className={draft.tool === 'dimension' ? 'on' : undefined}
           aria-pressed={draft.tool === 'dimension'}
           title={DIMENSION_TITLE}
-          aria-label="Dimension"
+          aria-label={tr("Dimension")}
           onClick={() => (hasSelection ? re.getState().dimensionSelection() : re.getState().setSketchTool(draft.tool === 'dimension' ? 'select' : 'dimension'))}
         >
           <Icon name="dimDistance" size={20} />
@@ -766,22 +738,22 @@ export function SketchEditor({ chainsOf }: { chainsOf: () => SketchChains | null
         })}
       </div>
       <div className="iconrow" data-test="sketch-edit">
-        <button data-test="sketch-delete" disabled={!hasSelection} aria-label="Delete" title="Delete the selected pieces" onClick={() => re.getState().deleteSelected()}>
+        <button data-test="sketch-delete" disabled={!hasSelection} aria-label={tr("Delete")} title={tr("Delete the selected pieces")} onClick={() => re.getState().deleteSelected()}>
           <Icon name="del" size={22} />
         </button>
-        <button data-test="sketch-sharpen" disabled={!hasSelection} aria-label="Sharp corner" title="Sharp corner — Remove the selected fillet arc or chamfer line and carry its two lines to the corner" onClick={() => re.getState().sharpenSelected()}>
+        <button data-test="sketch-sharpen" disabled={!hasSelection} aria-label={tr("Sharp corner")} title={tr("Sharp corner — Remove the selected fillet arc or chamfer line and carry its two lines to the corner")} onClick={() => re.getState().sharpenSelected()}>
           <Icon name="sharpCorner" size={22} />
         </button>
-        <button data-test="sketch-fix" disabled={!hasSelection} aria-label="Fix" title="Fix — Lock the selected pieces where they are" onClick={() => re.getState().toggleFixedSelected()}>
+        <button data-test="sketch-fix" disabled={!hasSelection} aria-label={tr("Fix")} title={tr("Fix — Lock the selected pieces where they are")} onClick={() => re.getState().toggleFixedSelected()}>
           <Icon name="fix" size={22} />
         </button>
-        <button data-test="sketch-construction" disabled={!hasSelection} aria-label="Construction" title="Construction — Construction geometry takes no part in the regions — an axis to revolve about, a mirror line" onClick={() => re.getState().toggleConstructionSelected()}>
+        <button data-test="sketch-construction" disabled={!hasSelection} aria-label={tr("Construction")} title={tr("Construction — Construction geometry takes no part in the regions — an axis to revolve about, a mirror line")} onClick={() => re.getState().toggleConstructionSelected()}>
           <Icon name="construction" size={22} />
         </button>
-        <button data-test="sketch-pattern" disabled={!hasSelection} className={draft.pattern ? 'on' : undefined} aria-pressed={Boolean(draft.pattern)} aria-label="Pattern" title="Pattern — Repeat the selected pieces in a row, a grid or round a centre. Each copy is a piece of its own and keeps the relations and dimensions the pieces have among themselves" onClick={() => (draft.pattern ? re.getState().cancelSketchPattern() : re.getState().openSketchPattern())}>
+        <button data-test="sketch-pattern" disabled={!hasSelection} className={draft.pattern ? 'on' : undefined} aria-pressed={Boolean(draft.pattern)} aria-label={tr("Pattern")} title={tr("Pattern — Repeat the selected pieces in a row, a grid or round a centre. Each copy is a piece of its own and keeps the relations and dimensions the pieces have among themselves")} onClick={() => (draft.pattern ? re.getState().cancelSketchPattern() : re.getState().openSketchPattern())}>
           <KeyIcon name="sketchPattern" size={22} />
         </button>
-        <button data-test="sketch-align" disabled={!oneLine} aria-label="Align" title="Align — Turn the sheet so the selected line lies along its X axis — a crooked edge of the scan becomes the horizontal the rest is drawn against. Nothing moves on the part." onClick={() => re.getState().alignToSelected()}>
+        <button data-test="sketch-align" disabled={!oneLine} aria-label={tr("Align")} title={tr("Align — Turn the sheet so the selected line lies along its X axis — a crooked edge of the scan becomes the horizontal the rest is drawn against. Nothing moves on the part.")} onClick={() => re.getState().alignToSelected()}>
           <Icon name="alignSheet" size={22} />
         </button>
       </div>
@@ -791,9 +763,9 @@ export function SketchEditor({ chainsOf }: { chainsOf: () => SketchChains | null
       {inferred.length > 0 && (
         <div className="chiprow" data-test="sketch-inferred">
           {inferred.map((c) => (
-            <span key={c.id} className={'relchip' + (draft.selectedConstraint === c.id ? ' sel' : '') + (unmet.some((u) => u.id === c.id) ? ' warn' : '')} data-test="sketch-inferred-chip" title="Inferred while drawing — the piece was drawn nearly so. Click to select it, × to take it off." onClick={() => re.getState().selectConstraint(c.id)}>
+            <span key={c.id} className={'relchip' + (draft.selectedConstraint === c.id ? ' sel' : '') + (unmet.some((u) => u.id === c.id) ? ' warn' : '')} data-test="sketch-inferred-chip" title={tr("Inferred while drawing — the piece was drawn nearly so. Click to select it, × to take it off.")} onClick={() => re.getState().selectConstraint(c.id)}>
               {constraintLabel(c, sketch)}
-              <button className="x" tabIndex={-1} title="Take the inferred relation off" onClick={(e) => { e.stopPropagation(); re.getState().selectConstraint(c.id); re.getState().removeSelectedConstraint() }}>
+              <button className="x" tabIndex={-1} title={tr("Take the inferred relation off")} onClick={(e) => { e.stopPropagation(); re.getState().selectConstraint(c.id); re.getState().removeSelectedConstraint() }}>
                 ×
               </button>
             </span>
@@ -836,7 +808,7 @@ export function SketchEditor({ chainsOf }: { chainsOf: () => SketchChains | null
                 onEnter={() => re.getState().finishDimension(c.id)}
               />
               {unmet.some((u) => u.id === c.id) && <b className="warn">⚠</b>}
-              <button className="x" tabIndex={-1} title="Remove the dimension" onClick={() => { re.getState().selectConstraint(c.id); re.getState().removeSelectedConstraint() }}>
+              <button className="x" tabIndex={-1} title={tr("Remove the dimension")} onClick={() => { re.getState().selectConstraint(c.id); re.getState().removeSelectedConstraint() }}>
                 ×
               </button>
             </div>
@@ -847,7 +819,7 @@ export function SketchEditor({ chainsOf }: { chainsOf: () => SketchChains | null
                 {constraintLabel(c, sketch)}
               </span>
               {unmet.some((u) => u.id === c.id) && <b className="warn">⚠</b>}
-              <button className="x" tabIndex={-1} title="Remove the relation" onClick={() => { re.getState().selectConstraint(c.id); re.getState().removeSelectedConstraint() }}>
+              <button className="x" tabIndex={-1} title={tr("Remove the relation")} onClick={() => { re.getState().selectConstraint(c.id); re.getState().removeSelectedConstraint() }}>
                 ×
               </button>
             </div>
@@ -855,9 +827,9 @@ export function SketchEditor({ chainsOf }: { chainsOf: () => SketchChains | null
           {fixes.map((e) => (
             <div key={fixId(e.id)} className={'kv' + (draft.selectedConstraint === fixId(e.id) ? ' sel' : '')} data-test="sketch-fix-row">
               <span className="name" onClick={() => re.getState().selectConstraint(fixId(e.id))}>
-                Fix {e.kind} {e.id}
+                {tr("Fix")}{' '}{e.kind} {e.id}
               </span>
-              <button className="x" tabIndex={-1} title="Take the Fix off — the piece is free to move again" onClick={() => { re.getState().selectConstraint(fixId(e.id)); re.getState().removeSelectedConstraint() }}>
+              <button className="x" tabIndex={-1} title={tr("Take the Fix off — the piece is free to move again")} onClick={() => { re.getState().selectConstraint(fixId(e.id)); re.getState().removeSelectedConstraint() }}>
                 ×
               </button>
             </div>
@@ -867,36 +839,32 @@ export function SketchEditor({ chainsOf }: { chainsOf: () => SketchChains | null
 
       <div className="dro">
         <div className="dro-label">
-          <span>Sketch</span>
+          <span>{tr("Sketch")}</span>
           <span data-test="sketch-counts">
-            {sketch.entities.length} piece{sketch.entities.length === 1 ? '' : 's'} · {found} region{found === 1 ? '' : 's'}
+            {sketch.entities.length} {tr("piece")}{sketch.entities.length === 1 ? '' : 's'} · {found} {tr("region")}{found === 1 ? '' : 's'}
             {report && report.underConstrained.length > 0 && (
-              <span data-test="sketch-loose" title="Pieces a relation or dimension does not pin down yet — drawn in the loose colour on the sheet; the rest in the constrained colour">
-                {' '}· {report.underConstrained.length} loose
-              </span>
+              <span data-test="sketch-loose" title={tr("Pieces a relation or dimension does not pin down yet — drawn in the loose colour on the sheet; the rest in the constrained colour")}>
+                {' '}· {report.underConstrained.length} {tr("loose")}{' '}</span>
             )}
           </span>
         </div>
         <div className={'dro-window ' + status + (status === 'failed' ? ' alarm' : '')} data-test="sketch-status" title={status === 'failed' ? unmetTitle : solvedTitle}>
-          {status === 'empty' && <b style={{ fontSize: 12, fontWeight: 400, color: 'var(--dim)' }}>Needs input</b>}
+          {status === 'empty' && <b style={{ fontSize: 12, fontWeight: 400, color: 'var(--dim)' }}>{tr("Needs input")}</b>}
           {status === 'failed' && (
             <b>
-              ⚠ {unmet.length} relation{unmet.length === 1 ? '' : 's'} not met
-            </b>
+              ⚠ {unmet.length} {tr("relation")}{unmet.length === 1 ? '' : 's'} {tr("not met")}{' '}</b>
           )}
-          {status === 'ready' && <b style={{ fontSize: 13 }}>Solved{found > 0 ? ` · ${found} closed region${found === 1 ? '' : 's'}` : ' · no closed region yet'}</b>}
+          {status === 'ready' && <b style={{ fontSize: 13 }}>{tr("Solved")}{found > 0 ? ` · ${found} closed region${found === 1 ? '' : 's'}` : ' · no closed region yet'}</b>}
         </div>
       </div>
       {found > 0 && (
         <div className="toolrow" data-test="sketch-feature-keys">
-          <button className="primary withicon" data-test="sketch-extrude" title="Finish the sketch and extrude every region of it — the body shows as a ghost with arrows to drag; a click on a region lets it go" onClick={() => re.getState().finishAndExtrude()}>
+          <button className="primary withicon" data-test="sketch-extrude" title={tr("Finish the sketch and extrude every region of it — the body shows as a ghost with arrows to drag; a click on a region lets it go")} onClick={() => re.getState().finishAndExtrude()}>
             <Icon name="extrude" size={18} />
-            Extrude
-          </button>
-          <button className="primary withicon" data-test="sketch-revolve" title="Finish the sketch and revolve every region of it about an axis picked next" onClick={() => re.getState().finishAndRevolve()}>
+            {tr("Extrude")}{' '}</button>
+          <button className="primary withicon" data-test="sketch-revolve" title={tr("Finish the sketch and revolve every region of it about an axis picked next")} onClick={() => re.getState().finishAndRevolve()}>
             <Icon name="revolve" size={18} />
-            Revolve
-          </button>
+            {tr("Revolve")}{' '}</button>
         </div>
       )}
 

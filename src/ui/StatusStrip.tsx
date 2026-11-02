@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // Machine status strip: ready-lamp, what the tool is doing right now, the
 // running tally of what has been measured, and the imprint. Nothing that is a
 // switch — the ways of looking at the part are on the view bar in the corner
@@ -30,42 +31,42 @@ export function StatusStrip() {
   return (
     <footer className="strip">
       <div>
-        <span className={lamp} /> {state}
+        <span className={lamp} /> {tr(state)}
       </div>
       {elements.length > 0 && (
         <div>
-          ELEMENTS <b>{done.length}</b>
-          {done.length !== elements.length && ` of ${elements.length}`} · DIM{' '}
+          {tr("ELEMENTS")}{' '}<b>{done.length}</b>
+          {done.length !== elements.length && ` of ${elements.length}`} {tr("· DIM")}{' '}
           <b>{dimensions.length}</b>
         </div>
       )}
       <div className="msg grow">
         {errorText ? (
-          <span className="warn">⚠ {errorText}</span>
+          <span className="warn">⚠ {tr(errorText)}</span>
         ) : agent ? (
           <span data-test="agent-running">
-            <b>{agent.title}</b> <code>{agent.name}</code>
-            {statusText ? ` — ${statusText}` : ''}
+            <b>{tr(agent.title)}</b> <code>{agent.name}</code>
+            {statusText ? ` — ${tr(statusText)}` : ''}
           </span>
         ) : (
-          statusText
+          tr(statusText)
         )}
       </div>
       <button
         className="stripimprint"
         onClick={() => openImprint(true)}
-        title="Impressum & Datenschutzerklärung"
+        title={tr("Impressum & Datenschutzerklärung")}
       >
-        § <span className="btxt">IMPRINT</span>
+        § <span className="btxt">{tr("IMPRINT")}</span>
       </button>
       <a href="https://www.cnckitchen.com" target="_blank" rel="noreferrer" data-test="local-note">
         {agentConnected ? (
           <>
-            AGENT CONNECTED<span className="ltxt"> · WHAT IT READS GOES TO ITS AI MODEL</span>
+            {tr("AGENT CONNECTED")}<span className="ltxt"> {tr("· WHAT IT READS GOES TO ITS AI MODEL")}</span>
           </>
         ) : (
           <>
-            LOCAL ONLY<span className="ltxt"> · FILES NEVER LEAVE YOUR BROWSER</span>
+            {tr("LOCAL ONLY")}<span className="ltxt"> {tr("· FILES NEVER LEAVE YOUR BROWSER")}</span>
           </>
         )}
       </a>

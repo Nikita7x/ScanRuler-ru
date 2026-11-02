@@ -33,6 +33,9 @@
     </style>
     <script>
       try {
+        var l = localStorage.getItem('scanruler.language')
+        if (l !== 'ru' && l !== 'en') l = navigator.language.toLowerCase().startsWith('ru') ? 'ru' : 'en'
+        document.documentElement.lang = l
         var t = localStorage.getItem('scanruler.uitheme')
         if (t === 'dark' || (t !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches))
           document.documentElement.dataset.theme = 'dark'

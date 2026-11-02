@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The GD&T group: a tolerance is assembled the way a dimension is — a type,
 // the elements it is about, a limit to hold it to — and read the same way,
 // in a DRO row with the verdict under it. It shares the dimension draft in
@@ -96,23 +97,13 @@ export function ToleranceSection({
   return (
     <div className="group">
       <div className="sec-head">
-        GD&amp;T
-        <InfoDot title="Geometric tolerances">
+        {tr("GD&T")}{' '}<InfoDot title={tr("Geometric tolerances")}>
           <p>
-            What a drawing&apos;s feature control frames ask for: how flat, round, cylindrical or
-            spherical a feature is on its own, how parallel, square or angled it lies to a datum,
-            and how well it shares the datum&apos;s axis.
-          </p>
+            {tr("What a drawing&apos;s feature control frames ask for: how flat, round, cylindrical or spherical a feature is on its own, how parallel, square or angled it lies to a datum, and how well it shares the datum&apos;s axis.")}{' '}</p>
           <p>
-            Each reads the elements you have fitted — a face by its measured surface, a bore or a
-            pin by its axis, a ball by its centre — and is the width of the narrowest zone that still
-            holds the feature, the number to compare against the frame. Datums are elements too:
-            pick the one the drawing names.
-          </p>
+            {tr("Each reads the elements you have fitted — a face by its measured surface, a bore or a pin by its axis, a ball by its centre — and is the width of the narrowest zone that still holds the feature, the number to compare against the frame. Datums are elements too: pick the one the drawing names.")}{' '}</p>
           <p>
-            Type a limit and the reading is judged against it, here, on the pin and in the copied
-            summary.
-          </p>
+            {tr("Type a limit and the reading is judged against it, here, on the pin and in the copied summary.")}{' '}</p>
         </InfoDot>
         {own.length > 0 && <b>{own.length}</b>}
       </div>
@@ -124,8 +115,7 @@ export function ToleranceSection({
           disabled={!anyFitted || dimDraft !== null || draftOpen}
           onClick={() => startDimension('form-flatness')}
         >
-          New tolerance
-        </button>
+          {tr("New tolerance")}{' '}</button>
       ) : (
         dimDraft &&
         info && (
@@ -143,7 +133,7 @@ export function ToleranceSection({
               />
             )}
             <label className="field">
-              <span>Type</span>
+              <span>{tr("Type")}</span>
               <select
                 data-test="tol-type"
                 value={dimDraft.type}
@@ -175,18 +165,14 @@ export function ToleranceSection({
             {dimDraft.type === 'orient-angularity' && (
               <label className="field">
                 <span>
-                  Basic angle
-                  <InfoDot title="Basic angle">
+                  {tr("Basic angle")}{' '}<InfoDot title={tr("Basic angle")}>
                     <p>
-                      The angle the drawing draws the feature at, in a box: the zone is laid at
-                      exactly this angle to the datum, and the value is how far the feature spreads
-                      across it.
-                    </p>
+                      {tr("The angle the drawing draws the feature at, in a box: the zone is laid at exactly this angle to the datum, and the value is how far the feature spreads across it.")}{' '}</p>
                   </InfoDot>
                 </span>
                 <OptionalNumber
                   value={dimDraft.basic}
-                  placeholder="type"
+                  placeholder={tr("type")}
                   step={0.01}
                   min={0}
                   unit="°"
@@ -226,8 +212,7 @@ export function ToleranceSection({
             </button>
             <div className="toolrow">
               <button data-test="cancel-tolerance" onClick={cancelDimension}>
-                Cancel
-              </button>
+                {tr("Cancel")}{' '}</button>
             </div>
           </div>
         )
@@ -235,7 +220,7 @@ export function ToleranceSection({
 
       {own.length > 0 && (
         <div className="g-label">
-          <span>Tolerances</span>
+          <span>{tr("Tolerances")}</span>
           <ShowAllButton
             anyVisible={own.some((d) => d.visible !== false)}
             what="tolerances"

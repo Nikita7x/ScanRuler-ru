@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The box a flat element is created or edited in — the 2D twin of
 // DraftEditor, in the same shape so an operator who knows one knows the
 // other: name when editing, the creation method, the hint, a DRO preview of
@@ -105,7 +106,7 @@ export function FlatDraftEditor() {
 
       {kindMethods.length > 1 && (
         <label className="field">
-          <span>Created</span>
+          <span>{tr("Created")}</span>
           <select
             data-test="flat-draft-method"
             value={draft.method}
@@ -128,7 +129,7 @@ export function FlatDraftEditor() {
             checked={snapToEdge}
             onChange={(e) => setSnapToEdge(e.target.checked)}
           />
-          <span>Snap to edge</span>
+          <span>{tr("Snap to edge")}</span>
         </label>
       )}
 
@@ -140,7 +141,7 @@ export function FlatDraftEditor() {
             checked={draft.closed}
             onChange={(e) => setDraftClosed(e.target.checked)}
           />
-          <span>Closed curve</span>
+          <span>{tr("Closed curve")}</span>
         </label>
       )}
 
@@ -170,7 +171,7 @@ export function FlatDraftEditor() {
 
       <div className="dro">
         <div className="dro-label">
-          <span>Preview</span>
+          <span>{tr("Preview")}</span>
           {method.mode !== 'construct' && (
             <span data-test="flat-draft-picks">
               {collectsEdgePoints(method)
@@ -225,15 +226,13 @@ export function FlatDraftEditor() {
           <button
             data-test="flat-draft-free-tangents"
             disabled={tangentsSet === 0}
-            title="Every tangent automatic again — the curve as smooth as it can be through the points"
+            title={tr("Every tangent automatic again — the curve as smooth as it can be through the points")}
             onClick={freeDraftTangents}
           >
-            Free tangents
-          </button>
+            {tr("Free tangents")}{' '}</button>
         )}
         <button data-test="flat-draft-cancel" onClick={cancelDraft}>
-          Cancel
-        </button>
+          {tr("Cancel")}{' '}</button>
       </div>
     </div>
   )

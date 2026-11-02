@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // How far past the measured surface the element being made is drawn: one
 // field per side, matching one grip per side in the viewport. Millimetres,
 // positive outward, and negative to pull an edge back in — the clamp that
@@ -45,29 +46,15 @@ export function ExtendFields({ fit }: { fit: ExtendableFit }) {
     <div className="extend">
       <div className="g-label">
         <span>
-          Extend
-          <InfoDot title="Extending an element">
+          {tr("Extend")}{' '}<InfoDot title={tr("Extending an element")}>
             <p>
-              How far past the surface it was measured on the element is <b>drawn and exported</b>.
-              A cylinder grows out of each end, a plane out of each of its four edges — type the
-              lengths here, or drag the grips on the element itself in the viewport.
-            </p>
+              {tr("How far past the surface it was measured on the element is")}{' '}<b>{tr("drawn and exported")}</b>{tr(". A cylinder grows out of each end, a plane out of each of its four edges — type the lengths here, or drag the grips on the element itself in the viewport.")}{' '}</p>
             <p>
-              <b>U</b> and <b>V</b> are the patch's own two axes, the ones its extents are reported
-              along. The four fields sit in the same order as the four grips.
-            </p>
+              <b>U</b> {tr("and")}{' '}<b>V</b> {tr("are the patch's own two axes, the ones its extents are reported along. The four fields sit in the same order as the four grips.")}{' '}</p>
             <p>
-              Nothing measured changes: the fit, its sigma and the patch size it reports stay the
-              surface the scan actually covered, and a dimension still warns when it leaves it. Only
-              the shape you see and the shape CAD receives get longer. Negative values pull an edge
-              back in.
-            </p>
+              {tr("Nothing measured changes: the fit, its sigma and the patch size it reports stay the surface the scan actually covered, and a dimension still warns when it leaves it. Only the shape you see and the shape CAD receives get longer. Negative values pull an edge back in.")}{' '}</p>
             <p>
-              The one exception is a cylinder with <b>Fit only inside the span</b> on: the best fit
-              then uses only the scanned surface between the two ends as drawn. Pull an end in past
-              a rim the scanner caught badly — the mouth of a bore, a chamfer — and that part stops
-              pulling on the axis and the diameter.
-            </p>
+              {tr("The one exception is a cylinder with")}{' '}<b>{tr("Fit only inside the span")}</b> {tr("on: the best fit then uses only the scanned surface between the two ends as drawn. Pull an end in past a rim the scanner caught badly — the mouth of a bore, a chamfer — and that part stops pulling on the axis and the diameter.")}{' '}</p>
           </InfoDot>
         </span>
         <b data-test="extend-size">
@@ -90,25 +77,18 @@ export function ExtendFields({ fit }: { fit: ExtendableFit }) {
       </div>
 
       {!plane && (
-        <label className="checkrow" title="Use only the scanned surface between the two ends as drawn">
+        <label className="checkrow" title={tr("Use only the scanned surface between the two ends as drawn")}>
           <input
             type="checkbox"
             data-test="extend-fit-inside"
             checked={fitsInside(ext)}
             onChange={(e) => setDraftFitInside(e.target.checked)}
           />
-          Fit only inside the span
-          <InfoDot title="Fitting inside the span">
+          {tr("Fit only inside the span")}{' '}<InfoDot title={tr("Fitting inside the span")}>
             <p>
-              Pull an end in with a negative value, and with this on the surface beyond that end is
-              left out of the best fit — for the mouth of a bore the scanner rounded off, or a
-              chamfer that got swept into the cylinder.
-            </p>
+              {tr("Pull an end in with a negative value, and with this on the surface beyond that end is left out of the best fit — for the mouth of a bore the scanner rounded off, or a chamfer that got swept into the cylinder.")}{' '}</p>
             <p>
-              The fit re-runs whenever an end moves. Its diameter, sigma and point count are then
-              the surface inside the span alone; the length it reports is still how far the scan
-              reached, so the two numbers here stay measured from the same ends.
-            </p>
+              {tr("The fit re-runs whenever an end moves. Its diameter, sigma and point count are then the surface inside the span alone; the length it reports is still how far the scan reached, so the two numbers here stay measured from the same ends.")}{' '}</p>
           </InfoDot>
         </label>
       )}
@@ -117,20 +97,18 @@ export function ExtendFields({ fit }: { fit: ExtendableFit }) {
         {plane && (
           <button
             data-test="extend-square"
-            title="Grow the shorter axis out to the longer one, so the patch is square"
+            title={tr("Grow the shorter axis out to the longer one, so the patch is square")}
             onClick={squareDraftExtend}
           >
-            Make square
-          </button>
+            {tr("Make square")}{' '}</button>
         )}
         <button
           data-test="extend-reset"
           disabled={!isExtended(ext)}
-          title="Back to exactly the measured surface"
+          title={tr("Back to exactly the measured surface")}
           onClick={resetDraftExtend}
         >
-          Reset
-        </button>
+          {tr("Reset")}{' '}</button>
       </div>
     </div>
   )

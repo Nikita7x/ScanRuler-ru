@@ -3009,6 +3009,46 @@ button.x:disabled {
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
 }
 
+.langswitch {
+  display: flex;
+  flex: none;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r);
+  overflow: hidden;
+  background: var(--well-deep);
+  box-shadow: var(--inset);
+}
+
+.langswitch button {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--dim);
+  font-family: var(--cond);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 7px;
+}
+
+.langswitch button + button {
+  border-left: 1px solid var(--line-strong);
+}
+
+.langswitch button:hover:not(.on) {
+  color: var(--ink);
+}
+
+.langswitch button.on {
+  background: var(--panel);
+  color: var(--accent);
+}
+
+.langswitch button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
 .viewslot {
   position: absolute;
   inset: 0;

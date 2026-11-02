@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from './i18n'
 // The app on screen: the session (app/session.ts) made once and drawn — the
 // top bar, the panel of the workspace that is up, the 3D viewport, the 2D
 // sheet, the legends and the prompts on the stage. The workspaces' verbs are
@@ -119,6 +120,7 @@ const NO_RUNTIME: PluginRuntime = {}
 const CREASE_SETTLE_MS = 250
 
 export default function App() {
+  const language = usePrefs((s) => s.language)
   const clientRef = useRef<MeshWorkerClient | null>(null)
   if (!clientRef.current) clientRef.current = new MeshWorkerClient()
   const sceneRef = useRef<SceneManager | null>(null)
@@ -128,6 +130,9 @@ export default function App() {
   const sessionRef = useRef<AppSession | null>(null)
   if (!sessionRef.current) sessionRef.current = createSession({ clientRef, sceneRef })
   const session = sessionRef.current
+  useEffect(() => {
+    document.documentElement.lang = language
+  }, [language])
   const { imports, sources, maps, fieldDirections } = session
   const { deviation, deviationRgb, elementField, elementRgb, elementScope, thickness, thicknessRgb } = maps
   const {
@@ -1516,7 +1521,7 @@ export default function App() {
   }).current
   const scanSlot: StartSlot = {
     role: 'Scan',
-    what: 'The part as measured',
+    what: tr('The part as measured'),
     name: fileName,
     onOpen: (f) => void openFile(f),
   }
@@ -1526,7 +1531,7 @@ export default function App() {
           scanSlot,
           {
             role: 'Reference',
-            what: 'The nominal CAD part — mesh or STEP',
+            what: tr('The nominal CAD part — mesh or STEP'),
             name: nominalName,
             accept: REFERENCE_ACCEPT,
             onOpen: (f) => void openNominal(f),
@@ -1657,7 +1662,7 @@ export default function App() {
             {splitOpen && (
               <>
                 <div className="splitcap">
-                  <b>Scan</b>
+                  <b>{tr("Scan")}</b>
                   <span>{fileName}</span>
                 </div>
                 <CompareView
@@ -1746,12 +1751,12 @@ export default function App() {
           )}
           {onFlat && !flatImageName && flatSubject.kind === 'image' && (
             <StartPane
-              title="Measuring a flatbed scan"
-              blurb="Scan the part face-down on a flatbed scanner and open the image — then fit points, lines and circles to its edges and measure between them, the way a measuring microscope does. PNG or JPEG, at the highest optical resolution you have. Everything stays in this browser."
+              title={tr("Measuring a flatbed scan")}
+              blurb={tr("Scan the part face-down on a flatbed scanner and open the image — then fit points, lines and circles to its edges and measure between them, the way a measuring microscope does. PNG or JPEG, at the highest optical resolution you have. Everything stays in this browser.")}
               slots={[
                 {
                   role: 'Image',
-                  what: 'The flatbed scan of the part',
+                  what: tr('The flatbed scan of the part'),
                   name: flatImageName,
                   accept: IMAGE_ACCEPT,
                   onOpen: (f) => void openImage(f),
@@ -1764,25 +1769,25 @@ export default function App() {
               skip={active?.startPane?.skip}
               title={
                 active?.startPane
-                  ? active.startPane.title
+                  ? tr(active.startPane.title)
                   : onDeviation
                   ? source === 'element'
-                    ? 'Deviation from a fitted element'
-                    : 'Deviation from a nominal part'
+                    ? tr('Deviation from a fitted element')
+                    : tr('Deviation from a nominal part')
                   : onThickness
-                    ? 'Wall thickness'
-                    : 'Fitting elements'
+                    ? tr('Wall thickness')
+                    : tr('Fitting elements')
               }
               blurb={
                 active?.startPane
-                  ? active.startPane.blurb
+                  ? tr(active.startPane.blurb)
                   : onDeviation
                   ? source === 'element'
-                    ? 'Load a scan, fit a plane, cylinder or sphere on it in the 3D Measure workspace, then map how far the surface strays from that ideal. No reference model, no alignment. STL, PLY, OBJ, 3MF or STEP, in millimetres — everything stays in this browser.'
-                    : 'Load both, then best-fit the scan onto the reference and read the difference off the part. Scan and reference as STL, PLY, OBJ, 3MF in millimetres or a STEP file straight from CAD — everything stays in this browser.'
+                    ? tr('Load a scan, fit a plane, cylinder or sphere on it in the 3D Measure workspace, then map how far the surface strays from that ideal. No reference model, no alignment. STL, PLY, OBJ, 3MF or STEP, in millimetres — everything stays in this browser.')
+                    : tr('Load both, then best-fit the scan onto the reference and read the difference off the part. Scan and reference as STL, PLY, OBJ, 3MF in millimetres or a STEP file straight from CAD — everything stays in this browser.')
                   : onThickness
-                    ? 'Load a scan and measure how thick its walls are, everywhere at once. No reference model, no alignment. STL, PLY, OBJ, 3MF or STEP, in millimetres — everything stays in this browser.'
-                      : 'Load a scan, then pick features on it to fit spheres, cylinders and planes and measure between them. STL, PLY, OBJ, 3MF or STEP, in millimetres — everything stays in this browser.'
+                    ? tr('Load a scan and measure how thick its walls are, everywhere at once. No reference model, no alignment. STL, PLY, OBJ, 3MF or STEP, in millimetres — everything stays in this browser.')
+                      : tr('Load a scan, then pick features on it to fit spheres, cylinders and planes and measure between them. STL, PLY, OBJ, 3MF or STEP, in millimetres — everything stays in this browser.')
               }
               slots={startSlots}
               onOpenSample={openSample}
@@ -1805,13 +1810,11 @@ export default function App() {
               loaded, or the element that has yet to be chosen. */}
           {onDeviation && source === 'reference' && !picking && fileName && !nominalName && (
             <div className="hintchip" data-test="need-reference-chip">
-              Scan loaded — open the reference model in the panel, or drop it anywhere
-            </div>
+              {tr("Scan loaded — open the reference model in the panel, or drop it anywhere")}{' '}</div>
           )}
           {onDeviation && source === 'reference' && !picking && !align && fileName && nominalName && (
             <div className="hintchip" data-test="ready-chip">
-              Both models loaded — align to fit the scan onto the reference
-            </div>
+              {tr("Both models loaded — align to fit the scan onto the reference")}{' '}</div>
           )}
           {onDeviation && source === 'element' && !picking && fileName && targetId === null && (
             <div className="hintchip" data-test="need-element-chip">
@@ -1822,8 +1825,7 @@ export default function App() {
           )}
           {onThickness && !picking && !hasThicknessMap && fileName && (
             <div className="hintchip" data-test="thickness-ready-chip">
-              Part loaded — measure its wall thickness in the panel
-            </div>
+              {tr("Part loaded — measure its wall thickness in the panel")}{' '}</div>
           )}
           {/* Not a hint but an alarm: every number this workspace shows rests
               on the scale, and until one has been measured the scale is only
@@ -1847,7 +1849,7 @@ export default function App() {
             </div>
           )}
           <BusyOverlay />
-          {errorText && <div className="toast">{errorText}</div>}
+          {errorText && <div className="toast">{tr(errorText)}</div>}
           {dragging && (
             <div className="drop-overlay">
               {onFlat

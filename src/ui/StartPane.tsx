@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The front door: what a workspace shows on an empty stage, before there is any
 // part at all. One tile per model it will need, each its own drop target, where
 // the files are going to land. Every workspace uses it, so opening a model looks
@@ -59,20 +60,20 @@ function Tile({ role, what, name, accept = SCAN_ACCEPT, onOpen }: StartSlot) {
       }}
     >
       <HiddenFileInput inputRef={inputRef} accept={accept} onOpen={onOpen} multiple={accept === SCAN_ACCEPT} />
-      <div className="starttile-role">{role}</div>
-      <div className="starttile-what">{what}</div>
+      <div className="starttile-role">{tr(role)}</div>
+      <div className="starttile-what">{tr(what)}</div>
       {name ? (
         <div className="starttile-name" title={name}>
           ✓ {name}
         </div>
       ) : (
-        <div className="starttile-drop">Drop it here</div>
+        <div className="starttile-drop">{tr("Drop it here")}</div>
       )}
       <button
         className={((name ? '' : 'primary ') + (pulse ? 'pulse' : '')).trim() || undefined}
         onClick={() => inputRef.current?.click()}
       >
-        {name ? 'Replace…' : 'Choose file…'}
+        {tr(name ? 'Replace…' : 'Choose file…')}
       </button>
     </div>
   )
@@ -104,8 +105,8 @@ export function StartPane({
   return (
     <div className="startpane" data-test="start-pane">
       <div className="starthead">
-        <b>{title}</b>
-        <span>{started ? 'One to go — load the scan to measure it.' : blurb}</span>
+        <b>{tr(title)}</b>
+        <span>{started ? tr('One to go — load the scan to measure it.') : tr(blurb)}</span>
       </div>
       <div className="starttiles">
         {slots.map((slot) => (
@@ -113,28 +114,27 @@ export function StartPane({
         ))}
       </div>
       <div className="startfoot">
-        Drag &amp; drop works anywhere in the window — the first empty slot takes it.
-      </div>
+        {tr("Drag & drop works anywhere in the window — the first empty slot takes it.")}{' '}</div>
       {onOpenSample && (
         <div className="startsample">
           <button
             data-test="start-sample"
-            title={SAMPLE_DETAIL}
+            title={tr(SAMPLE_DETAIL)}
             disabled={fetching}
             onClick={() => {
               setFetching(true)
               void onOpenSample().finally(() => setFetching(false))
             }}
           >
-            {fetching ? 'Opening…' : 'Open a sample scan'}
+            {tr(fetching ? 'Opening…' : 'Open a sample scan')}
           </button>
-          <small>No scan to hand? {SAMPLE_DETAIL}.</small>
+          <small>{tr("No scan to hand?")}{' '}{tr(SAMPLE_DETAIL)}.</small>
         </div>
       )}
       {skip && (
         <div className="startskip">
           <button className="ghost" data-test="start-skip" title={skip.title} onClick={skip.onClick}>
-            {skip.label}
+            {tr(skip.label)}
           </button>
         </div>
       )}

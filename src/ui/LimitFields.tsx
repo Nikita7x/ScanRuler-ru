@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The limit a measurement is held to, typed in beside it — optional, so the
 // fields are empty until something is asked of the value. A tolerance takes
 // one ceiling; a dimension a nominal with an allowance either side, the
@@ -89,21 +90,16 @@ export function LimitFields({
     return (
       <label className="field">
         <span>
-          Limit
-          <InfoDot title="Limit">
+          {tr("Limit")}{' '}<InfoDot title={tr("Limit")}>
             <p>
-              The tolerance value off the drawing&apos;s feature control frame: the zone may be this
-              wide and no wider. Leave it empty to read the value without judging it.
-            </p>
+              {tr("The tolerance value off the drawing&apos;s feature control frame: the zone may be this wide and no wider. Leave it empty to read the value without judging it.")}{' '}</p>
             <p>
-              With a limit the row and the pin say how far inside or over it the reading stands, and
-              turn red when it is over. The copied summary says PASS or FAIL.
-            </p>
+              {tr("With a limit the row and the pin say how far inside or over it the reading stands, and turn red when it is over. The copied summary says PASS or FAIL.")}{' '}</p>
           </InfoDot>
         </span>
         <OptionalNumber
           value={limit?.kind === 'max' ? limit.max : undefined}
-          placeholder="none"
+          placeholder={tr("none")}
           step={step}
           min={0}
           kind={kind}
@@ -137,22 +133,16 @@ export function LimitFields({
     <>
       <label className="field">
         <span>
-          Nominal
-          <InfoDot title="Nominal and tolerance">
+          {tr("Nominal")}{' '}<InfoDot title={tr("Nominal and tolerance")}>
             <p>
-              What the drawing says the value should be, and how far either side of it is still
-              good. Leave the nominal empty to read the value without judging it; leave − empty for
-              a symmetric tolerance.
-            </p>
+              {tr("What the drawing says the value should be, and how far either side of it is still good. Leave the nominal empty to read the value without judging it; leave − empty for a symmetric tolerance.")}{' '}</p>
             <p>
-              With a nominal the row and the pin show the deviation from it, and turn red when it is
-              outside the tolerance. The copied summary says PASS or FAIL.
-            </p>
+              {tr("With a nominal the row and the pin show the deviation from it, and turn red when it is outside the tolerance. The copied summary says PASS or FAIL.")}{' '}</p>
           </InfoDot>
         </span>
         <OptionalNumber
           value={band?.nominal}
-          placeholder="none"
+          placeholder={tr("none")}
           step={step}
           min={-Infinity}
           kind={kind}
@@ -163,12 +153,12 @@ export function LimitFields({
       </label>
       {band && (
         <label className="field">
-          <span>Tolerance</span>
+          <span>{tr("Tolerance")}</span>
           <span className="tolpair">
             <b>+</b>
             <OptionalNumber
               value={band.plus}
-              placeholder="0"
+              placeholder={tr("0")}
               step={step}
               min={0}
               kind={kind}

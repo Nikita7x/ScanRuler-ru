@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../../src/i18n'
 // Offset: the surface moved along its normals, the whole part or a marked
 // region, by a distance either way.
 
@@ -33,35 +34,22 @@ export function OffsetTool({
   return (
     <div className="group" data-test="offset-tool">
       <div className="sec-head">
-        Shrink / expand
-        <InfoDot title="Shrinking or expanding the surface">
+        {tr("Shrink / expand")}{' '}<InfoDot title={tr("Shrinking or expanding the surface")}>
           <p>
-            Every point of the surface moved along its normal by the same distance: out to{' '}
-            <b>expand</b>, in to <b>shrink</b>. Not a scale — a {ex.ball} {w} ball expanded by{' '}
-            {ex.by} {w} is {ex.across} {w} across, and a bore in the part comes out {ex.bore} {w}{' '}
-            narrower, where scaling would widen it. For the thickness a scanning spray added, a
-            clearance on a mating part, a print that came out a little fat.
-          </p>
+            {tr("Every point of the surface moved along its normal by the same distance: out to")}{' '}
+            <b>{tr("expand")}</b>{tr(", in to")}{' '}<b>{tr("shrink")}</b>{tr(". Not a scale — a")}{' '}{ex.ball} {w} {tr("ball expanded by")}{' '}
+            {ex.by} {w} {tr("is")}{' '}{ex.across} {w} {tr("across, and a bore in the part comes out")}{' '}{ex.bore} {w}{' '}
+            {tr("narrower, where scaling would widen it. For the thickness a scanning spray added, a clearance on a mating part, a print that came out a little fat.")}{' '}</p>
           <p>
-            Each point moves so that every face around it ends the distance from where it was —
-            even thickness, as a CAD offset has it. On a sharp edge the point moves further, square
-            to neither face, so both faces end the distance out and the edge stays sharp. Where
-            the surface would fold over itself — a dent shrunk past its depth, a spike of scatter
-            — the points are eased until it does not.
-          </p>
+            {tr("Each point moves so that every face around it ends the distance from where it was — even thickness, as a CAD offset has it. On a sharp edge the point moves further, square to neither face, so both faces end the distance out and the edge stays sharp. Where the surface would fold over itself — a dent shrunk past its depth, a spike of scatter — the points are eased until it does not.")}{' '}</p>
           <p>
-            <b>Marked region</b> moves only the surface you mark with a window, the brush or a
-            lasso, as a step — like a face pushed. Where the face beside it runs along the move —
-            marked up to a machined edge — that face is stretched or shortened with it and the
-            edge stays sharp; elsewhere a wall joins the step to the surface around it. The edit
-            is made on the edited copy; <b>Ctrl+Z</b> puts it back.
-          </p>
+            <b>{tr("Marked region")}</b> {tr("moves only the surface you mark with a window, the brush or a lasso, as a step — like a face pushed. Where the face beside it runs along the move — marked up to a machined edge — that face is stretched or shortened with it and the edge stays sharp; elsewhere a wall joins the step to the surface around it. The edit is made on the edited copy;")}{' '}<b>{tr("Ctrl+Z")}</b> {tr("puts it back.")}{' '}</p>
         </InfoDot>
       </div>
 
       <div className="field">
-        <span>Move</span>
-        <div className="moderow" role="radiogroup" aria-label="What to move">
+        <span>{tr("Move")}</span>
+        <div className="moderow" role="radiogroup" aria-label={tr("What to move")}>
           {(['all', 'marked'] as const).map((scope) => (
             <button
               key={scope}
@@ -81,8 +69,8 @@ export function OffsetTool({
       {regional && <MarkTools escapeNote="The marking stays until it is moved or cleared." onClear={onClear} />}
 
       <div className="field">
-        <span>Direction</span>
-        <div className="moderow" role="radiogroup" aria-label="Which way to move">
+        <span>{tr("Direction")}</span>
+        <div className="moderow" role="radiogroup" aria-label={tr("Which way to move")}>
           {(['expand', 'shrink'] as const).map((direction) => (
             <button
               key={direction}
@@ -129,7 +117,7 @@ export function OffsetTool({
         )}
       </button>
       {regional && marked === 0 && (
-        <p className="hint">Mark the surface to move — pick Window, Brush or Lasso above.</p>
+        <p className="hint">{tr("Mark the surface to move — pick Window, Brush or Lasso above.")}</p>
       )}
     </div>
   )

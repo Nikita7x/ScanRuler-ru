@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The alignment group: the 3-2-1 datum editor, the manual move / rotate box,
 // and the buttons that open them.
 
@@ -52,7 +53,7 @@ function StepHead({ n, text, optional }: { n: number; text: string; optional?: b
     <div className="stephead">
       <span className="stepno">{n}</span>
       {text}
-      {optional && <span className="step-opt">optional</span>}
+      {optional && <span className="step-opt">{tr("optional")}</span>}
     </div>
   )
 }
@@ -115,7 +116,7 @@ function AlignSelect({
             onChange(e.target.value === '' ? null : Number(e.target.value))
         }}
       >
-        <option value="">Select…</option>
+        <option value="">{tr("Select…")}</option>
         {picks >= need && !picking && (
           <option value="__picked__">
             {need === 1 ? 'Picked point ✓' : `${need} picked points ✓`}
@@ -192,54 +193,27 @@ export function AlignmentSection({
   return (
     <div className="group">
       <div className="sec-head">
-        Alignment
-        <InfoDot title="Alignment">
+        {tr("Alignment")}{' '}<InfoDot title={tr("Alignment")}>
           <p>
-            Where X, Y, Z and the zero point sit on the part. Until it is set the scan lies in
-            whatever pose the scanner left it in, so heights, offsets and anything measured
-            against an axis mean nothing.
-          </p>
+            {tr("Where X, Y, Z and the zero point sit on the part. Until it is set the scan lies in whatever pose the scanner left it in, so heights, offsets and anything measured against an axis mean nothing.")}{' '}</p>
           <p>
-            <b>Auto-align</b> reads the pose off the scan itself: the directions most of its faces
-            are square to, the axis its round walls run along, and the side it stood on — an open
-            scan is open where it sat, and a flat rim it ends in counts as the face that is
-            missing. It opens the
-            same three steps filled in, previewed on the part — change which side is down or which
-            way X runs, or replace a step, before anything is applied. A part with no flat faces
-            and no round walls gets its principal axes, which is a guess.
-          </p>
+            <b>{tr("Auto-align")}</b> {tr("reads the pose off the scan itself: the directions most of its faces are square to, the axis its round walls run along, and the side it stood on — an open scan is open where it sat, and a flat rim it ends in counts as the face that is missing. It opens the same three steps filled in, previewed on the part — change which side is down or which way X runs, or replace a step, before anything is applied. A part with no flat faces and no round walls gets its principal axes, which is a guess.")}{' '}</p>
           <p>
-            <b>Align part</b> places it in up to three steps — set a face on a coordinate plane,
-            run an edge or a bore along an axis, put the zero point on a corner. Each step takes a
-            measured element — the accurate choice, it averages thousands of scan points — or
-            points clicked straight on the scan, and the viewport previews every choice against
-            the coordinate planes before anything is applied.
-          </p>
+            <b>{tr("Align part")}</b> {tr("places it in up to three steps — set a face on a coordinate plane, run an edge or a bore along an axis, put the zero point on a corner. Each step takes a measured element — the accurate choice, it averages thousands of scan points — or points clicked straight on the scan, and the viewport previews every choice against the coordinate planes before anything is applied.")}{' '}</p>
           <p>
-            <b>Use symmetry</b>, in the Align part box, settles the pose on the part’s own mirror
-            plane: the plane is searched for on the scan — or taken from a symmetry plane already
-            measured — the axis nearest its normal is turned onto it, and the zero point is put on
-            it. The plane is then a coordinate plane of the part, which is what a sketch on the
-            middle and a Mirror want. With no pose set up yet it starts from Auto-align’s.
-          </p>
+            <b>{tr("Use symmetry")}</b>{tr(", in the Align part box, settles the pose on the part’s own mirror plane: the plane is searched for on the scan — or taken from a symmetry plane already measured — the axis nearest its normal is turned onto it, and the zero point is put on it. The plane is then a coordinate plane of the part, which is what a sketch on the middle and a Mirror want. With no pose set up yet it starts from Auto-align’s.")}{' '}</p>
           <p>
-            <b>Move / rotate by numbers</b> applies a transform you already know instead. Both are
-            baked into the part, and <b>Reset alignment</b> puts it back.
-          </p>
+            <b>{tr("Move / rotate by numbers")}</b> {tr("applies a transform you already know instead. Both are baked into the part, and")}{' '}<b>{tr("Reset alignment")}</b> {tr("puts it back.")}{' '}</p>
         </InfoDot>
       </div>
       {alignDraft === null && manual !== null ? (
         <div className="draftbox">
           <div className="sec-head">
-            Move / rotate part
-            <InfoDot title="Move / rotate part">
+            {tr("Move / rotate part")}{' '}<InfoDot title={tr("Move / rotate part")}>
               <p>
-                How far to move the part ({len.word()}) and how far to turn it (°) along the global axes.
-              </p>
+                {tr("How far to move the part (")}{len.word()}{tr(") and how far to turn it (°) along the global axes.")}{' '}</p>
               <p>
-                It turns about the zero point first — about X, then Y, then Z — and moves after
-                that, so a rotation and an offset entered together behave the same way every time.
-              </p>
+                {tr("It turns about the zero point first — about X, then Y, then Z — and moves after that, so a rotation and an offset entered together behave the same way every time.")}{' '}</p>
             </InfoDot>
           </div>
           {MANUAL_FIELDS.map((f, i) => (
@@ -277,12 +251,10 @@ export function AlignmentSection({
               setManual(null)
             }}
           >
-            Move part
-          </button>
+            {tr("Move part")}{' '}</button>
           <div className="toolrow">
             <button data-test="cancel-manual" onClick={() => setManual(null)}>
-              Cancel
-            </button>
+              {tr("Cancel")}{' '}</button>
           </div>
         </div>
       ) : alignDraft === null ? (
@@ -293,24 +265,21 @@ export function AlignmentSection({
             disabled={!fileName || busy}
             onClick={onAutoAlign}
           >
-            Auto-align
-          </button>
+            {tr("Auto-align")}{' '}</button>
           <button
             className="block"
             data-test="start-alignment"
             disabled={!fileName || busy}
             onClick={onStartAlignment}
           >
-            Align part
-          </button>
+            {tr("Align part")}{' '}</button>
           <button
             className="block"
             data-test="start-manual"
             disabled={!fileName || busy}
             onClick={() => setManual([NaN, NaN, NaN, NaN, NaN, NaN])}
           >
-            Move / rotate by numbers
-          </button>
+            {tr("Move / rotate by numbers")}{' '}</button>
           {appliedAlignment !== null && (
             <button
               className="block"
@@ -318,41 +287,23 @@ export function AlignmentSection({
               disabled={busy}
               onClick={onResetAlignment}
             >
-              Reset alignment
-            </button>
+              {tr("Reset alignment")}{' '}</button>
           )}
         </>
       ) : (
         <div className="draftbox">
           <div className="sec-head">
-            Align part
-            <InfoDot title="Align part">
+            {tr("Align part")}{' '}<InfoDot title={tr("Align part")}>
               <p>
-                Three steps, and only the first is required. The coordinate planes in the viewport
-                are where the part is going; it moves live with every choice, and nothing is
-                applied until <b>Confirm alignment</b> is pressed.
-              </p>
+                {tr("Three steps, and only the first is required. The coordinate planes in the viewport are where the part is going; it moves live with every choice, and nothing is applied until")}{' '}<b>{tr("Confirm alignment")}</b> {tr("is pressed.")}{' '}</p>
               <p>
-                <b>1 · Set on a plane</b> — use a measured plane or cylinder, or pick 3 points
-                on one face of the part. Then say which side of the part that face is: the
-                bottom lands on the floor plane, a front lands on the front plane, and so on.
-              </p>
+                <b>{tr("1 · Set on a plane")}</b> {tr("— use a measured plane or cylinder, or pick 3 points on one face of the part. Then say which side of the part that face is: the bottom lands on the floor plane, a front lands on the front plane, and so on.")}{' '}</p>
               <p>
-                <b>2 · Align with an axis</b> — use a measured plane or cylinder (its normal or
-                its axis is the direction), or pick 2 points along an edge, and say which way
-                that direction should run, so the part cannot spin on the plane. An element
-                averages thousands of scan points where a pick is one spot of noise, so fit the
-                face or the bore first when the direction has to hold. Picked, the edge runs
-                from your 1st point to your 2nd.
-              </p>
+                <b>{tr("2 · Align with an axis")}</b> {tr("— use a measured plane or cylinder (its normal or its axis is the direction), or pick 2 points along an edge, and say which way that direction should run, so the part cannot spin on the plane. An element averages thousands of scan points where a pick is one spot of noise, so fit the face or the bore first when the direction has to hold. Picked, the edge runs from your 1st point to your 2nd.")}{' '}</p>
               <p>
-                <b>3 · Move to zero point</b> — pick the corner or feature that becomes X0 Y0 Z0.
-                A zero point on its own works too, if all you want is to move the origin.
-              </p>
+                <b>{tr("3 · Move to zero point")}</b> {tr("— pick the corner or feature that becomes X0 Y0 Z0. A zero point on its own works too, if all you want is to move the origin.")}{' '}</p>
               <p>
-                Whatever a step already fixes it also zeroes — a face set on the floor sits at
-                height 0 — and the first alignment centres the part on whatever is still free.
-              </p>
+                {tr("Whatever a step already fixes it also zeroes — a face set on the floor sits at height 0 — and the first alignment centres the part on whatever is still free.")}{' '}</p>
             </InfoDot>
           </div>
           {alignDraft.proposal && (
@@ -374,7 +325,7 @@ export function AlignmentSection({
             onPick={() => beginAlignmentPick('primary')}
           />
           <label className="field">
-            <span>It is the part’s</span>
+            <span>{tr("It is the part’s")}</span>
             <select
               data-test="align-primary-axis"
               value={alignDraft.primaryAxis}
@@ -402,7 +353,7 @@ export function AlignmentSection({
           />
           {(alignDraft.secondary !== null || alignDraft.secondaryPicks.length > 0) && (
             <label className="field">
-              <span>It runs</span>
+              <span>{tr("It runs")}</span>
               <select
                 data-test="align-secondary-axis"
                 value={alignDraft.secondaryAxis}
@@ -445,11 +396,10 @@ export function AlignmentSection({
             className="block"
             data-test="align-symmetry"
             disabled={busy || alignDraft.pickSlot !== null}
-            title="Find the part’s mirror plane on the scan — or use a symmetry plane already measured — and settle this pose on it: the axis nearest its normal turned onto it, the zero point put on it. With nothing set up yet, Auto-align’s pose is the start. Nothing is applied until Confirm alignment is pressed"
+            title={tr("Find the part’s mirror plane on the scan — or use a symmetry plane already measured — and settle this pose on it: the axis nearest its normal turned onto it, the zero point put on it. With nothing set up yet, Auto-align’s pose is the start. Nothing is applied until Confirm alignment is pressed")}
             onClick={onAlignSymmetry}
           >
-            Use symmetry
-          </button>
+            {tr("Use symmetry")}{' '}</button>
           <button
             className="primary block"
             data-test="apply-alignment"
@@ -457,8 +407,7 @@ export function AlignmentSection({
             disabled={!alignReady || busy}
             onClick={() => alignReady && onApplyAlignment(alignReady.rigid)}
           >
-            Confirm alignment
-          </button>
+            {tr("Confirm alignment")}{' '}</button>
           <div className="toolrow">
             {alignDraft.pickSlot !== null && (
               <button
@@ -466,12 +415,10 @@ export function AlignmentSection({
                 disabled={alignSlotPicks(alignDraft, alignDraft.pickSlot).length === 0}
                 onClick={undoAlignmentPick}
               >
-                Undo point
-              </button>
+                {tr("Undo point")}{' '}</button>
             )}
             <button data-test="cancel-alignment" onClick={cancelAlignment}>
-              Cancel
-            </button>
+              {tr("Cancel")}{' '}</button>
           </div>
         </div>
       )}

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The 2D dimension group — the twin of DimensionSection: the editor a
 // dimension is assembled or re-opened in, and the DRO rows the finished
 // dimensions are read from.
@@ -67,22 +68,14 @@ export function FlatDimensionSection({
   return (
     <div className="group">
       <div className="sec-head">
-        Create dimensions
-        <InfoDot title="Dimensions">
+        {tr("Create dimensions")}{' '}<InfoDot title={tr("Dimensions")}>
           <p>
-            Measurements between elements: point–point and point–line distances, the width between
-            two near-parallel lines, the angle between two lines. Values follow the elements — re-fit
-            or recalibrate and every dimension updates.
-          </p>
-          <p>Distances and angles between elements never change under an alignment.</p>
+            {tr("Measurements between elements: point–point and point–line distances, the width between two near-parallel lines, the angle between two lines. Values follow the elements — re-fit or recalibrate and every dimension updates.")}{' '}</p>
+          <p>{tr("Distances and angles between elements never change under an alignment.")}</p>
           <p>
-            Fill a slot from its dropdown, or click the element on the sheet — a circle or an arc
-            by its edge or by the cross at its center, which is the point it measures from.
-          </p>
+            {tr("Fill a slot from its dropdown, or click the element on the sheet — a circle or an arc by its edge or by the cross at its center, which is the point it measures from.")}{' '}</p>
           <p>
-            <b>Add dimension</b> leaves the box open for the next one of the same type, its
-            slots empty; <b>Cancel</b> or <b>Esc</b> closes it.
-          </p>
+            <b>{tr("Add dimension")}</b> {tr("leaves the box open for the next one of the same type, its slots empty;")}{' '}<b>{tr("Cancel")}</b> {tr("or")}{' '}<b>{tr("Esc")}</b> {tr("closes it.")}{' '}</p>
         </InfoDot>
         {dimensions.length > 0 && <b>{dimensions.length}</b>}
       </div>
@@ -95,10 +88,9 @@ export function FlatDimensionSection({
             disabled={measurable < 2 || draftBusy}
             onClick={startDimDraft}
           >
-            New dimension
-          </button>
+            {tr("New dimension")}{' '}</button>
           {measurable < 2 && (
-            <p className="hint">Create at least two elements first, then measure between them.</p>
+            <p className="hint">{tr("Create at least two elements first, then measure between them.")}</p>
           )}
         </>
       ) : (
@@ -106,7 +98,7 @@ export function FlatDimensionSection({
           <div className="draftbox dimbox">
             <DimDraftHead editId={dimDraft.editId} name={dimDraft.name} dimensions={dimensions} nameTestId="flat-dim-name" onName={setDimName} />
             <label className="field">
-              <span>Type</span>
+              <span>{tr("Type")}</span>
               <select
                 data-test="flat-dim-type"
                 value={dimDraft.type}
@@ -167,8 +159,7 @@ export function FlatDimensionSection({
             </button>
             <div className="toolrow">
               <button data-test="flat-dim-cancel" onClick={cancelDimDraft}>
-                Cancel
-              </button>
+                {tr("Cancel")}{' '}</button>
             </div>
           </div>
         )
@@ -176,7 +167,7 @@ export function FlatDimensionSection({
 
       {dimensions.length > 0 && (
         <div className="g-label">
-          <span>Dimensions</span>
+          <span>{tr("Dimensions")}</span>
           <ShowAllButton
             anyVisible={dimensions.some((d) => d.visible)}
             what="dimensions"

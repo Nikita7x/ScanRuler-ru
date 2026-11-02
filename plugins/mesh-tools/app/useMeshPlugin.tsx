@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../src/i18n'
 // The Mesh Tools workspace's part in the app, for one render: the
 // workspace's verbs (useMeshWorkspace), the two maps it shows — how far the
 // reduced mesh strays from the scan, and how far the edited copy is from the
@@ -344,15 +345,14 @@ export function useMeshPlugin(host: PluginHost): PluginRuntime {
         )}
         {tool === 'reduce' && !report && fileName && (
           <div className="hintchip" data-test="mesh-ready-chip">
-            Part loaded — reduce the mesh in the panel
-          </div>
+            {tr("Part loaded — reduce the mesh in the panel")}{' '}</div>
         )}
       </>
     ),
     viewKeys: (
       <>
         {tool === 'reduce' && (
-          <div className="keys" role="radiogroup" aria-label="What to show of the reduction">
+          <div className="keys" role="radiogroup" aria-label={tr("What to show of the reduction")}>
             {MESH_VIEWS.map((v) => (
               <button
                 key={v.id}
@@ -371,7 +371,7 @@ export function useMeshPlugin(host: PluginHost): PluginRuntime {
           </div>
         )}
         {tool === 'trim' && (
-          <div className="keys" role="radiogroup" aria-label="What to show of the trim">
+          <div className="keys" role="radiogroup" aria-label={tr("What to show of the trim")}>
             {TRIM_VIEWS.map((v) => (
               <button
                 key={v.id}
@@ -410,8 +410,7 @@ export function useMeshPlugin(host: PluginHost): PluginRuntime {
             }
           >
             <Icon name="compare" size={16} />
-            Deviation
-          </button>
+            {tr("Deviation")}{' '}</button>
         </div>
       </>
     ),

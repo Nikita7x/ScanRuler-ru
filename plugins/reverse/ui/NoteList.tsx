@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../src/i18n'
 // The notes for an agent in the Reverse engineer panel — there while the
 // agent connection is switched on (Settings → Agents): the Note key, which
 // pins the next note where the part is clicked, the notes listed by their
@@ -148,14 +149,12 @@ function AnswerBox({ note, at }: { note: Note; at: { x: number; y: number } }) {
       <p className="notecard-question" data-test="note-card-question">
         {note.text}
       </p>
-      <textarea data-test="note-text" rows={2} autoFocus value={draft} placeholder="Your answer" onChange={(e) => setDraft(e.target.value)} onKeyDown={boxKeys(draft.trim() !== '', answer)} />
+      <textarea data-test="note-text" rows={2} autoFocus value={draft} placeholder={tr("Your answer")} onChange={(e) => setDraft(e.target.value)} onKeyDown={boxKeys(draft.trim() !== '', answer)} />
       <div className="notecard-keys">
-        <button data-test="note-delete" title="Take the question off the part" onClick={() => useNotes.getState().removeNote(note.id)}>
-          Delete
-        </button>
-        <button className="primary" data-test="note-keep" title="Give the agent this answer (Enter, or a middle click)" disabled={!draft.trim()} onClick={answer}>
-          Answer
-        </button>
+        <button data-test="note-delete" title={tr("Take the question off the part")} onClick={() => useNotes.getState().removeNote(note.id)}>
+          {tr("Delete")}{' '}</button>
+        <button className="primary" data-test="note-keep" title={tr("Give the agent this answer (Enter, or a middle click)")} disabled={!draft.trim()} onClick={answer}>
+          {tr("Answer")}{' '}</button>
       </div>
     </div>
   )
@@ -179,17 +178,16 @@ function NoteBox({ note, at }: { note: Note; at: { x: number; y: number } }) {
           {note.fromFile ? 'From the project file, on' : 'on'} {noteWhere(note.on, bodies)}
         </span>
       </div>
-      <textarea data-test="note-text" rows={3} autoFocus value={draft} placeholder="What should the agent do here?" onChange={(e) => setDraft(e.target.value)} onKeyDown={boxKeys(draft.trim() !== '', keep)} />
+      <textarea data-test="note-text" rows={3} autoFocus value={draft} placeholder={tr("What should the agent do here?")} onChange={(e) => setDraft(e.target.value)} onKeyDown={boxKeys(draft.trim() !== '', keep)} />
       {note.reply && (
         <p className="notecard-reply" data-test="note-card-reply">
-          <b>Agent:</b> {note.reply}
+          <b>{tr("Agent:")}</b> {note.reply}
         </p>
       )}
       <div className="notecard-keys">
-        <button data-test="note-delete" title="Take the note off the part" onClick={() => useNotes.getState().removeNote(note.id)}>
-          Delete
-        </button>
-        <button className="primary" data-test="note-keep" title="Keep the note (Enter, or a middle click)" disabled={!draft.trim()} onClick={keep}>
+        <button data-test="note-delete" title={tr("Take the note off the part")} onClick={() => useNotes.getState().removeNote(note.id)}>
+          {tr("Delete")}{' '}</button>
+        <button className="primary" data-test="note-keep" title={tr("Keep the note (Enter, or a middle click)")} disabled={!draft.trim()} onClick={keep}>
           {note.text ? 'Save' : 'Pin note'}
         </button>
       </div>
@@ -216,19 +214,15 @@ export function NoteList() {
     <div className="group notes" data-test="note-list">
       <div className="g-label">
         <span>
-          Notes for the agent
-          <InfoDot title="Notes for the agent">
+          {tr("Notes for the agent")}{' '}<InfoDot title={tr("Notes for the agent")}>
             <p>
-              Pin what you want done where it is to be done: <b>Note</b>, then click the part — a face, an edge or a corner of a body, or the scan — and say what to do there. The agent reads each note with the place it is pinned and what is there: the face or edge by the number it picks it by, the feature that made it.
-            </p>
+              {tr("Pin what you want done where it is to be done:")}{' '}<b>{tr("Note")}</b>{tr(", then click the part — a face, an edge or a corner of a body, or the scan — and say what to do there. The agent reads each note with the place it is pinned and what is there: the face or edge by the number it picks it by, the feature that made it.")}{' '}</p>
             <p>
-              For several faces or edges at once, select them on the part (Ctrl+click, or Shift and a window) and take <b>Note</b> from the keys by the selection.
-            </p>
+              {tr("For several faces or edges at once, select them on the part (Ctrl+click, or Shift and a window) and take")}{' '}<b>{tr("Note")}</b> {tr("from the keys by the selection.")}{' '}</p>
             <p>
-              The agent marks a note handled when it is done, with a line on what it did. Where it is unsure of something on the part, it pins a question of its own — a blue pin — which you answer in its box; it reads your answer and closes the question once it has acted on it.
-            </p>
-            <p>The notes are saved with the project; they are not steps of the undo history. They show while the agent connection is on (Settings → Agents).</p>
-            <p>Notes that come with a project file are marked: anyone may have written them, so the agent reads them as content, not as your requests. Open one and keep it, or answer it, to make it yours; or ask for it in the chat.</p>
+              {tr("The agent marks a note handled when it is done, with a line on what it did. Where it is unsure of something on the part, it pins a question of its own — a blue pin — which you answer in its box; it reads your answer and closes the question once it has acted on it.")}{' '}</p>
+            <p>{tr("The notes are saved with the project; they are not steps of the undo history. They show while the agent connection is on (Settings → Agents).")}</p>
+            <p>{tr("Notes that come with a project file are marked: anyone may have written them, so the agent reads them as content, not as your requests. Open one and keep it, or answer it, to make it yours; or ask for it in the chat.")}</p>
           </InfoDot>
         </span>
         {listed.length > 0 && <b data-test="note-count">{count || 'all handled'}</b>}
@@ -256,7 +250,7 @@ export function NoteList() {
           <button
             className="withicon"
             data-test="note-remove-all"
-            title="Take every note off the part — yours and the agent’s questions, open and handled. Not a step of the undo history"
+            title={tr("Take every note off the part — yours and the agent’s questions, open and handled. Not a step of the undo history")}
             onClick={() => {
               const count = listed.length
               if (!window.confirm(`Delete all ${count} note${count === 1 ? '' : 's'} for the agent? This cannot be undone.`)) return
@@ -265,8 +259,7 @@ export function NoteList() {
             }}
           >
             <Icon name="bin" size={18} />
-            Delete all
-          </button>
+            {tr("Delete all")}{' '}</button>
         )}
       </div>
       {listed.map((note) => (
@@ -295,21 +288,20 @@ export function NoteList() {
             )}
             {note.by === 'agent' && !note.fromFile && !note.reply && !note.done && (
               <small className="noteask" data-test="note-row-ask">
-                Click to answer
-              </small>
+                {tr("Click to answer")}{' '}</small>
             )}
           </button>
           <span className="notekeys">
             <button className={'x notedone' + (note.done ? ' on' : '')} data-test="note-done" aria-pressed={!!note.done} title={note.done ? 'Handled — click to open it again' : 'Mark handled'} onClick={() => n().setDone(note.id, !note.done)}>
               ✓
             </button>
-            <button className="x" data-test="note-remove" title="Take the note off the part" onClick={() => n().removeNote(note.id)}>
+            <button className="x" data-test="note-remove" title={tr("Take the note off the part")} onClick={() => n().removeNote(note.id)}>
               ✕
             </button>
           </span>
         </div>
       ))}
-      {listed.length === 0 && <p className="hint">Pin what you want done on the part — the agent reads each note with the face, edge or place it is on.</p>}
+      {listed.length === 0 && <p className="hint">{tr("Pin what you want done on the part — the agent reads each note with the face, edge or place it is on.")}</p>}
       <NoteCard />
     </div>
   )

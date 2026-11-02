@@ -8,27 +8,27 @@
 
 import { useEffect, useLayoutEffect, useRef, useState, type RefObject } from 'react'
 import { useStore } from '../state/store'
-import { useFlat } from '../state/flatStore'
 import { usePrefs } from '../state/prefsStore'
 import { useDeviation } from '../state/deviationStore'
 import { useShell, type Workspace } from '../state/shellStore'
 import { plugins } from '../plugins/registry'
 import { UndoRedo } from './UndoRedo'
+import { tr } from '../i18n'
 import { AGENT_STATUS, useAgentLink } from '../commands/agentLink'
 import { Icon, type IconName } from './icons'
 import { IMAGE_ACCEPT, SCAN_ACCEPT, isImageFile, isModelFile, isTextureFile } from '../core/formats'
 import { bundleFiles } from '../app/scanFiles'
-import { PROJECT_EXTENSION, projectStem } from '../core/project/manifest'
+import { PROJECT_EXTENSION } from '../core/project/manifest'
 import { isProjectFile } from '../app/useProject'
 import { APP_VERSION } from '../version'
 import type { RecoveryStatus } from '../app/useRecovery'
 
-const GITHUB_URL = 'https://github.com/CNCKitchen/scanruler'
+const GITHUB_URL = 'https://github.com/Nikita7x/ScanRuler-ru'
 
 /** What the GitHub key links to: the whole app, or — with plugins in use,
  *  which are not published there — the app without them. */
 const sourceTitle = () =>
-  plugins().length > 0 ? 'Source code of the open-source core (AGPL-3.0-only) on GitHub' : 'Source code (AGPL-3.0-only) on GitHub'
+  tr(plugins().length > 0 ? 'Source code of the open-source core (AGPL-3.0-only) on GitHub' : 'Source code (AGPL-3.0-only) on GitHub')
 
 const CORE_TABS: { id: Workspace; icon: IconName; label: string; title: string }[] = [
   { id: 'elements', icon: 'wsMeasure', label: '3D Measure', title: 'Fit spheres, cylinders and planes, and measure between them' },
@@ -53,28 +53,26 @@ const APP_TITLE = 'ScanRuler by CNC Kitchen'
  *  the scan's name, or the image's. Enter or leaving the field takes what
  *  was typed; Escape puts it back. */
 function ProjectName() {
+  const language = usePrefs((s) => s.language)
   const name = useStore((s) => s.projectName)
-  const fileName = useStore((s) => s.fileName)
-  const imageName = useFlat((s) => s.imageName)
   /** The text while it is being typed, or null. */
   const [typed, setTyped] = useState<string | null>(null)
   const dropped = useRef(false)
   useEffect(() => {
-    document.title = name ? `${name} — ScanRuler` : APP_TITLE
-  }, [name])
+    document.title = name ? `${name} — ScanRuler` : tr(APP_TITLE)
+  }, [name, language])
   const shown = typed ?? name ?? ''
-  const fallback = projectStem(null, fileName, imageName)
   const placeholder = 'Untitled project'
   return (
     <input
       className="projectname"
       data-test="project-name"
-      aria-label="Project name"
+      aria-label={tr("Project name")}
       spellCheck={false}
       value={shown}
       placeholder={placeholder}
       size={Math.max(14, Math.min(32, (shown || placeholder).length + 1))}
-      title={`The project's name — what Save Project saves it under and every export is named on.${name ? '' : ` Unnamed, they go by ${fallback === 'project' ? 'the scan or the image it holds' : `“${fallback}”`}.`}`}
+      title={tr("Project name — saves projects and names exports")}
       onFocus={() => setTyped(name ?? '')}
       onChange={(e) => setTyped(e.target.value)}
       onBlur={() => {
@@ -173,6 +171,8 @@ export function TopBar({
   const picking = useDeviation((s) => s.picking)
   const openSettings = usePrefs((s) => s.openSettings)
   const agentLink = usePrefs((s) => s.agentLink)
+  const language = usePrefs((s) => s.language)
+  const setLanguage = usePrefs((s) => s.setLanguage)
   const agent = useAgentLink()
   const openRef = useRef<HTMLInputElement>(null)
   const barRef = useRef<HTMLElement>(null)
@@ -199,14 +199,14 @@ export function TopBar({
 
   return (
     <header className="top" ref={barRef}>
-      <img className="brandmark" src="/scanruler-mark.svg" alt="" />
+      <img className="brandmark" src="/scanruler-mark.svg" alt={tr("")} />
       {/* The version rides in the caption, and in the tooltip for the narrow
           layouts that drop the caption: a bug report needs the number, and
           the imprint carries it too. */}
       <div className="brand" title={`ScanRuler v${APP_VERSION}`}>
-        <b>ScanRuler</b>
+        <b>{tr("ScanRuler")}</b>
         <span>
-          CNC Kitchen · 3D scan analysis ·{' '}
+          {tr("CNC Kitchen · 3D scan analysis ·")}{' '}
           <i className="ver" data-test="app-version">
             v{APP_VERSION}
           </i>
@@ -222,13 +222,13 @@ export function TopBar({
             data-test={`workspace-${w.id}`}
             aria-selected={workspace === w.id}
             className={workspace === w.id ? 'on' : undefined}
-            title={`${w.label}\n${w.title}`}
-            aria-label={w.label}
+            title={`${tr(w.label)}\n${tr(w.title)}`}
+            aria-label={tr(w.label)}
             disabled={picking}
             onClick={() => setWorkspace(w.id)}
           >
             <Icon name={w.icon} size={16} />
-            <span className="wtxt">{w.label}</span>
+            <span className="wtxt">{tr(w.label)}</span>
           </button>
         ))}
       </div>
@@ -237,9 +237,8 @@ export function TopBar({
         <div className="partchip file-info" title={fileName}>
           <b>{fileName}</b>
           <span>
-            {triangleCount.toLocaleString('en-US')} triangles ·{' '}
-            {vertexCount.toLocaleString('en-US')} vertices
-          </span>
+            {triangleCount.toLocaleString('en-US')} {tr("triangles ·")}{' '}
+            {vertexCount.toLocaleString('en-US')} {tr("vertices")}{' '}</span>
         </div>
       )}
       <div className="grow" />
@@ -249,19 +248,19 @@ export function TopBar({
         <button
           className={`agentchip ${agent.status}`}
           data-test="agent-chip"
-          title={`${AGENT_STATUS[agent.status]}${agent.detail ? ` — ${agent.detail}` : ''}. Settings → Agents.`}
+          title={tr(`${AGENT_STATUS[agent.status]}${agent.detail ? ` — ${agent.detail}` : ''}. Settings → Agents.`)}
           onClick={() => openSettings(true)}
         >
           <span className="agentlamp" />
           <span className="btxt">
-            Agent: {agent.status === 'connected' ? 'connected' : agent.status === 'refused' ? 'turned away' : 'listening'}
+            {tr("Agent:")}{' '}{tr(agent.status === 'connected' ? 'connected' : agent.status === 'refused' ? 'turned away' : 'listening')}
           </span>
         </button>
       )}
       <span className="project-save-status" data-test="project-save-status"
-        title={`${recovery.status || 'Checkpoints are stored only in this browser.'} Checkpoints and project files include completed work; finish active drawings before leaving. Save Project downloads a portable copy.`}>
-        {recovery.dirty ? 'Unsaved changes' : 'No unsaved changes'}
-        {recovery.status && <small role="status">{recovery.status}</small>}
+        title={tr(`${recovery.status || 'Checkpoints are stored only in this browser.'} Checkpoints and project files include completed work; finish active drawings before leaving. Save Project downloads a portable copy.`)}>
+        {tr(recovery.dirty ? 'Unsaved changes' : 'No unsaved changes')}
+        {recovery.status && <small role="status">{tr(recovery.status)}</small>}
       </span>
       <UndoRedo />
       <input
@@ -278,30 +277,30 @@ export function TopBar({
         data-test="new-project"
         onClick={onNewProject}
         disabled={busy}
-        title="Start a new project: the scan, the reference and the image closed, every measurement and every workspace's work let go, the name taken off — after asking, when there are changes not saved"
+        title={tr("Start a new project")}
       >
         <Icon name="newProject" size={16} />
-        <span className="btxt">New<span className="ptxt"> Project</span></span>
+        <span className="btxt">{tr("New")}<span className="ptxt"> {tr("Project")}</span></span>
       </button>
       <button
         className="ghost withicon"
         data-test="save-project"
         onClick={onSaveProject}
         disabled={busy || !savable}
-        title={`Save the scan, the reference, the image and every measurement as one .${PROJECT_EXTENSION} file`}
+        title={tr("Save project file")}
       >
         <Icon name="save" size={16} />
-        <span className="btxt">Save<span className="ptxt"> Project</span></span>
+        <span className="btxt">{tr("Save")}<span className="ptxt"> {tr("Project")}</span></span>
       </button>
       <button
         className="ghost withicon"
         data-test="load-project"
         onClick={() => openRef.current?.click()}
         disabled={busy}
-        title={`Open a .${PROJECT_EXTENSION} project — or a plain scan or image to start fresh`}
+        title={tr("Open a project, scan or image")}
       >
         <Icon name="load" size={16} />
-        <span className="btxt">Load<span className="ptxt"> Project</span></span>
+        <span className="btxt">{tr("Load")}<span className="ptxt"> {tr("Project")}</span></span>
       </button>
       {/* What is set once and left — the chassis, the colour mode, the mouse
           controls, the line weights, the hints. Beside the project keys
@@ -310,10 +309,10 @@ export function TopBar({
         className="ghost withicon"
         data-test="open-settings"
         onClick={() => openSettings(true)}
-        title="Interface theme, colour mode, mouse controls, line widths and guided hints"
+        title={tr("Interface theme, colour mode, mouse controls, line widths and guided hints")}
       >
         <Icon name="settings" size={16} />
-        <span className="btxt"> Settings</span>
+        <span className="btxt"> {tr("Settings")}</span>
       </button>
       <a
         className="iconbtn"
@@ -327,6 +326,10 @@ export function TopBar({
           <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
         </svg>
       </a>
+      <div className="langswitch" role="group" aria-label={language === 'ru' ? 'Язык интерфейса' : 'Interface language'}>
+        <button type="button" className={language === 'en' ? 'on' : undefined} aria-pressed={language === 'en'} onClick={() => setLanguage('en')}>{tr("Eng")}</button>
+        <button type="button" className={language === 'ru' ? 'on' : undefined} aria-pressed={language === 'ru'} onClick={() => setLanguage('ru')}>{tr("Rus")}</button>
+      </div>
     </header>
   )
 }

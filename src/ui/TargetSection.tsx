@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // Choosing the element the scan is measured against — the whole of the setup
 // for an element map, because the element was already measured on this scan.
 // There is no button to press afterwards: the map is a few milliseconds of
@@ -80,50 +81,38 @@ export function TargetSection({
   return (
     <div className={className}>
       <div className="sec-head">
-        Element
-        <InfoDot title="The element to measure against">
+        {tr("Element")}{' '}<InfoDot title={tr("The element to measure against")}>
           <p>
-            Any plane, cylinder or sphere from the 3D Measure workspace. They are all drawn on the
-            part, so you can <b>click one on the model</b> instead of using the dropdown — the
-            choice is the same either way.
-          </p>
+            {tr("Any plane, cylinder or sphere from the 3D Measure workspace. They are all drawn on the part, so you can")}{' '}<b>{tr("click one on the model")}</b> {tr("instead of using the dropdown — the choice is the same either way.")}{' '}</p>
           <p>
-            The map is measured over the element <b>as it is drawn</b> — extend it in the 3D Measure
-            workspace with the grips and the measured region grows with it, which is how a plane
-            fitted on one pad becomes a flatness map of the whole face it belongs to.
-          </p>
+            {tr("The map is measured over the element")}{' '}<b>{tr("as it is drawn")}</b> {tr("— extend it in the 3D Measure workspace with the grips and the measured region grows with it, which is how a plane fitted on one pad becomes a flatness map of the whole face it belongs to.")}{' '}</p>
           <p>
-            A point and a line are not offered: the distance to them has no side, so there is no
-            zero for the scale to run warm and cool around.
-          </p>
+            {tr("A point and a line are not offered: the distance to them has no side, so there is no zero for the scale to run warm and cool around.")}{' '}</p>
         </InfoDot>
       </div>
 
       {options.length === 0 ? (
         <>
           <p className="hint">
-            No plane, cylinder or sphere measured yet. Fit one on the scan in the 3D Measure workspace
-            and it appears here.
-          </p>
+            {tr("No plane, cylinder or sphere measured yet. Fit one on the scan in the 3D Measure workspace and it appears here.")}{' '}</p>
           <button
             className={pulseGo ? 'block pulse' : 'block'}
             data-test="target-goto-measure"
             onClick={onGoToMeasure}
           >
-            Go to 3D Measure…
-          </button>
+            {tr("Go to 3D Measure…")}{' '}</button>
         </>
       ) : (
         <>
           <label className={pulseSelect && !disabled ? 'field pulse' : 'field'}>
-            <span>Measure to</span>
+            <span>{tr("Measure to")}</span>
             <select
               data-test="target-select"
               disabled={disabled}
               value={targetId ?? ''}
               onChange={(e) => onSelect(e.target.value === '' ? null : Number(e.target.value))}
             >
-              <option value="">Select…</option>
+              <option value="">{tr("Select…")}</option>
               {options.map((el) => (
                 <option key={el.id} value={el.id}>
                   {el.name} · {elementKindInfo(el.kind).noun}
@@ -139,26 +128,18 @@ export function TargetSection({
               checked={shown}
               onChange={(e) => onShown(e.target.checked)}
             />
-            <span>Show elements on the part</span>
-            <InfoDot title="The elements on the part">
+            <span>{tr("Show elements on the part")}</span>
+            <InfoDot title={tr("The elements on the part")}>
               <p>
-                Every plane, cylinder and sphere the map could be measured against is drawn on the
-                part, so that <b>clicking one chooses it</b> — the same choice as the dropdown
-                above, made where you are looking. Switching this off takes them off the stage, and
-                with them the clicking.
-              </p>
+                {tr("Every plane, cylinder and sphere the map could be measured against is drawn on the part, so that")}{' '}<b>{tr("clicking one chooses it")}</b> {tr("— the same choice as the dropdown above, made where you are looking. Switching this off takes them off the stage, and with them the clicking.")}{' '}</p>
               <p>
-                The one in use is reduced to its <b>border</b>: it lies exactly on the surface being
-                read, and a body there would wash the colour the reading is made of. It is also the
-                one element a click passes straight through, so a click on the map it covers still
-                pins a reading.
-              </p>
-              <p>An element hidden by its own eye in the 3D Measure workspace stays hidden here too.</p>
+                {tr("The one in use is reduced to its")}{' '}<b>{tr("border")}</b>{tr(": it lies exactly on the surface being read, and a body there would wash the colour the reading is made of. It is also the one element a click passes straight through, so a click on the map it covers still pins a reading.")}{' '}</p>
+              <p>{tr("An element hidden by its own eye in the 3D Measure workspace stays hidden here too.")}</p>
             </InfoDot>
           </label>
 
           {targetId === null && options.length > 1 && (
-            <p className="hint">Click one on the part, or pick it above.</p>
+            <p className="hint">{tr("Click one on the part, or pick it above.")}</p>
           )}
 
           {target && (
@@ -169,22 +150,13 @@ export function TargetSection({
 
               <label className="field">
                 <span>
-                  Measured region
-                  <InfoDot title="Which part of the scan is measured">
+                  {tr("Measured region")}{' '}<InfoDot title={tr("Which part of the scan is measured")}>
                     <p>
-                      <b>Everything the element bounds</b> maps every scan point within the element
-                      as drawn — the whole face a plane covers, all the way around a cylinder.
-                    </p>
+                      <b>{tr("Everything the element bounds")}</b> {tr("maps every scan point within the element as drawn — the whole face a plane covers, all the way around a cylinder.")}{' '}</p>
                     <p>
-                      <b>Marked surface only</b> restricts the map to a region you mark by hand,
-                      with the same window, brush and lasso the fits are marked with. Use it to read
-                      one pad, one land or one sector against the element while the rest of the
-                      surface stays out of the map and its statistics.
-                    </p>
+                      <b>{tr("Marked surface only")}</b> {tr("restricts the map to a region you mark by hand, with the same window, brush and lasso the fits are marked with. Use it to read one pad, one land or one sector against the element while the rest of the surface stays out of the map and its statistics.")}{' '}</p>
                     <p>
-                      The region is yours until you clear it: it survives switching elements, so the
-                      same patch can be read against several datums in a row.
-                    </p>
+                      {tr("The region is yours until you clear it: it survives switching elements, so the same patch can be read against several datums in a row.")}{' '}</p>
                   </InfoDot>
                 </span>
                 <select
@@ -193,8 +165,8 @@ export function TargetSection({
                   value={scope}
                   onChange={(e) => onScope(e.target.value as 'all' | 'marked')}
                 >
-                  <option value="all">Everything the element bounds</option>
-                  <option value="marked">Marked surface only</option>
+                  <option value="all">{tr("Everything the element bounds")}</option>
+                  <option value="marked">{tr("Marked surface only")}</option>
                 </select>
               </label>
 
@@ -206,53 +178,39 @@ export function TargetSection({
                       onClear={onScopeClear}
                     />
                     <button className="block" data-test="scope-done" onClick={onScopeDone}>
-                      Put the marking tools away
-                    </button>
+                      {tr("Put the marking tools away")}{' '}</button>
                     {markCount === 0 && (
                       <p className="hint">
-                        Nothing marked yet — the map is empty until you mark the surface to
-                        measure.
-                      </p>
+                        {tr("Nothing marked yet — the map is empty until you mark the surface to measure.")}{' '}</p>
                     )}
                   </>
                 ) : (
                   <>
                     <p className="hint" data-test="scope-count">
-                      {scopeCount.toLocaleString('en-US')} point{scopeCount === 1 ? '' : 's'} in
-                      the marked region.
-                    </p>
+                      {scopeCount.toLocaleString('en-US')} {tr("point")}{scopeCount === 1 ? '' : 's'} {tr("in the marked region.")}{' '}</p>
                     <button
                       className="block"
                       data-test="scope-edit"
                       disabled={disabled}
                       onClick={() => onScope('marked')}
                     >
-                      Edit marked region…
-                    </button>
+                      {tr("Edit marked region…")}{' '}</button>
                   </>
                 ))}
 
               <div className="field">
                 <span>
-                  Material side
-                  <InfoDot title="Which side the material is on">
+                  {tr("Material side")}{' '}<InfoDot title={tr("Which side the material is on")}>
                     <p>
-                      Positive deviation is always too much material, so the tool has to know which
-                      side of the element the part is. It reads that off the scan's own normals
-                      around the element when you choose it.
-                    </p>
+                      {tr("Positive deviation is always too much material, so the tool has to know which side of the element the part is. It reads that off the scan's own normals around the element when you choose it.")}{' '}</p>
                     <p>
-                      Inside a bore the material is on the <i>inner</i> side, and a fitted plane's
-                      normal points whichever way the fit happened to choose — so when the map comes
-                      out inverted, this is the control that fixes it.
-                    </p>
+                      {tr("Inside a bore the material is on the")}{' '}<i>{tr("inner")}</i> {tr("side, and a fitted plane's normal points whichever way the fit happened to choose — so when the map comes out inverted, this is the control that fixes it.")}{' '}</p>
                   </InfoDot>
                 </span>
                 <div className="sidepick">
                   <b data-test="target-side">{sideLabel(target, side)}</b>
                   <button data-test="target-flip" disabled={disabled} onClick={onFlip}>
-                    Flip
-                  </button>
+                    {tr("Flip")}{' '}</button>
                 </div>
               </div>
             </>

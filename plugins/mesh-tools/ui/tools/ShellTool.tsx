@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../../src/i18n'
 // Shell: a closed part hollowed to a wall, or an open surface thickened to
 // one, on the side chosen.
 
@@ -28,29 +29,15 @@ export function ShellTool({ ready, busy, onShell }: { ready: boolean; busy: bool
   return (
     <div className="group" data-test="shell-tool">
       <div className="sec-head">
-        Shell / hollow
-        <InfoDot title="Hollowing a part, or thickening a surface">
+        {tr("Shell / hollow")}{' '}<InfoDot title={tr("Hollowing a part, or thickening a surface")}>
           <p>
-            A <b>closed</b> part is hollowed: its outside stays as scanned, and an inner wall the
-            thickness in from it all round seals a cavity — what a resin print is hollowed with.
-            The inner wall is built from the part's distance field, not by moving the scan in:
-            where the part is thinner than twice the wall it simply stays solid, and the wall never
-            comes nearer the outside than the thickness. It is smoother and lighter than the scan,
-            needing none of its detail. The cavity is sealed; open it with <b>Boolean</b> or{' '}
-            <b>Cut</b> if it should drain.
-          </p>
+            A <b>{tr("closed")}</b> {tr("part is hollowed: its outside stays as scanned, and an inner wall the thickness in from it all round seals a cavity — what a resin print is hollowed with. The inner wall is built from the part's distance field, not by moving the scan in: where the part is thinner than twice the wall it simply stays solid, and the wall never comes nearer the outside than the thickness. It is smoother and lighter than the scan, needing none of its detail. The cavity is sealed; open it with")}{' '}<b>{tr("Boolean")}</b> {tr("or")}{' '}
+            <b>{tr("Cut")}</b> {tr("if it should drain.")}{' '}</p>
           <p>
-            An <b>open</b> surface — one side of a part, a sheet — is thickened into a solid: a
-            second skin the thickness from it, <b>inward</b> (the scanned surface stays the
-            outside), <b>outward</b> or half to <b>both sides</b>, and a wall round every rim
-            joining the two.
-          </p>
+            {tr("An")}{' '}<b>{tr("open")}</b> {tr("surface — one side of a part, a sheet — is thickened into a solid: a second skin the thickness from it,")}{' '}<b>{tr("inward")}</b> {tr("(the scanned surface stays the outside),")}{' '}<b>{tr("outward")}</b> {tr("or half to")}{' '}<b>{tr("both sides")}</b>{tr(", and a wall round every rim joining the two.")}{' '}</p>
           <p>
-            A part closed but for a few small holes — no larger than Fill holes would fill — is
-            asked to have them filled first, so it can be hollowed; thickened as it is, it would
-            come out with a wall round every hole. <b>Cut</b> shows the inside without cutting.{' '}
-            <b>Ctrl+Z</b> puts the part back.
-          </p>
+            {tr("A part closed but for a few small holes — no larger than Fill holes would fill — is asked to have them filled first, so it can be hollowed; thickened as it is, it would come out with a wall round every hole.")}{' '}<b>{tr("Cut")}</b> {tr("shows the inside without cutting.")}{' '}
+            <b>{tr("Ctrl+Z")}</b> {tr("puts the part back.")}{' '}</p>
         </InfoDot>
       </div>
 
@@ -67,7 +54,7 @@ export function ShellTool({ ready, busy, onShell }: { ready: boolean; busy: bool
       />
 
       {mode !== null && mode !== 'hollow' && (
-        <div className="moderow shell-sides" role="radiogroup" aria-label="Which way to thicken">
+        <div className="moderow shell-sides" role="radiogroup" aria-label={tr("Which way to thicken")}>
           {SIDES.map((x) => (
             <button
               key={x.id}
@@ -87,38 +74,29 @@ export function ShellTool({ ready, busy, onShell }: { ready: boolean; busy: bool
 
       {ready && survey === null && (
         <p className="hint">
-          <span className="spinner" /> Looking at the mesh…
-        </p>
+          <span className="spinner" /> {tr("Looking at the mesh…")}{' '}</p>
       )}
       {survey && mode === 'hollow' && (
         <p className="hint" data-test="shell-closed">
-          The mesh is closed, so it is hollowed: the outside stays as it is, and an inner wall {t}
-          in from it seals a cavity. Where the part is thinner than {twice} it stays solid.
-          {survey.bad > 0 ? ` ${n(survey.bad, 'edge is', 'edges are')} shared by more than two triangles — the inside is read by which way the surface faces, and may be off there.` : ''}
+          {tr("The mesh is closed, so it is hollowed: the outside stays as it is, and an inner wall")}{' '}{t}
+          {tr("in from it seals a cavity. Where the part is thinner than")}{' '}{twice} {tr("it stays solid.")}{' '}{survey.bad > 0 ? ` ${n(survey.bad, 'edge is', 'edges are')} shared by more than two triangles — the inside is read by which way the surface faces, and may be off there.` : ''}
         </p>
       )}
       {survey && mode === 'thicken' && (
         <p className="hint" data-test="shell-open">
-          The mesh is an open surface — {n(survey.rims, 'open rim', 'open rims')} — so it is thickened
-          into a solid: a second skin {t} {way}, and a wall round every rim.
-        </p>
+          {tr("The mesh is an open surface —")}{' '}{n(survey.rims, 'open rim', 'open rims')} {tr("— so it is thickened into a solid: a second skin")}{' '}{t} {way}{tr(", and a wall round every rim.")}{' '}</p>
       )}
       {survey && mode === 'holes' && (
         <p className="warnnote" data-test="shell-holes">
-          ⚠ The mesh is closed but for {n(survey.holes, 'hole', 'holes')} under {typedLen(survey.holeSize, len.units)}.
-          Hollowing needs it closed: fill {survey.holes === 1 ? 'it' : 'them'} first — or thicken it as
-          it is, with a wall round every hole.
-        </p>
+          {tr("⚠ The mesh is closed but for")}{' '}{n(survey.holes, 'hole', 'holes')} {tr("under")}{' '}{typedLen(survey.holeSize, len.units)}{tr(". Hollowing needs it closed: fill")}{' '}{survey.holes === 1 ? 'it' : 'them'} {tr("first — or thicken it as it is, with a wall round every hole.")}{' '}</p>
       )}
 
       {mode === 'holes' ? (
         <div className="toolrow">
-          <button data-test="shell-thicken-anyway" disabled={!ready || busy} onClick={() => onShell('thicken')} title="Thicken the surface as it is, a wall round every hole">
-            Thicken as it is
-          </button>
-          <button className="primary" data-test="shell-fill-first" data-confirm={1} disabled={busy} onClick={() => m.setTool('holes')} title="Go to Fill holes, to close the holes and hollow the part after">
-            Fill holes first
-          </button>
+          <button data-test="shell-thicken-anyway" disabled={!ready || busy} onClick={() => onShell('thicken')} title={tr("Thicken the surface as it is, a wall round every hole")}>
+            {tr("Thicken as it is")}{' '}</button>
+          <button className="primary" data-test="shell-fill-first" data-confirm={1} disabled={busy} onClick={() => m.setTool('holes')} title={tr("Go to Fill holes, to close the holes and hollow the part after")}>
+            {tr("Fill holes first")}{' '}</button>
         </div>
       ) : (
         <button

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The 2D Measure faceplate: the scanned image, the scale everything else
 // rests on, then elements and dimensions in the exact shape of the 3D panel —
 // kind buttons, the draft box, the element list with its edit / hide / delete
@@ -148,24 +149,17 @@ export function FlatPanel({
       <div className="group">
         <div className="sec-head">
           {sections.length > 0 ? 'Source' : 'Image'}
-          <InfoDot title="What is measured">
+          <InfoDot title={tr("What is measured")}>
             <p>
-              A flatbed scan of the part — a <b>PNG</b> or <b>JPEG</b> straight from the scanner.
-              Scan at the highest optical resolution you have; the pixels are the measurement.
-            </p>
-            <p>Drop it anywhere in the window. Nothing is uploaded.</p>
+              {tr("A flatbed scan of the part — a")}{' '}<b>{tr("PNG")}</b> {tr("or")}{' '}<b>{tr("JPEG")}</b> {tr("straight from the scanner. Scan at the highest optical resolution you have; the pixels are the measurement.")}{' '}</p>
+            <p>{tr("Drop it anywhere in the window. Nothing is uploaded.")}</p>
             <p>
-              Or a <b>section</b>: the 3D scan cut with a plane in the 3D Measure workspace. Its
-              edges lie on the sheet at true size already, so there is nothing to calibrate,
-              and they are snapped to, fitted and measured exactly like an image&apos;s. One source
-              is on the sheet at a time; each keeps its own elements, dimensions and alignment, and
-              finds them again when it comes back.
-            </p>
+              {tr("Or a")}{' '}<b>{tr("section")}</b>{tr(": the 3D scan cut with a plane in the 3D Measure workspace. Its edges lie on the sheet at true size already, so there is nothing to calibrate, and they are snapped to, fitted and measured exactly like an image&apos;s. One source is on the sheet at a time; each keeps its own elements, dimensions and alignment, and finds them again when it comes back.")}{' '}</p>
           </InfoDot>
         </div>
         {sections.length > 0 && (
           <label className="field">
-            <span>Measure</span>
+            <span>{tr("Measure")}</span>
             <select
               data-test="flat-source"
               value={sheetKeyOf(subject)}
@@ -192,36 +186,23 @@ export function FlatPanel({
             onOpen={onOpenImage}
           />
         )}
-        {!onSection && !imageName && <p className="hint">Drop it anywhere in the window.</p>}
+        {!onSection && !imageName && <p className="hint">{tr("Drop it anywhere in the window.")}</p>}
         {activeSection && (
           <p className="hint" data-test="flat-section-status">
-            <b>{activeSection.name}</b>: {scanName ?? 'the scan'} cut {cutOf(activeSection)}. The sheet
-            is at the scan&apos;s true size, origin at the cutting plane&apos;s centre — set an
-            alignment to read coordinates off a feature.
-          </p>
+            <b>{activeSection.name}</b>: {scanName ?? 'the scan'} {tr("cut")}{' '}{cutOf(activeSection)}{tr(". The sheet is at the scan&apos;s true size, origin at the cutting plane&apos;s centre — set an alignment to read coordinates off a feature.")}{' '}</p>
         )}
       </div>
 
       {imageName && !onSection && (
         <div className="group">
           <div className="sec-head">
-            Calibration
-            <InfoDot title="Calibration">
+            {tr("Calibration")}{' '}<InfoDot title={tr("Calibration")}>
               <p>
-                Every length this workspace reports is pixels divided by this scale. The
-                file's own dpi is only <b>nominal</b> — scanner transports are off by real
-                fractions of a percent — so measure the scale off something true: scan a gauge
-                block, calliper-measured part or gauge pin along with the part.
-              </p>
+                {tr("Every length this workspace reports is pixels divided by this scale. The file's own dpi is only")}{' '}<b>{tr("nominal")}</b> {tr("— scanner transports are off by real fractions of a percent — so measure the scale off something true: scan a gauge block, calliper-measured part or gauge pin along with the part.")}{' '}</p>
               <p>
-                <b>Known distance</b> takes two picks across the reference and its true length.
-                <b> Known diameter</b> takes three or more picks around a circle's edge and its
-                true diameter.
-              </p>
+                <b>{tr("Known distance")}</b> {tr("takes two picks across the reference and its true length.")}{' '}<b> {tr("Known diameter")}</b> {tr("takes three or more picks around a circle's edge and its true diameter.")}{' '}</p>
               <p>
-                Scanners err differently along the two axes. Calibrating X and Y separately
-                needs a reference laid along each axis in turn.
-              </p>
+                {tr("Scanners err differently along the two axes. Calibrating X and Y separately needs a reference laid along each axis in turn.")}{' '}</p>
             </InfoDot>
           </div>
 
@@ -249,8 +230,7 @@ export function FlatPanel({
                   flat.getState().startCalibration('distance')
                 }}
               >
-                Calibrate on a known distance
-              </button>
+                {tr("Calibrate on a known distance")}{' '}</button>
               <button
                 className="block"
                 data-test="flat-cal-diameter"
@@ -259,8 +239,7 @@ export function FlatPanel({
                   flat.getState().startCalibration('diameter')
                 }}
               >
-                Calibrate on a known diameter
-              </button>
+                {tr("Calibrate on a known diameter")}{' '}</button>
               <label className="checkrow">
                 <input
                   type="checkbox"
@@ -268,7 +247,7 @@ export function FlatPanel({
                   checked={splitAxes}
                   onChange={(e) => flat.getState().setSplitAxes(e.target.checked)}
                 />
-                <span>Calibrate X and Y separately</span>
+                <span>{tr("Calibrate X and Y separately")}</span>
               </label>
             </>
           )}
@@ -300,29 +279,24 @@ export function FlatPanel({
                 disabled={!enough}
                 onClick={apply}
               >
-                Apply calibration
-              </button>
+                {tr("Apply calibration")}{' '}</button>
               <div className="toolrow">
                 <button
                   data-test="flat-cal-undo"
                   disabled={picks === 0}
                   onClick={() => flat.getState().undoCalPick()}
                 >
-                  Undo pick
-                </button>
+                  {tr("Undo pick")}{' '}</button>
                 <button data-test="flat-cal-cancel" onClick={() => flat.getState().cancelCalibration()}>
-                  Cancel
-                </button>
+                  {tr("Cancel")}{' '}</button>
               </div>
             </>
           )}
           {calError && <p className="alarmtext">{calError}</p>}
 
-          <div className="sec-head">Scanner profiles</div>
+          <div className="sec-head">{tr("Scanner profiles")}</div>
           <p className="hint">
-            A measured calibration describes the scanner at one resolution, not the image — save
-            it once, apply it to every scan from that scanner.
-          </p>
+            {tr("A measured calibration describes the scanner at one resolution, not the image — save it once, apply it to every scan from that scanner.")}{' '}</p>
           {profiles.length > 0 && (
             <div className="toolrow">
               <select
@@ -330,7 +304,7 @@ export function FlatPanel({
                 value={chosenProfile}
                 onChange={(e) => setChosenProfile(e.target.value)}
               >
-                <option value="">Choose profile…</option>
+                <option value="">{tr("Choose profile…")}</option>
                 {profiles.map((p) => (
                   <option key={p.name} value={p.name}>
                     {p.name}
@@ -342,8 +316,7 @@ export function FlatPanel({
                 disabled={!chosenProfile}
                 onClick={() => flat.getState().applyProfile(chosenProfile)}
               >
-                Apply
-              </button>
+                {tr("Apply")}{' '}</button>
               <button
                 data-test="flat-profile-delete"
                 disabled={!chosenProfile}
@@ -352,8 +325,7 @@ export function FlatPanel({
                   setChosenProfile('')
                 }}
               >
-                Delete
-              </button>
+                {tr("Delete")}{' '}</button>
             </div>
           )}
           {calSource === 'measured' && (
@@ -361,7 +333,7 @@ export function FlatPanel({
               <input
                 type="text"
                 data-test="flat-profile-name"
-                placeholder="e.g. V600 @ 600 dpi"
+                placeholder={tr("e.g. V600 @ 600 dpi")}
                 value={profileName}
                 onChange={(e) => setProfileName(e.target.value)}
               />
@@ -373,8 +345,7 @@ export function FlatPanel({
                   setProfileName('')
                 }}
               >
-                Save
-              </button>
+                {tr("Save")}{' '}</button>
             </div>
           )}
         </div>
@@ -383,58 +354,25 @@ export function FlatPanel({
       {hasSheet && counting === null && !placingNote && !editedNote && (
         <div className="group">
           <div className="sec-head">
-            Create element
-            <InfoDot title="Elements">
+            {tr("Create element")}{' '}<InfoDot title={tr("Elements")}>
               <p>
-                Every measurement here starts with an element — a point, a line, a circle, an arc
-                or a spline. Dimensions are then measured between them, never between raw pixels.
-              </p>
+                {tr("Every measurement here starts with an element — a point, a line, a circle, an arc or a spline. Dimensions are then measured between them, never between raw pixels.")}{' '}</p>
               <p>
-                An element is <b>picked</b>, by clicking the points it runs through — with{' '}
-                <b>Snap to edge</b> on, every click and drag lands on the nearest detected edge
-                at subpixel — or on the center of a circle, an arc or a point when one is within
-                reach — and <b>Alt</b> inverts that for one pick; any pin can be dragged
-                afterwards; <b>fitted to an edge</b> from one click on it, the way a fit from a
-                click works on the scan — the line or circle grows along the detected edge from
-                the point you clicked and stops where the edge bends away, at a corner or into a
-                fillet, so a click on one side of a part takes that side and a click on a hole's
-                rim takes the hole; <b>fitted to an edge region</b>, by clicking a detected edge
-                to take all of it or dragging a box over it and letting every edge point inside
-                feed the fit; or <b>constructed</b> from elements you already have — a midpoint, a
-                circle's center, the intersection of two lines, the circle through the centers of
-                a bolt pattern. A construction's sources are clicked on the sheet or chosen in the
-                box.
-              </p>
+                {tr("An element is")}{' '}<b>{tr("picked")}</b>{tr(", by clicking the points it runs through — with")}{' '}
+                <b>{tr("Snap to edge")}</b> {tr("on, every click and drag lands on the nearest detected edge at subpixel — or on the center of a circle, an arc or a point when one is within reach — and")}{' '}<b>{tr("Alt")}</b> {tr("inverts that for one pick; any pin can be dragged afterwards;")}{' '}<b>{tr("fitted to an edge")}</b> {tr("from one click on it, the way a fit from a click works on the scan — the line or circle grows along the detected edge from the point you clicked and stops where the edge bends away, at a corner or into a fillet, so a click on one side of a part takes that side and a click on a hole's rim takes the hole;")}{' '}<b>{tr("fitted to an edge region")}</b>{tr(", by clicking a detected edge to take all of it or dragging a box over it and letting every edge point inside feed the fit; or")}{' '}<b>{tr("constructed")}</b> {tr("from elements you already have — a midpoint, a circle's center, the intersection of two lines, the circle through the centers of a bolt pattern. A construction's sources are clicked on the sheet or chosen in the box.")}{' '}</p>
               <p>
-                Which of those a kind offers appears as <i>Created</i> once you choose it.
-              </p>
+                {tr("Which of those a kind offers appears as")}{' '}<i>{tr("Created")}</i> {tr("once you choose it.")}{' '}</p>
               <p>
-                The kind stays in hand after <b>Create</b>, ready for the next one, as a sketch
-                tool does — <b>Cancel</b> or <b>Esc</b> puts it down; on a box with picks in it,
-                <b> Esc</b> first empties the box.
-              </p>
+                {tr("The kind stays in hand after")}{' '}<b>{tr("Create")}</b>{tr(", ready for the next one, as a sketch tool does —")}{' '}<b>{tr("Cancel")}</b> {tr("or")}{' '}<b>{tr("Esc")}</b> {tr("puts it down; on a box with picks in it,")}{' '}<b> {tr("Esc")}</b> {tr("first empties the box.")}{' '}</p>
               <p>
-                A <b>spline</b> is the free curve a CAD sketch draws through fit points — a cam
-                profile, an outline no arc fits. Click its points in order along the edge (they
-                snap like any pick), click on the curve to insert a point there, and drag the
-                <b> tangent handle</b> at any point to bend the curve through it the way you
-                would in CAD; click a handle to let it go automatic again. Click the first point
-                again to close the curve on itself, and it leaves the tool as a real spline in
-                the SVG and the STEP file.
-              </p>
+                A <b>{tr("spline")}</b> {tr("is the free curve a CAD sketch draws through fit points — a cam profile, an outline no arc fits. Click its points in order along the edge (they snap like any pick), click on the curve to insert a point there, and drag the")}{' '}<b> {tr("tangent handle")}</b> {tr("at any point to bend the curve through it the way you would in CAD; click a handle to let it go automatic again. Click the first point again to close the curve on itself, and it leaves the tool as a real spline in the SVG and the STEP file.")}{' '}</p>
               <p>
-                <b>Count</b> is a tally rather than a fit: click the features one after another
-                — the teeth of a gear, the holes in a flange — and each click wears the next
-                number, pinned where you clicked.
-              </p>
+                <b>{tr("Count")}</b> {tr("is a tally rather than a fit: click the features one after another — the teeth of a gear, the holes in a flange — and each click wears the next number, pinned where you clicked.")}{' '}</p>
               <p>
-                <b>Text</b> pins a free note to the sheet — a remark, a part number — wherever you
-                click; drag it to move it, click it to change what it says.
-              </p>
+                <b>{tr("Text")}</b> {tr("pins a free note to the sheet — a remark, a part number — wherever you click; drag it to move it, click it to change what it says.")}{' '}</p>
               <p>
-                <b>Enter</b> or a <b>middle click</b> creates whatever is pending; <b>Esc</b>{' '}
-                discards it.
-              </p>
+                <b>{tr("Enter")}</b> {tr("or a")}{' '}<b>{tr("middle click")}</b> {tr("creates whatever is pending;")}{' '}<b>{tr("Esc")}</b>{' '}
+                {tr("discards it.")}{' '}</p>
             </InfoDot>
           </div>
           <div className="kindrow featurekeys">
@@ -465,7 +403,7 @@ export function FlatPanel({
               }}
             >
               <Icon name="count" />
-              <span>Count</span>
+              <span>{tr("Count")}</span>
             </button>
             <button
               data-test="flat-fit-text"
@@ -476,7 +414,7 @@ export function FlatPanel({
               }}
             >
               <Icon name="note" />
-              <span>Text</span>
+              <span>{tr("Text")}</span>
             </button>
           </div>
         </div>
@@ -484,27 +422,26 @@ export function FlatPanel({
 
       {placingNote && (
         <div className="draftbox" data-test="flat-note-placing">
-          <div className="sec-head">New text</div>
-          <p className="hint">Click the image where the text should sit.</p>
+          <div className="sec-head">{tr("New text")}</div>
+          <p className="hint">{tr("Click the image where the text should sit.")}</p>
           <div className="toolrow">
             <button data-test="flat-note-cancel" onClick={() => flat.getState().cancelNote()}>
-              Cancel
-            </button>
+              {tr("Cancel")}{' '}</button>
           </div>
         </div>
       )}
 
       {editedNote && (
         <div className="draftbox" data-test="flat-note-editor">
-          <div className="sec-head">Text</div>
+          <div className="sec-head">{tr("Text")}</div>
           <label className="field">
-            <span>Says</span>
+            <span>{tr("Says")}</span>
             <input
               type="text"
               autoFocus
               data-test="flat-note-text"
               value={editedNote.text}
-              placeholder="Type here…"
+              placeholder={tr("Type here…")}
               onChange={(e) => flat.getState().setNoteText(editedNote.id, e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') flat.getState().finishNote()
@@ -516,18 +453,16 @@ export function FlatPanel({
               }}
             />
           </label>
-          <p className="hint">Drag the label on the image to move it.</p>
+          <p className="hint">{tr("Drag the label on the image to move it.")}</p>
           <button
             className="primary block"
             data-test="flat-note-done"
             onClick={() => flat.getState().finishNote()}
           >
-            Done
-          </button>
+            {tr("Done")}{' '}</button>
           <div className="toolrow">
             <button data-test="flat-note-delete" onClick={() => flat.getState().deleteNote(editedNote.id)}>
-              Delete
-            </button>
+              {tr("Delete")}{' '}</button>
           </div>
         </div>
       )}
@@ -552,11 +487,11 @@ export function FlatPanel({
               checked={snapToEdge}
               onChange={(e) => flat.getState().setSnapToEdge(e.target.checked)}
             />
-            <span>Snap to edge</span>
+            <span>{tr("Snap to edge")}</span>
           </label>
           <div className="dro">
             <div className="dro-label">
-              <span>Tally</span>
+              <span>{tr("Tally")}</span>
             </div>
             <div
               className={'dro-window ' + (counting.picks.length > 0 ? 'ready' : 'empty')}
@@ -581,11 +516,9 @@ export function FlatPanel({
               disabled={counting.picks.length === 0}
               onClick={() => flat.getState().undoCountPick()}
             >
-              Undo point
-            </button>
+              {tr("Undo point")}{' '}</button>
             <button data-test="flat-count-cancel" onClick={() => flat.getState().cancelCount()}>
-              Cancel
-            </button>
+              {tr("Cancel")}{' '}</button>
           </div>
         </div>
       )}
@@ -593,7 +526,7 @@ export function FlatPanel({
       {elements.length + counts.length + notes.length > 0 && (
         <div className="group">
           <div className="g-label">
-            <span>Elements</span>
+            <span>{tr("Elements")}</span>
             <ShowAllButton
               anyVisible={
                 elements.some((e) => e.visible) ||
@@ -650,7 +583,7 @@ export function FlatPanel({
               name={n.text.trim() === '' ? 'Text' : n.text}
               color="var(--dim)"
               visible={n.visible}
-              reading={<span className="note-row-kind">text</span>}
+              reading={<span className="note-row-kind">{tr("text")}</span>}
               selected={editingNoteId === n.id}
               editorOpen={editorOpen && editingNoteId !== n.id}
               onEdit={() => flat.getState().editNote(n.id)}
@@ -669,18 +602,16 @@ export function FlatPanel({
           <div className="toolrow">
             <CopyButton label="Copy report" disabled={!hasMeasurements} onCopy={onCopy} />
             <button data-test="flat-export-csv" disabled={!hasMeasurements} onClick={onExportCsv}>
-              Export CSV
-            </button>
+              {tr("Export CSV")}{' '}</button>
           </div>
           <div className="toolrow">
             <button
               data-test="flat-export-svg"
               disabled={!drawable}
               onClick={onExportSvg}
-              title="Save the sheet as an SVG at true scale — the edges while they are shown and the visible elements, aligned and turned as shown — for a vector editor, a laser or a print at 1:1"
+              title={tr("Save the sheet as an SVG at true scale — the edges while they are shown and the visible elements, aligned and turned as shown — for a vector editor, a laser or a print at 1:1")}
             >
-              Export SVG
-            </button>
+              {tr("Export SVG")}{' '}</button>
             <button
               data-test="flat-export-dxf"
               disabled={!drawable}
@@ -689,48 +620,25 @@ export function FlatPanel({
                 inches ? 'inches' : 'millimetres'
               } on a sheet with a scale, y up, the origin on the alignment; every fit as its own entity, the edges while they are shown as polylines thinned to a sketch's worth`}
             >
-              Export DXF
-            </button>
+              {tr("Export DXF")}{' '}</button>
           </div>
           <p className="hint">
-            The sheet as a drawing at true scale, aligned and turned as shown. SVG for a vector
-            editor or a print at 1:1; DXF for CAD, the origin on the alignment and the edges
-            thinned to a sketch's worth.
-          </p>
+            {tr("The sheet as a drawing at true scale, aligned and turned as shown. SVG for a vector editor or a print at 1:1; DXF for CAD, the origin on the alignment and the edges thinned to a sketch's worth.")}{' '}</p>
         </>
       )}
 
       {hasSheet && (
         <div className="group">
           <div className="sec-head">
-            Alignment
-            <InfoDot title="Alignment">
+            {tr("Alignment")}{' '}<InfoDot title={tr("Alignment")}>
               <p>
-                Aligns the sheet to the part instead of to the scanner glass: the first pick is
-                the <b>origin</b>, the second sets <b>+X</b>. The sheet turns so that +X runs to
-                the right of the screen, and coordinates and line angles read from the origin
-                along it from then on. Distances and angles between elements never change under
-                an alignment.
-              </p>
+                {tr("Aligns the sheet to the part instead of to the scanner glass: the first pick is the")}{' '}<b>{tr("origin")}</b>{tr(", the second sets")}{' '}<b>+X</b>{tr(". The sheet turns so that +X runs to the right of the screen, and coordinates and line angles read from the origin along it from then on. Distances and angles between elements never change under an alignment.")}{' '}</p>
               <p>
-                Both picks snap to detected edges like any other pick — put the origin on a
-                corner or a circle center, run X along a reference edge. The grid shows where
-                the axes lie.
-              </p>
+                {tr("Both picks snap to detected edges like any other pick — put the origin on a corner or a circle center, run X along a reference edge. The grid shows where the axes lie.")}{' '}</p>
               <p>
-                <b>Rotate 90°</b> turns the sheet on the stage a quarter turn at a time on top of
-                that — the image or the section as it is looked at, not the frame. Coordinates,
-                the grid and every measurement stay where they are on the part.
-              </p>
+                <b>{tr("Rotate 90°")}</b> {tr("turns the sheet on the stage a quarter turn at a time on top of that — the image or the section as it is looked at, not the frame. Coordinates, the grid and every measurement stay where they are on the part.")}{' '}</p>
               <p>
-                <b>Mirror</b> flips the sheet on the stage left-to-right or top-to-bottom, as it
-                is shown. A flatbed scan is the part seen through the glass; mirrored, it is the
-                part seen from above, the way a drawing shows it. Nothing measured moves —
-                distances, diameters and angles between elements are what they were — and an
-                alignment reads right-handed as shown, +X to the right and +Y up the screen, so
-                coordinates and line angles compare with a drawing. The drawing exports come out
-                mirrored the same way.
-              </p>
+                <b>{tr("Mirror")}</b> {tr("flips the sheet on the stage left-to-right or top-to-bottom, as it is shown. A flatbed scan is the part seen through the glass; mirrored, it is the part seen from above, the way a drawing shows it. Nothing measured moves — distances, diameters and angles between elements are what they were — and an alignment reads right-handed as shown, +X to the right and +Y up the screen, so coordinates and line angles compare with a drawing. The drawing exports come out mirrored the same way.")}{' '}</p>
             </InfoDot>
           </div>
           <p className="hint" data-test="flat-datum-status">
@@ -758,13 +666,11 @@ export function FlatPanel({
                 disabled={!datum}
                 onClick={() => flat.getState().clearDatum()}
               >
-                Clear
-              </button>
+                {tr("Clear")}{' '}</button>
             </div>
           ) : (
             <button className="block" data-test="flat-datum-cancel" onClick={() => flat.getState().cancelDatum()}>
-              Cancel
-            </button>
+              {tr("Cancel")}{' '}</button>
           )}
           {datum && (
             <label className="checkrow">
@@ -774,48 +680,44 @@ export function FlatPanel({
                 checked={showGrid}
                 onChange={(e) => flat.getState().setShowGrid(e.target.checked)}
               />
-              <span>Show grid</span>
+              <span>{tr("Show grid")}</span>
             </label>
           )}
           <div className="toolrow">
             <button
               className="withicon"
               data-test="flat-turn-ccw"
-              title="Turn the sheet a quarter turn counter-clockwise"
+              title={tr("Turn the sheet a quarter turn counter-clockwise")}
               onClick={() => flat.getState().turnSheet(1)}
             >
               <Icon name="rotateCcw" size={18} />
-              Rotate 90°
-            </button>
+              {tr("Rotate 90°")}{' '}</button>
             <button
               className="withicon"
               data-test="flat-turn-cw"
-              title="Turn the sheet a quarter turn clockwise"
+              title={tr("Turn the sheet a quarter turn clockwise")}
               onClick={() => flat.getState().turnSheet(-1)}
             >
               <Icon name="rotateCw" size={18} />
-              Rotate 90°
-            </button>
+              {tr("Rotate 90°")}{' '}</button>
           </div>
           <div className="toolrow">
             <button
               className="withicon"
               data-test="flat-mirror-lr"
-              title="Mirror the sheet left-to-right (horizontally), as it is shown — a scan seen through the glass, shown as from above"
+              title={tr("Mirror the sheet left-to-right (horizontally), as it is shown — a scan seen through the glass, shown as from above")}
               onClick={() => flat.getState().mirrorSheet('left-right')}
             >
               <Icon name="mirror" size={18} />
-              Mirror
-            </button>
+              {tr("Mirror")}{' '}</button>
             <button
               className="withicon"
               data-test="flat-mirror-tb"
-              title="Mirror the sheet top-to-bottom (vertically), as it is shown"
+              title={tr("Mirror the sheet top-to-bottom (vertically), as it is shown")}
               onClick={() => flat.getState().mirrorSheet('top-bottom')}
             >
               <Icon name="mirrorTB" size={18} />
-              Mirror
-            </button>
+              {tr("Mirror")}{' '}</button>
           </div>
           {(turns !== 0 || mirror) && (
             <p className="hint" data-test="flat-turn-status">
@@ -832,18 +734,12 @@ export function FlatPanel({
       {onSection && (
         <div className="group">
           <div className="sec-head">
-            Section edges
-            <InfoDot title="Section edges">
+            {tr("Section edges")}{' '}<InfoDot title={tr("Section edges")}>
               <p>
-                The polylines the cutting plane produced through the scan, drawn in teal over
-                the sheet. They are what picks snap to and what an edge-region fit consumes —
-                no detector runs, the cut is the edge.
-              </p>
+                {tr("The polylines the cutting plane produced through the scan, drawn in teal over the sheet. They are what picks snap to and what an edge-region fit consumes — no detector runs, the cut is the edge.")}{' '}</p>
               <p>
-                The chains are as fine as the scan&apos;s triangles: coarse on a decimated mesh,
-                subpixel-dense on a fine one. Chains shorter than{' '}
-                {inches ? '0.04 in' : 'a millimetre'} are dropped.
-              </p>
+                {tr("The chains are as fine as the scan&apos;s triangles: coarse on a decimated mesh, subpixel-dense on a fine one. Chains shorter than")}{' '}
+                {inches ? '0.04 in' : 'a millimetre'} {tr("are dropped.")}{' '}</p>
             </InfoDot>
           </div>
           <p className="hint" data-test="flat-edge-status">
@@ -858,7 +754,7 @@ export function FlatPanel({
               checked={showEdges}
               onChange={(e) => flat.getState().setShowEdges(e.target.checked)}
             />
-            <span>Show section edges</span>
+            <span>{tr("Show section edges")}</span>
           </label>
         </div>
       )}
@@ -866,17 +762,11 @@ export function FlatPanel({
       {imageName && !onSection && (
         <div className="group">
           <div className="sec-head">
-            Edge detection
-            <InfoDot title="Edge detection">
+            {tr("Edge detection")}{' '}<InfoDot title={tr("Edge detection")}>
               <p>
-                The image is swept once for edges — where brightness turns over — and each edge
-                comes out as a chain of subpixel points, drawn in teal over the scan. Fits will
-                consume these chains; the overlay shows what they would have to work with.
-              </p>
+                {tr("The image is swept once for edges — where brightness turns over — and each edge comes out as a chain of subpixel points, drawn in teal over the scan. Fits will consume these chains; the overlay shows what they would have to work with.")}{' '}</p>
               <p>
-                Sensitivity decides how faint an edge still counts. Push it up if a real edge is
-                missing, down if noise and paper texture come up as edges.
-              </p>
+                {tr("Sensitivity decides how faint an edge still counts. Push it up if a real edge is missing, down if noise and paper texture come up as edges.")}{' '}</p>
             </InfoDot>
           </div>
           <p className="hint" data-test="flat-edge-status">
@@ -887,7 +777,7 @@ export function FlatPanel({
                 : 'No edges detected yet.'}
           </p>
           <label className="field">
-            <span>Sensitivity</span>
+            <span>{tr("Sensitivity")}</span>
             <input
               type="range"
               data-test="flat-edge-sensitivity"
@@ -906,7 +796,7 @@ export function FlatPanel({
               checked={showEdges}
               onChange={(e) => flat.getState().setShowEdges(e.target.checked)}
             />
-            <span>Show detected edges</span>
+            <span>{tr("Show detected edges")}</span>
           </label>
         </div>
       )}

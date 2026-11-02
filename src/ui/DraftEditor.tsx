@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../i18n'
 // The box an element is created or edited in, plus the Fitting group that
 // rides along while a surface fit is open. Renders nothing without a draft.
 
@@ -136,7 +137,7 @@ export function DraftEditor({
 
           {kindMethods.length > 1 && (
             <label className="field">
-              <span>Created</span>
+              <span>{tr("Created")}</span>
               <select
                 data-test="draft-method"
                 value={draft.method}
@@ -154,25 +155,13 @@ export function DraftEditor({
           {method.mode === 'fit' && (
             <label className="field">
               <span>
-                Surface
-                <InfoDot title="Which surface is fitted">
+                {tr("Surface")}{' '}<InfoDot title={tr("Which surface is fitted")}>
                   <p>
-                    <b>Found from a click:</b> click once on the feature and the patch grows outward
-                    across the scan on its own, stopping where the surface stops being flat or round
-                    enough to belong. Fast, and right most of the time.
-                  </p>
+                    <b>{tr("Found from a click:")}</b> {tr("click once on the feature and the patch grows outward across the scan on its own, stopping where the surface stops being flat or round enough to belong. Fast, and right most of the time.")}{' '}</p>
                   <p>
-                    <b>Marked by hand:</b> take exactly the triangles you want — with a window, a
-                    round brush or a lasso, the same three tools the deviation workspace marks a
-                    local fine fit with. Use it when a click runs off across a fillet, when noise
-                    breaks the feature into unconnected patches, or when only part of a face is
-                    worth trusting.
-                  </p>
+                    <b>{tr("Marked by hand:")}</b> {tr("take exactly the triangles you want — with a window, a round brush or a lasso, the same three tools the deviation workspace marks a local fine fit with. Use it when a click runs off across a fillet, when noise breaks the feature into unconnected patches, or when only part of a face is worth trusting.")}{' '}</p>
                   <p>
-                    Nothing is armed until you pick one of them: while a tool is live it takes both
-                    plain drags — left marks, right rubs out — and <b>Navigate</b> or Esc hands them
-                    back to the camera. Shift-drag orbits either way.
-                  </p>
+                    {tr("Nothing is armed until you pick one of them: while a tool is live it takes both plain drags — left marks, right rubs out — and")}{' '}<b>{tr("Navigate")}</b> {tr("or Esc hands them back to the camera. Shift-drag orbits either way.")}{' '}</p>
                 </InfoDot>
               </span>
               <select
@@ -180,8 +169,8 @@ export function DraftEditor({
                 value={selectMode}
                 onChange={(e) => onSelectMode(e.target.value as SelectMode)}
               >
-                <option value="auto">Found from a click</option>
-                <option value="paint">Marked by hand</option>
+                <option value="auto">{tr("Found from a click")}</option>
+                <option value="paint">{tr("Marked by hand")}</option>
               </select>
             </label>
           )}
@@ -189,19 +178,11 @@ export function DraftEditor({
           {method.mode === 'construct' && method.surface && (
             <label className="field">
               <span>
-                Search on
-                <InfoDot title="Which surface the search may use">
+                {tr("Search on")}{' '}<InfoDot title={tr("Which surface the search may use")}>
                   <p>
-                    <b>Whole scan:</b> every triangle of the part takes part — the right choice for
-                    a clean scan of the part alone.
-                  </p>
+                    <b>{tr("Whole scan:")}</b> {tr("every triangle of the part takes part — the right choice for a clean scan of the part alone.")}{' '}</p>
                   <p>
-                    <b>Marked surface:</b> mark the part of the scan the search may use, with the
-                    same window, brush and lasso a hand-marked fit uses, and leave out what should
-                    not count — a fixture, a stamped number, a patch the scanner missed or
-                    smeared. Only the marked points are searched, and only the marked triangles
-                    are surface a mirror image may land on. The marking is saved with the element.
-                  </p>
+                    <b>{tr("Marked surface:")}</b> {tr("mark the part of the scan the search may use, with the same window, brush and lasso a hand-marked fit uses, and leave out what should not count — a fixture, a stamped number, a patch the scanner missed or smeared. Only the marked points are searched, and only the marked triangles are surface a mirror image may land on. The marking is saved with the element.")}{' '}</p>
                 </InfoDot>
               </span>
               <select
@@ -209,8 +190,8 @@ export function DraftEditor({
                 value={selectMode}
                 onChange={(e) => onSelectMode(e.target.value as SelectMode)}
               >
-                <option value="auto">Whole scan</option>
-                <option value="paint">Marked surface</option>
+                <option value="auto">{tr("Whole scan")}</option>
+                <option value="paint">{tr("Marked surface")}</option>
               </select>
             </label>
           )}
@@ -240,7 +221,7 @@ export function DraftEditor({
                     data-test="find-symmetry"
                     disabled={busy || draft.status === 'fitting'}
                     onClick={onFindSymmetry}
-                    title="Reflect the scan through the seed — a coordinate plane, a plane element or a section; with none, through each of its principal planes — fit the reflection back onto the scan, and read the mirror plane off the fit"
+                    title={tr("Reflect the scan through the seed — a coordinate plane, a plane element or a section; with none, through each of its principal planes — fit the reflection back onto the scan, and read the mirror plane off the fit")}
                   >
                     {draft.status === 'ready' ? 'Find again' : 'Find symmetry plane'}
                   </button>
@@ -297,17 +278,14 @@ export function DraftEditor({
 
           <div className="dro">
             <div className="dro-label">
-              <span>Preview</span>
+              <span>{tr("Preview")}</span>
               {paintingSurface ? (
                 <span data-test="paint-count">
-                  {paintCount.toLocaleString('en-US')} point
-                  {paintCount === 1 ? '' : 's'} marked
-                </span>
+                  {paintCount.toLocaleString('en-US')} {tr("point")}{' '}{paintCount === 1 ? '' : 's'} {tr("marked")}{' '}</span>
               ) : (
                 method.mode !== 'construct' && (
                   <span>
-                    {draft.picks.length} pick
-                    {draft.picks.length === 1 ? '' : 's'}
+                    {draft.picks.length} {tr("pick")}{' '}{draft.picks.length === 1 ? '' : 's'}
                   </span>
                 )
               )}
@@ -338,8 +316,7 @@ export function DraftEditor({
               {draft.status === 'fitting' && (
                 <b>
                   <span className="spinner" />
-                  Fitting…
-                </b>
+                  {tr("Fitting…")}{' '}</b>
               )}
               {draft.status === 'failed' && <b>{draft.message ?? 'Failed'}</b>}
               {draft.status === 'ready' &&
@@ -386,12 +363,10 @@ export function DraftEditor({
           <div className="toolrow">
             {method.mode !== 'construct' && !paintingSurface && (
               <button disabled={draft.picks.length === 0} onClick={onUndoPick}>
-                Undo point
-              </button>
+                {tr("Undo point")}{' '}</button>
             )}
             <button data-test="cancel-draft" onClick={onCancelDraft}>
-              Cancel
-            </button>
+              {tr("Cancel")}{' '}</button>
           </div>
         </div>
       )}
@@ -403,35 +378,23 @@ export function DraftEditor({
       {draft && method?.mode === 'fit' && (
         <div className="group">
           <div className="g-label">
-            <span>Fitting {edited ? edited.name : `this ${draftKind?.noun ?? 'element'}`}</span>
+            <span>{tr("Fitting")}{' '}{edited ? edited.name : `this ${draftKind?.noun ?? 'element'}`}</span>
           </div>
           <label className="field">
-            <span>Method</span>
+            <span>{tr("Method")}</span>
             <select value={draft.settings.method} disabled>
-              <option value="gaussian">Gaussian best-fit</option>
+              <option value="gaussian">{tr("Gaussian best-fit")}</option>
             </select>
           </label>
           <label className="field">
             <span>
-              Used points
-              <InfoDot title="Used points">
+              {tr("Used points")}{' '}<InfoDot title={tr("Used points")}>
                 <p>
-                  Every element is a Gaussian best fit — the plane, cylinder or sphere that
-                  minimises the squared distance to the points taken from the scan.
-                </p>
+                  {tr("Every element is a Gaussian best fit — the plane, cylinder or sphere that minimises the squared distance to the points taken from the scan.")}{' '}</p>
                 <p>
-                  This is the outlier cut-off. Points further from that first fit than the chosen
-                  multiple of the standard deviation are dropped and the fit is repeated, so scan
-                  noise, a stray edge triangle or a speck of spray cannot drag the result. Tighter
-                  cut-offs give a cleaner element from fewer points; <i>all points</i> keeps
-                  everything.
-                </p>
+                  {tr("This is the outlier cut-off. Points further from that first fit than the chosen multiple of the standard deviation are dropped and the fit is repeated, so scan noise, a stray edge triangle or a speck of spray cannot drag the result. Tighter cut-offs give a cleaner element from fewer points;")}{' '}<i>{tr("all points")}</i> {tr("keeps everything.")}{' '}</p>
                 <p>
-                  The setting belongs to this element: changing it re-fits this one from the
-                  points it was built on, and every other element keeps the cut-off it was
-                  measured with. Re-open an element to change its own. The last choice is
-                  what the next new element starts with.
-                </p>
+                  {tr("The setting belongs to this element: changing it re-fits this one from the points it was built on, and every other element keeps the cut-off it was measured with. Re-open an element to change its own. The last choice is what the next new element starts with.")}{' '}</p>
               </InfoDot>
             </span>
             <select

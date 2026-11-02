@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { tr } from '../../../src/i18n'
 // A feature row's menu, opened by a right click on the row: leave the
 // feature out of the build or build it again — and every feature of its
 // kind at once, or every round and chamfer, a draft of the part that
@@ -143,7 +144,7 @@ export function SuppressedRow({ feature, icon, locked }: { feature: Feature; ico
         <KeyIcon name={icon} size={15} />
       </span>
       <span className="name">{feature.name}</span>
-      <b>suppressed</b>
+      <b>{tr("suppressed")}</b>
       <button className="x edit" disabled title={`Build ${feature.name} again to edit it`}>
         <Icon name="edit" size={14} />
       </button>
