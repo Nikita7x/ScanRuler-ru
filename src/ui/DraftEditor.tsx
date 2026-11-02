@@ -124,7 +124,7 @@ export function DraftEditor({
         <div className="draftbox" style={{ borderLeftColor: draftColor }}>
           <div className="sec-head">
             <span className="dot" style={{ background: draftColor }} />
-            {edited ? `Edit ${edited.name}` : `New ${draftKind.noun}`}
+            {edited ? tr(`Edit ${edited.name}`) : tr(`New ${draftKind.noun}`)}
           </div>
 
           {draft.editId !== undefined && (
@@ -273,7 +273,7 @@ export function DraftEditor({
               })}
             </>
           ) : (
-            <p className="hint">{pickHint}</p>
+            <p className="hint">{tr(pickHint)}</p>
           )}
 
           <div className="dro">
@@ -285,7 +285,14 @@ export function DraftEditor({
               ) : (
                 method.mode !== 'construct' && (
                   <span>
-                    {draft.picks.length} {tr("pick")}{' '}{draft.picks.length === 1 ? '' : 's'}
+                    {draft.picks.length}{' '}
+                    {tr(
+                      draft.picks.length === 1
+                        ? 'point'
+                        : draft.picks.length <= 4
+                          ? 'points'
+                          : 'points (many)',
+                    )}
                   </span>
                 )
               )}
@@ -318,7 +325,7 @@ export function DraftEditor({
                   <span className="spinner" />
                   {tr("Fitting…")}{' '}</b>
               )}
-              {draft.status === 'failed' && <b>{draft.message ?? 'Failed'}</b>}
+              {draft.status === 'failed' && <b>{tr(draft.message ?? 'Failed')}</b>}
               {draft.status === 'ready' &&
                 (() => {
                   const primary = formatPrimary(shownFit!, len.units)
@@ -358,7 +365,7 @@ export function DraftEditor({
             disabled={draft.status !== 'ready'}
             onClick={onConfirmDraft}
           >
-            {edited ? 'Save changes' : `Create ${draftKind.noun}`}
+            {edited ? tr('Save changes') : tr(`Create ${draftKind.noun}`)}
           </button>
           <div className="toolrow">
             {method.mode !== 'construct' && !paintingSurface && (
